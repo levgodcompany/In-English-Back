@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modelo para el estudiante
+model Student {
+  id        Int      @id @default(autoincrement())
+  name      String
+  lastName  String
+  email     String   @unique
+  password  String
+  birthDate DateTime // Fecha de nacimiento
+
+  @@map("Students")
+}
+
+// Modelo de los profesores
+model Teacher {
+  id        Int      @id @default(autoincrement())
+  name      String
+  lastName  String
+  password  String
+  email     String
+  birthDate DateTime // Fecha de nacimiento
+  
+  @@map("Teachers")
+}
+
+// Modelo de los niveles
+model Level {
+  id          Int             @id @default(autoincrement())
+  title       String
+  description String
+  order       Int // Nos permite organizar los niveles
+  unities     Unit[] // Un nivel puede tener n unidades
+  activities  ActivityLevel[]
+
+  @@map("Levels")
+}
+
+// Modelo de las unidades
+model Unit {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String
+  order       Int // Nos permetira organizar las unidades
+  level       Level          @relation(fields: [idLevel], references: [id]) // Muchas unidades puede estar en un nivel
+  idLevel     Int
+  courses     Course[] //Una unidad puede tener muchos cursos
+  activities  ActivityUnit[]
+
+  @@map("Unities")
+}
+
+// Modelo de los cursos
+// cada curso pertenece a una unidad
+model Course {
+  id          Int              @id @default(autoincrement())
+  title       String
+  description String
+  order       Int
+  unit        Unit             @relation(fields: [idUnit], references: [id]) // muchos cursos pueden pertenecer a una unidad
+  idUnit      Int
+  materials   Module[] // Un curso puede tener muchos modulos
+  activity    ActivityCourse[]
+
+  @@map("Courses")
+}
+
+model Module {
+  id          Int              @id @default(autoincrement())
+  title       String
+  description String
+  idCourse    Int
+  idTeacher   Int
+  order       Int
+  fileURL     String?
+  typeFile    String?
+  activities  ActivityModule[] // Un modulo puede tener muchas actividades
+  course      Course           @relation(fields: [idCourse], references: [id]) // Muchos modulos pueden estar en un solo curso
+
+  @@map("Modules")
+}
+
+// Actividades
+
+// Modulo de tarea, que pertenece a un modulo
+model ActivityModule {
+  id             Int          @id @default(autoincrement())
+  title          String
+  description    String?
+  fileURL        String?
+  typeFile       String?
+  oreder         Int
+  activityTypeId Int
+  moduleId       Int
+  modules        Module       @relation(fields: [moduleId], references: [id]) // Una actividad solo puede pertenecer a un modulo
+  activityType   ActivityType @relation(fields: [activityTypeId], references: [id]) // una actividad puede ser solo de un tipo, examen, tarea, etc
+
+  @@map("ActivitiesModules")
+}
+
+// Modulo de tarea, que pertenece a un modulo
+model ActivityCourse {
+  id             Int          @id @default(autoincrement())
+  title          String
+  description    String?
+  fileURL        String?
+  typeFile       String?
+  order          Int
+  activityTypeId Int
+  idCourse       Int
+  courses        Course       @relation(fields: [idCourse], references: [id]) // Una actividad solo puede pertenecer a un modulo
+  activityType   ActivityType @relation(fields: [activityTypeId], references: [id]) // una actividad puede ser solo de un tipo, examen, tarea, etc
+
+  @@map("ActivitiesCourses")
+}
+
+// Modulo de tarea, que pertenece a un modulo
+model ActivityUnit {
+  id             Int          @id @default(autoincrement())
+  title          String
+  description    String?
+  fileURL        String?
+  typeFile       String?
+  order          Int
+  activityTypeId Int
+  idUnit         Int
+  unities        Unit         @relation(fields: [idUnit], references: [id]) // Una actividad solo puede pertenecer a un modulo
+  activityType   ActivityType @relation(fields: [activityTypeId], references: [id]) // una actividad puede ser solo de un tipo, examen, tarea, etc
+
+  @@map("ActivitiesUnities")
+}
+
+// Modulo de tarea, que pertenece a un modulo
+model ActivityLevel {
+  id             Int          @id @default(autoincrement())
+  title          String
+  description    String?
+  fileURL        String?
+  typeFile       String?
+  order          Int
+  activityTypeId Int
+  idLevel        Int
+  levels         Level        @relation(fields: [idLevel], references: [id]) // Una actividad solo puede pertenecer a un modulo
+  activityType   ActivityType @relation(fields: [activityTypeId], references: [id]) // una actividad puede ser solo de un tipo, examen, tarea, etc
+
+  @@map("ActivitiesLevels")
+}
+
+model ActivityType {
+  id              Int              @id @default(autoincrement())
+  title           String
+  description     String
+  activityModule  ActivityModule[] // Un tipo de actividad puede tener muchas actividades
+  activityCourse  ActivityCourse[] // Un tipo de actividad puede tener muchas actividades
+  activityUnities ActivityUnit[] // Un tipo de actividad puede tener muchas actividades
+  activityLevels  ActivityLevel[] // Un tipo de actividad puede tener muchas actividades
+}
