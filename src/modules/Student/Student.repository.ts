@@ -213,7 +213,7 @@ class StudentModel {
             })
 
         } catch (error) {
-            throw new Error(`Eror al remover el Student del Level: ${error}`)
+            throw new Error(`Error al remover el Student del Level: ${error}`)
         }
     }
 

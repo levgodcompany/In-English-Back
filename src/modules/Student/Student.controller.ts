@@ -6,7 +6,6 @@ class StudentController {
     async create(req: Request, res: Response): Promise<void> {
         try {
             const student: Student = req.body;
-            console.log("pre crear", student)
             const newStudent = await studentService.create(student);
             res.json(newStudent)
         } catch (error) {
