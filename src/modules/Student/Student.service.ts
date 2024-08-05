@@ -75,10 +75,14 @@ class StudentService {
             return `No se encontro el Unit con el ID: ${idUnit}`
         }
 
-        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+        const student = await prisma.student.findUnique({ where: { id: idStudent }, include:{levels:true} })
 
         if (!student) {
             return `No se encontro el Student con el ID: ${idStudent}`
+        }
+        const levelIndex = student.levels.findIndex(level=> level.levelId == unit.idLevel)
+        if(levelIndex == -1){
+            return `No esta matriculado al nivel`
         }
 
         return await StudentRepository.assignUnitToStudent(idStudent, idUnit);
