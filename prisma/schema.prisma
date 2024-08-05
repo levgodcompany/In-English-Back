@@ -15,11 +15,11 @@ model Student {
   email     String   @unique
   password  String
   birthDate DateTime // Fecha de nacimiento
-  level     Level[]
-  unit      Unit[]
-  course    Course[]
-  module    Module[]
-
+  levels    LevelStudent[]
+  units     UnitStudent[]
+  courses   CourseStudent[]
+  modules   ModuleStudent[]
+  activitySubmission ActivitySubmission[]
   @@map("Students")
 }
 
@@ -31,10 +31,10 @@ model Teacher {
   password  String
   email     String
   birthDate DateTime // Fecha de nacimiento
-  levels    Level[]
-  unities   Unit[]
-  courses   Course[]
-  modules   Module[]
+  levels    LevelTeacher[]
+  units     UnitTeacher[]
+  courses   CourseTeacher[]
+  modules   ModuleTeacher[]
 
   @@map("Teachers")
 }
@@ -46,9 +46,9 @@ model Level {
   description String
   order       Int // Nos permite organizar los niveles
   unities     Unit[] // Un nivel puede tener n unidades
-  activity    Activity[]
-  teachers    Teacher[]
-  sudents     Student[]
+  activities  LevelActivity[]
+  teachers    LevelTeacher[]
+  students    LevelStudent[]
 
   @@map("Levels")
 }
@@ -58,30 +58,29 @@ model Unit {
   id          Int        @id @default(autoincrement())
   title       String
   description String
-  order       Int // Nos permetira organizar las unidades
-  level       Level      @relation(fields: [idLevel], references: [id]) // Muchas unidades puede estar en un nivel
+  order       Int // Nos permitirá organizar las unidades
+  level       Level      @relation(fields: [idLevel], references: [id]) // Muchas unidades pueden estar en un nivel
   idLevel     Int
-  courses     Course[] //Una unidad puede tener muchos cursos
-  activity    Activity[]
-  teachers    Teacher[]
-  sudents     Student[]
+  courses     Course[] // Una unidad puede tener muchos cursos
+  activities  UnitActivity[]
+  teachers    UnitTeacher[]
+  students    UnitStudent[]
 
   @@map("Unities")
 }
 
 // Modelo de los cursos
-// cada curso pertenece a una unidad
 model Course {
   id          Int        @id @default(autoincrement())
   title       String
   description String
   order       Int
-  unit        Unit       @relation(fields: [idUnit], references: [id]) // muchos cursos pueden pertenecer a una unidad
+  unit        Unit       @relation(fields: [idUnit], references: [id]) // Muchos cursos pueden pertenecer a una unidad
   idUnit      Int
-  materials   Module[] // Un curso puede tener muchos modulos
-  activity    Activity[]
-  teachers    Teacher[]
-  sudents     Student[]
+  modules     Module[] // Un curso puede tener muchos módulos
+  activities  CourseActivity[]
+  teachers    CourseTeacher[]
+  students    CourseStudent[]
 
   @@map("Courses")
 }
@@ -91,14 +90,13 @@ model Module {
   title       String
   description String
   idCourse    Int
-  idTeacher   Int
   order       Int
   fileURL     String?
   typeFile    String?
-  activity    Activity[] // Un modulo puede tener muchas actividades
-  course      Course     @relation(fields: [idCourse], references: [id]) // Muchos modulos pueden estar en un solo curso
-  teachers    Teacher[]
-  sudents     Student[]
+  activities  ModuleActivity[] // Un módulo puede tener muchas actividades
+  course      Course     @relation(fields: [idCourse], references: [id]) // Muchos módulos pueden estar en un solo curso
+  teachers    ModuleTeacher[]
+  students    ModuleStudent[]
 
   @@map("Modules")
 }
@@ -109,12 +107,12 @@ model Activity {
   description    String?
   fileURL        String?
   typeFile       String?
-  oreder         Int
+  order          Int
   activityTypeId Int
-  levels         Level[]
-  units          Unit[]
-  courses        Course[]
-  modules        Module[]
+  levels         LevelActivity[]
+  units          UnitActivity[]
+  courses        CourseActivity[]
+  modules        ModuleActivity[]
   submissions    ActivitySubmission[]
   activityType   ActivityType         @relation(fields: [activityTypeId], references: [id])
 
@@ -125,12 +123,13 @@ model ActivityType {
   id          Int        @id @default(autoincrement())
   title       String
   description String
-  activity    Activity[]
+  activities  Activity[]
+
+  @@map("ActivityTypes")
 }
 
-// Envio de actividad
 model ActivitySubmission {
-  id            Int      @id
+  id            Int      @id @default(autoincrement())
   studentId     Int
   activityId    Int
   submittedAt   DateTime @default(now())
@@ -139,4 +138,115 @@ model ActivitySubmission {
   status        String
   qualification Decimal
   activity      Activity @relation(fields: [activityId], references: [id])
+  student       Student  @relation(fields: [studentId], references: [id])
+
+  @@map("ActivitySubmissions")
+}
+
+// Relación muchos a muchos entre Level y Activity
+model LevelActivity {
+  levelId    Int
+  activityId Int
+  level      Level    @relation(fields: [levelId], references: [id])
+  activity   Activity @relation(fields: [activityId], references: [id])
+  @@id([levelId, activityId])
+}
+
+// Relación muchos a muchos entre Unit y Activity
+model UnitActivity {
+  unitId     Int
+  activityId Int
+  unit       Unit     @relation(fields: [unitId], references: [id])
+  activity   Activity @relation(fields: [activityId], references: [id])
+  @@id([unitId, activityId])
+}
+
+// Relación muchos a muchos entre Course y Activity
+model CourseActivity {
+  courseId   Int
+  activityId Int
+  course     Course   @relation(fields: [courseId], references: [id])
+  activity   Activity @relation(fields: [activityId], references: [id])
+  @@id([courseId, activityId])
+}
+
+// Relación muchos a muchos entre Module y Activity
+model ModuleActivity {
+  moduleId   Int
+  activityId Int
+  module     Module   @relation(fields: [moduleId], references: [id])
+  activity   Activity @relation(fields: [activityId], references: [id])
+  @@id([moduleId, activityId])
+}
+
+// Relación muchos a muchos entre Level y Teacher
+model LevelTeacher {
+  levelId    Int
+  teacherId  Int
+  level      Level    @relation(fields: [levelId], references: [id])
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  @@id([levelId, teacherId])
+}
+
+// Relación muchos a muchos entre Unit y Teacher
+model UnitTeacher {
+  unitId     Int
+  teacherId  Int
+  unit       Unit     @relation(fields: [unitId], references: [id])
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  @@id([unitId, teacherId])
+}
+
+// Relación muchos a muchos entre Course y Teacher
+model CourseTeacher {
+  courseId   Int
+  teacherId  Int
+  course     Course   @relation(fields: [courseId], references: [id])
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  @@id([courseId, teacherId])
+}
+
+// Relación muchos a muchos entre Module y Teacher
+model ModuleTeacher {
+  moduleId   Int
+  teacherId  Int
+  module     Module   @relation(fields: [moduleId], references: [id])
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  @@id([moduleId, teacherId])
+}
+
+// Relación muchos a muchos entre Level y Student
+model LevelStudent {
+  levelId    Int
+  studentId  Int
+  level      Level    @relation(fields: [levelId], references: [id])
+  student    Student  @relation(fields: [studentId], references: [id])
+  @@id([levelId, studentId])
+}
+
+// Relación muchos a muchos entre Unit y Student
+model UnitStudent {
+  unitId     Int
+  studentId  Int
+  unit       Unit     @relation(fields: [unitId], references: [id])
+  student    Student  @relation(fields: [studentId], references: [id])
+  @@id([unitId, studentId])
+}
+
+// Relación muchos a muchos entre Course y Student
+model CourseStudent {
+  courseId   Int
+  studentId  Int
+  course     Course   @relation(fields: [courseId], references: [id])
+  student    Student  @relation(fields: [studentId], references: [id])
+  @@id([courseId, studentId])
+}
+
+// Relación muchos a muchos entre Module y Student
+model ModuleStudent {
+  moduleId   Int
+  studentId  Int
+  module     Module   @relation(fields: [moduleId], references: [id])
+  student    Student  @relation(fields: [studentId], references: [id])
+  @@id([moduleId, studentId])
 }
