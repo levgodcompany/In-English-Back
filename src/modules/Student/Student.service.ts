@@ -1,14 +1,12 @@
 import { prisma } from "../../../prisma/index"
-import { LevelStudent, Student } from "@prisma/client"
+import { Student } from "@prisma/client"
 import StudentRepository from "./Student.repository";
+import UnitService from "../Unit/Unit.service";
+import UnitRepository from "../Unit/Unit.repository";
 
 
 class StudentService {
-
-
-    /*
-        Metodo para obtener a un Student 
-     */
+   
     async findOne(id: number) {
         const student = await StudentRepository.findOne(id);
         if (!student) {
@@ -69,19 +67,19 @@ class StudentService {
     }
 
     async assignUnitToStudent(idStudent: number, idUnit: number) {
-        const unit = await prisma.unit.findUnique({ where: { id: idUnit } });
+        const unit = await UnitRepository.findOne(idUnit);
 
         if (!unit) {
             return `No se encontro el Unit con el ID: ${idUnit}`
         }
 
-        const student = await prisma.student.findUnique({ where: { id: idStudent }, include:{levels:true} })
+        const student = await prisma.student.findUnique({ where: { id: idStudent }, include: { levels: true } })
 
         if (!student) {
             return `No se encontro el Student con el ID: ${idStudent}`
         }
-        const levelIndex = student.levels.findIndex(level=> level.levelId == unit.idLevel)
-        if(levelIndex == -1){
+        const levelIndex = student.levels.findIndex(level => level.levelId == unit.idLevel)
+        if (levelIndex == -1) {
             return `No esta matriculado al nivel`
         }
 
@@ -92,13 +90,19 @@ class StudentService {
         const course = await prisma.course.findUnique({ where: { id: idCourse } });
 
         if (!course) {
-            return `No se encontro el Course con el ID: ${idCourse}`
+            return `No se encontro el Course con el ID: ${idCourse}`;
         }
 
-        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+        const student = await prisma.student.findUnique({ where: { id: idStudent }, include: { units: true } });
 
         if (!student) {
-            return `No se encontro el Student con el ID: ${idStudent}`
+            return `No se encontro el Student con el ID: ${idStudent}`;
+        }
+
+        const unitIndex = student.units.findIndex(unit => unit.unitId == course.idUnit);
+
+        if (unitIndex === -1) {
+            return `No se puede asignar esta Course, no esta asignado a la Unit`
         }
 
         return await StudentRepository.assignCourseToStudent(idStudent, idCourse);
