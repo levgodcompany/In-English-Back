@@ -64,15 +64,6 @@ class LevelController {
         }
     }
 
-    async assignUnitToLevel(req: Request, res: Response): Promise<void> {
-        try {
-            const { idLevel, idUnit } = req.params
-            const levels = await LevelService.assignUnitToLevel(Number(idLevel), Number(idUnit));
-            res.json(levels)
-        } catch (error) {
-            res.json(error)
-        }
-    }
     
 }
 

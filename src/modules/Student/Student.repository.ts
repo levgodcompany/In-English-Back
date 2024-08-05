@@ -14,7 +14,7 @@ class StudentModel {
                 },
                 include: {
                     activitySubmission: true,
-                    courses: true,
+
                     levels: {
                         include: {
                             level: {
@@ -26,8 +26,42 @@ class StudentModel {
                             }
                         }
                     },
-                    modules: true,
-                    units: true
+                    modules: {
+                        include: {
+                            module: {
+                                select: {
+                                    
+                                    title: true,
+                                    description: true,
+                                    teachers: true
+                                }
+                            }
+                        }
+                    },
+                    courses: {
+                        include: {
+                            course: {
+                                select: {
+                                    idUnit: true,
+                                    title: true,
+                                    description: true,
+                                    teachers: true
+                                }
+                            }
+                        }
+                    },
+                    units: {
+                        include: {
+                            unit: {
+                                select: {
+                                    idLevel: true,
+                                    title: true,
+                                    description: true,
+                                    teachers: true
+                                }
+                            }
+                        }
+                    },
                 }
             });
 

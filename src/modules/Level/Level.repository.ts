@@ -62,52 +62,22 @@ class LevelRepository {
         }
     }
 
-
-    private async assignEntityToLevel(entityType: 'unit' | 'activity', idTeacher: number, idEntity: number) {
+    // Métodos específicos para asignación de entidades
+    async assignActivityToLevel(idLevel: number, idAcivity: number) {
         try {
-            let entity: any;
-            switch (entityType) {
-                case 'activity':
-                    entity = await prisma.activity.findUnique({ where: { id: idEntity } });
-                    break;
-                case 'unit':
-                    entity = await prisma.unit.findUnique({ where: { id: idEntity } });
-                    break;
-                default:
-                    throw new Error('Tipo de entidad desconocido');
-            }
-            if (!entity) {
-                throw new Error(`No se encontró el ${entityType} con ID ${idEntity}`);
-            }
-
-            await this.findOne(idTeacher);
-
-            const updatedTeacher = await prisma.teacher.update({
-                where: { id: idTeacher },
+            const updatedTeacher = await prisma.level.update({
+                where: { id: idLevel },
                 data: {
-                    [`${entityType}s`]: {
+                    activities: {
                         connectOrCreate: {
                             where: {
-                                [`${entityType}Id_teacherId`]: {
-                                    [`${entityType}Id`]: idEntity,
-                                    teacherId: idTeacher
+                                levelId_activityId: {
+                                    activityId: idAcivity,
+                                    levelId: idLevel
                                 }
                             },
                             create: {
-                                [`${entityType}Id`]: idEntity
-                            }
-                        }
-                    }
-                },
-                include: {
-                    [`${entityType}s`]: {
-                        include: {
-                            [entityType]: {
-                                select: {
-                                    title: true,
-                                    description: true,
-                                    id: true
-                                }
+                                activityId: idAcivity
                             }
                         }
                     }
@@ -116,18 +86,10 @@ class LevelRepository {
 
             return updatedTeacher;
         } catch (error) {
-            throw new Error(`Error al asignar ${entityType} al Teacher con ID ${idTeacher}: ${error}`);
+            throw new Error(`Error al associar el Level con Activity: ${error}`);
         }
     }
 
-    // Métodos específicos para asignación de entidades
-    assignActivityToLevel(idLevel: number, idAcivity: number) {
-        return this.assignEntityToLevel('activity', idLevel, idAcivity);
-    }
-
-    assignUnitToLevel(idLevel: number, idUnit: number) {
-        return this.assignEntityToLevel('unit', idLevel, idUnit);
-    }
 
 }
 

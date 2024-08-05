@@ -49,9 +49,7 @@ class LevelService {
         return LevelRepository.assignActivityToLevel(idLevel, idAcivity)
     }
 
-    assignUnitToLevel(idLevel: number, idUnit: number) {
-        return LevelRepository.assignUnitToLevel(idLevel, idUnit)
-    }
+
 }
 
 export default new LevelService()
