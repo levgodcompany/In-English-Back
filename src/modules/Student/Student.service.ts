@@ -10,77 +10,179 @@ class StudentService {
         Metodo para obtener a un Student 
      */
     async findOne(id: number) {
-        return StudentRepository.findOne(id);
-    }
-
-    /*
-        Metodo para obtener a un Student con sus relaciones
-    */
-
-    async findOneStudentWithRelations(id: number, relations: string[]) {
-        const includeRelations = relations.reduce((acc, relation) => {
-            acc[relation] = true;
-            return acc;
-        }, {} as Record<string, boolean>);
-
-        const student = await this.Student().findUnique({
-            where: {
-                id
-            },
-            include: includeRelations
-        });
+        const student = await StudentRepository.findOne(id);
+        if (!student) {
+            return `No se encontro el Student ${id}`
+        }
 
         return student;
     }
 
+
     // Metodo para obtener todos los Students
     async findAll(): Promise<Student[]> {
         try {
-            const students = await this.Student().findMany();
+            const students = await StudentRepository.findAll();
             return students;
-            
         } catch (error) {
-            console.log("Error al obtener todos los students", error)
             throw new Error("" + error)
         }
 
     }
 
-    // Metodo para obtener todos los student con sus relaciones
-    async findAllStudentsWithRelations(relations: string[]) {
-        const includeRelations = relations.reduce((acc, relation) => {
-            acc[relation] = true;
-            return acc
-        }, {} as Record<string, boolean>);
-
-        let students = await this.Student().findMany({
-            include: includeRelations
-        });
-
-        return students;
-    }
-
-
     async create(data: Student): Promise<Student> {
         try {
-            const student = await this.Student().create({ data });
+            const student = await StudentRepository.create(data)
             return student;
 
         } catch (error) {
-            console.log("Error al crear student", error)
             throw new Error("" + error)
         }
     }
 
 
     async update(id: number, data: Student): Promise<Student> {
-        const student = await this.Student().update({
-            where: { id },
-            data
-        })
-
-        return student;
+        return await StudentRepository.update(id, data);
     }
+
+    async delete(id: number): Promise<Student> {
+        return StudentRepository.delete(id);
+    }
+
+
+
+    // Métodos específicos para asignación de entidades
+    async assignLevelToStudent(idStudent: number, idLevel: number) {
+        const level = await prisma.level.findUnique({ where: { id: idLevel } });
+
+        if (!level) {
+            return `No se encontro el Level con el ID: ${idLevel}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+
+        return await StudentRepository.assignLevelToStudent(idStudent, idLevel);
+    }
+
+    async assignUnitToStudent(idStudent: number, idUnit: number) {
+        const unit = await prisma.unit.findUnique({ where: { id: idUnit } });
+
+        if (!unit) {
+            return `No se encontro el Unit con el ID: ${idUnit}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+
+        return await StudentRepository.assignUnitToStudent(idStudent, idUnit);
+    }
+
+    async assignCourseToStudent(idStudent: number, idCourse: number) {
+        const course = await prisma.course.findUnique({ where: { id: idCourse } });
+
+        if (!course) {
+            return `No se encontro el Course con el ID: ${idCourse}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+
+        return await StudentRepository.assignCourseToStudent(idStudent, idCourse);
+    }
+
+    async assignModuleToStudent(idStudent: number, idModule: number) {
+        const module = await prisma.module.findUnique({ where: { id: idModule } });
+
+        if (!module) {
+            return `No se encontro el Module con el ID: ${idModule}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+
+        return await StudentRepository.assignModuleToStudent(idStudent, idModule);
+    }
+
+
+
+    // Metodos especificos para remover entidades
+    async removeLevelToStudent(idStudent: number, idLevel: number) {
+        const level = await prisma.level.findUnique({ where: { id: idLevel } });
+
+        if (!level) {
+            return `No se encontro el Level con el ID: ${idLevel}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+
+        return await StudentRepository.removeLevelToStudent(idStudent, idLevel);
+    }
+
+    async removeUnitToStudent(idStudent: number, idUnit: number) {
+        const unit = await prisma.unit.findUnique({ where: { id: idUnit } });
+
+        if (!unit) {
+            return `No se encontro el Unit con el ID: ${idUnit}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+        return await StudentRepository.removeLevelToStudent(idStudent, idUnit);
+    }
+
+    async removeCourseToStudent(idStudent: number, idCourse: number) {
+        const course = await prisma.course.findUnique({ where: { id: idCourse } });
+
+        if (!course) {
+            return `No se encontro el Course con el ID: ${idCourse}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+
+        return await StudentRepository.removeLevelToStudent(idStudent, idCourse);
+    }
+
+    async removeModuleToStudent(idStudent: number, idModule: number) {
+        const module = await prisma.module.findUnique({ where: { id: idModule } });
+
+        if (!module) {
+            return `No se encontro el Module con el ID: ${idModule}`
+        }
+
+        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+
+        if (!student) {
+            return `No se encontro el Student con el ID: ${idStudent}`
+        }
+        return await StudentRepository.removeLevelToStudent(idStudent, idModule);
+    }
+
+
+
 
 
     async addCourseToStudent(idStudent: number, idCourse: number) {
@@ -116,63 +218,14 @@ class StudentService {
 
     }
 
-    async assignLevelToStudent(idStudent: number, idLevel: number) {
-        try {
-            return StudentRepository.assignLevelToStudent(idStudent, idLevel);
-        } catch (error) {
-            throw new Error(`${error}`)
-        }
-    }
-
-    async removeLevelFromStudent(idStudent: number, idLevel: number){
-        return StudentRepository.removeLevelFromStudent(idStudent, idLevel);
-    }
-
-    async delete(id: number): Promise<Student> {
-        const deleteStudent = await this.Student().delete({ where: { id } });
-
-        return deleteStudent;
+    async removeLevelFromStudent(idStudent: number, idLevel: number) {
+        return StudentRepository.removeLevelToStudent(idStudent, idLevel);
     }
 
 
-    private Student() {
-        return prisma.student;
-    }
 
 
 }
 
-class LevelStudentService {
-
-    async findAll(): Promise<LevelStudent[]> {
-        const levelStudent = await this.LevelsStudents().findMany();
-
-        return levelStudent;
-    }
-
-
-    async create(data: LevelStudent) {
-
-
-    }
-
-
-    private LevelsStudents() {
-        return prisma.levelStudent;
-    }
-}
-
-class UnitStudentService {
-
-}
-
-class CourseStudentService {
-
-}
-
-class ModuleStudentService {
-
-}
 
 export const studentService = new StudentService();
-export const levelStudentService = new LevelStudentService()

@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import LevelService from "./Level.service";
 
 class LevelController {
+    
     async create(req: Request, res: Response): Promise<void> {
         try {
             const level: Level = req.body;
@@ -21,6 +22,58 @@ class LevelController {
             res.json(error)
         }
     }
+
+    async findOne(req: Request, res: Response): Promise<void> {
+        try {
+            const { idLevel } = req.params
+            const levels = await LevelService.findOne(Number(idLevel));
+            res.json(levels)
+        } catch (error) {
+            res.json(error)
+        }
+    }
+
+    async delete(req: Request, res: Response): Promise<void> {
+        try {
+            const { idLevel } = req.params
+            const levels = await LevelService.delete(Number(idLevel));
+            res.json(levels)
+        } catch (error) {
+            res.json(error)
+        }
+    }
+
+    async update(req: Request, res: Response): Promise<void> {
+        try {
+            const { idLevel } = req.params
+            const body = req.body
+            const levels = await LevelService.update(Number(idLevel), body);
+            res.json(levels)
+        } catch (error) {
+            res.json(error)
+        }
+    }
+
+    async assignActivityToLevel(req: Request, res: Response): Promise<void> {
+        try {
+            const { idLevel, idAcivity } = req.params
+            const levels = await LevelService.assignActivityToLevel(Number(idLevel), Number(idAcivity));
+            res.json(levels)
+        } catch (error) {
+            res.json(error)
+        }
+    }
+
+    async assignUnitToLevel(req: Request, res: Response): Promise<void> {
+        try {
+            const { idLevel, idUnit } = req.params
+            const levels = await LevelService.assignUnitToLevel(Number(idLevel), Number(idUnit));
+            res.json(levels)
+        } catch (error) {
+            res.json(error)
+        }
+    }
+    
 }
 
 export default new LevelController()

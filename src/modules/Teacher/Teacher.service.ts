@@ -8,7 +8,7 @@ class TeacherService {
         try {
             return TeacherRepository.findOne(id)
         } catch (error) {
-            throw new Error(`Error al buscar el Teacher con ID ${id}: ${error.message}`);
+            throw new Error(`Error al buscar el Teacher con ID ${id}: ${error}`);
         }
     }
 
@@ -16,7 +16,7 @@ class TeacherService {
         try {
             return TeacherRepository.findAll()
         } catch (error) {
-            throw new Error(`Error al buscar todos los Teachers: ${error.message}`);
+            throw new Error(`Error al buscar todos los Teachers: ${error}`);
         }
     }
 
@@ -24,7 +24,7 @@ class TeacherService {
         try {
             return TeacherRepository.create(data)
         } catch (error) {
-            throw new Error(`Error al crear el Teacher: ${error.message}`);
+            throw new Error(`Error al crear el Teacher: ${error}`);
         }
     }
 
@@ -32,7 +32,7 @@ class TeacherService {
         try {
             return TeacherRepository.update(id, data)
         } catch (error) {
-            throw new Error(`Error al actualizar el Teacher con ID ${id}: ${error.message}`);
+            throw new Error(`Error al actualizar el Teacher con ID ${id}: ${error}`);
         }
     }
 
@@ -40,7 +40,7 @@ class TeacherService {
         try {
             return TeacherRepository.delete(id)
         } catch (error) {
-            throw new Error(`Error al eliminar el Teacher con ID ${id}: ${error.message}`);
+            throw new Error(`Error al eliminar el Teacher con ID ${id}: ${error}`);
         }
     }
 

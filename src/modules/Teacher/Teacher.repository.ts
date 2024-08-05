@@ -13,7 +13,7 @@ class TeacherRepository {
             }
             return teacher;
         } catch (error) {
-            throw new Error(`Error al buscar el Teacher con ID ${id}: ${error.message}`);
+            throw new Error(`Error al buscar el Teacher con ID ${id}: ${error}`);
         }
     }
 
@@ -25,7 +25,7 @@ class TeacherRepository {
             }
             return teachers;
         } catch (error) {
-            throw new Error(`Error al buscar todos los Teachers: ${error.message}`);
+            throw new Error(`Error al buscar todos los Teachers: ${error}`);
         }
     }
 
@@ -39,7 +39,7 @@ class TeacherRepository {
             const newTeacher = await prisma.teacher.create({ data });
             return newTeacher;
         } catch (error) {
-            throw new Error(`Error al crear el Teacher: ${error.message}`);
+            throw new Error(`Error al crear el Teacher: ${error}`);
         }
     }
 
@@ -51,7 +51,7 @@ class TeacherRepository {
             });
             return updatedTeacher;
         } catch (error) {
-            throw new Error(`Error al actualizar el Teacher con ID ${id}: ${error.message}`);
+            throw new Error(`Error al actualizar el Teacher con ID ${id}: ${error}`);
         }
     }
 
@@ -60,7 +60,7 @@ class TeacherRepository {
             const deletedTeacher = await prisma.teacher.delete({ where: { id } });
             return deletedTeacher;
         } catch (error) {
-            throw new Error(`Error al eliminar el Teacher con ID ${id}: ${error.message}`);
+            throw new Error(`Error al eliminar el Teacher con ID ${id}: ${error}`);
         }
     }
 
@@ -123,7 +123,7 @@ class TeacherRepository {
 
             return updatedTeacher;
         } catch (error) {
-            throw new Error(`Error al asignar ${entityType} al Teacher con ID ${idTeacher}: ${error.message}`);
+            throw new Error(`Error al asignar ${entityType} al Teacher con ID ${idTeacher}: ${error}`);
         }
     }
 
