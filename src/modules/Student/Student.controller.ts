@@ -9,6 +9,7 @@ class StudentController {
             const newStudent = await studentService.create(student);
             res.json(newStudent)
         } catch (error) {
+            console.log("Error", error)
             res.json(error)
         }
     }

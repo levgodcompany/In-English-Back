@@ -9,6 +9,7 @@ class UnitController {
             const newModule = await UnitService.create(body);
             res.json(newModule)
         } catch (error) {
+            console.log(error)
             res.json(error)
         }
     }
