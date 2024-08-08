@@ -26,6 +26,14 @@ class ModueService {
         }
     }
 
+    async findAllByIdCourse(idCourse: number) {
+        try {
+            return ModuleRepository.findAllByIdCourse(idCourse);
+        } catch (error) {
+            throw new Error(`Error al buscar los modules: ${error}`);
+        }
+    }
+
     async update(id: number, data: Module) {
         try {
             return ModuleRepository.update(id, data);

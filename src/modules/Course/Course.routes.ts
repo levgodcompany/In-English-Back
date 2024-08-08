@@ -4,6 +4,7 @@ import CourseController from "./Course.controller";
 const router = Router();
 
 router.get("/", CourseController.findAll);
+router.get("/unit/:idUnit", CourseController.findAllByIdUnit);
 router.post("/", CourseController.create);
 router.put("/:idCourse", CourseController.update);
 router.get("/:idCourse", CourseController.findOne);

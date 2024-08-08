@@ -28,6 +28,14 @@ class CourseService {
         }
     }
 
+    async findAllByIdUnit(idUnit: number) {
+        try {
+            return CourseRepsitory.findAllByIdUnit(idUnit)
+        } catch (error) {
+            throw new Error(`Error al buscar los courses: ${error}`);
+        }
+    }
+
     async update(id: number, data: Course) {
         try {
             return CourseRepsitory.update(id, data)

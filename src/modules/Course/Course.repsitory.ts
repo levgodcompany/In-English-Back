@@ -33,6 +33,19 @@ class CourseRepository {
         }
     }
 
+    async findAllByIdUnit(idUnit: number) {
+        try {
+            const courses = await prisma.course.findMany({
+                where: {
+                    idUnit: idUnit
+                }
+            })
+            return courses
+        } catch (error) {
+            throw new Error(`Error al buscar los courses: ${error}`);
+        }
+    }
+
     async update(id: number, data: Course) {
         try {
             const course = await prisma.course.update({ where: { id }, data });

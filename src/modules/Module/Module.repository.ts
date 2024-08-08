@@ -33,6 +33,19 @@ class ModuleRepository {
         }
     }
 
+    async findAllByIdCourse(idCourse: number) {
+        try {
+            const modules = await prisma.module.findMany({
+                where: {
+                    idCourse: idCourse
+                }
+            })
+            return modules
+        } catch (error) {
+            throw new Error(`Error al buscar los modules: ${error}`);
+        }
+    }
+
     async update(id: number, data: Module) {
         try {
             const module = await prisma.module.update({ where: { id }, data });
