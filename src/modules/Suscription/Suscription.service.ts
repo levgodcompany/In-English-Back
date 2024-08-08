@@ -1,5 +1,7 @@
 import { Suscription } from "@prisma/client"
 import SuscriptionRepository from "./Suscription.repository"
+import BenefitRepository from "../Benefit/Benefit.repository"
+import PaymentMethodRepositoy from "../PaymentMethod/PaymentMethod.repositoy"
 
 class SuscriptionService {
 
@@ -53,6 +55,20 @@ class SuscriptionService {
         }
     }
 
+    async assignBenefitsToSuscription(idSuscription:number, idBenefits: number[]){
+        try {
+
+            const benefits = await BenefitRepository.findAllById(idBenefits);
+
+            benefits.forEach(({id})=> {
+                SuscriptionRepository.assignBenefitToSuscription(idSuscription, id)
+            })
+
+        } catch (error) {
+            throw new Error(`Error al asignar un beneficio a una suscripcion: ${error}`)
+        }
+    }
+
     async assignPaymentMethodToSuscription(idSuscription:number, idPaymentMethod: number){
         try {
             return SuscriptionRepository.assignPaymentMethodToSuscription(idSuscription, idPaymentMethod)
@@ -61,6 +77,21 @@ class SuscriptionService {
             throw new Error(`Error al asignar un beneficio a una suscripcion: ${error}`)
         }
     }
+
+    async assignPaymentMethodsToSuscription(idSuscription:number, idPaymentMethods: number[]){
+        try {
+
+            const paymentMethods = await PaymentMethodRepositoy.findAllById(idPaymentMethods);
+
+            for(const { id } of paymentMethods){
+                await SuscriptionRepository.assignPaymentMethodToSuscription(idSuscription, id)
+            }
+            
+        } catch (error) {
+            throw new Error(`Error al asignar un beneficio a una suscripcion: ${error}`)
+        }
+    }
+
 
     async assignStudentToSuscription(idSuscription:number, idStudent: number){
         try {

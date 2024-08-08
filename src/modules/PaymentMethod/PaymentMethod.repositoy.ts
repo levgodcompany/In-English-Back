@@ -27,6 +27,14 @@ class PaymentMethodRepositoy {
         }
     }
 
+    async findAllById(id: number[]){
+        try {
+            return await prisma.paymentMethod.findMany({where: {id: { in: id }}})
+        } catch (error) {
+            throw new Error(`Error al buscar todas los paymentMethod: ${error}`)
+        }
+    }
+
     async update(id: number, data: PaymentMethod){
         try {
             return await prisma.paymentMethod.update({where: {id}, data});

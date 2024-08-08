@@ -26,6 +26,14 @@ class UnitService {
         }
     }
 
+    async findAllByIdLevel(idLevel: number) {
+        try {
+            return UnitRepository.findAllByIdLevel(idLevel)
+        } catch (error) {
+            throw new Error(`Error al buscar las unidad por el idLevel ID ${idLevel}: ${error}`);
+        }
+    }
+
     async update(id: number, data: Unit) {
         try {
             return UnitRepository.update(id, data)

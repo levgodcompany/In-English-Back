@@ -7,9 +7,11 @@ class LevelController {
     async create(req: Request, res: Response): Promise<void> {
         try {
             const level: Level = req.body;
+            level.order = Number(level.order)
             const newLevel = await LevelService.create(level);
             res.json(newLevel)
         } catch (error) {
+            console.log(error)
             res.json(error)
         }
     }

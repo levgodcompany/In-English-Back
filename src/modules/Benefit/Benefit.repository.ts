@@ -19,6 +19,14 @@ class BenefitRepository {
         }
     }
 
+    async findAllById(id: number[]){
+        try {
+            return await prisma.benefit.findMany({where: {id: { in: id }}})
+        } catch (error) {
+            throw new Error(`Error al buscar todas los benefits: ${error}`)
+        }
+    }
+
     async findOne(id: number){
         try {
             return await prisma.benefit.findUnique({where: {id}})

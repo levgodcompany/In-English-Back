@@ -6,6 +6,7 @@ class UnitController {
     async create(req: Request, res: Response): Promise<void> {
         try {
             const body: Unit = req.body;
+            body.order = Number(body.order);
             const newModule = await UnitService.create(body);
             res.json(newModule)
         } catch (error) {
@@ -17,6 +18,16 @@ class UnitController {
     async findAll(req: Request, res: Response): Promise<void> {
         try {
             const unities = await UnitService.findAll();
+            res.json(unities)
+        } catch (error) {
+            res.json(error)
+        }
+    }
+
+    async findAllByIdLevel(req: Request, res: Response): Promise<void> {
+        try {
+            const { idLevel } = req.params
+            const unities = await UnitService.findAllByIdLevel(Number(idLevel));
             res.json(unities)
         } catch (error) {
             res.json(error)

@@ -44,25 +44,25 @@ class SuscriptionRepository {
     }
 
 
-    async assignBenefitToSuscription(idSuscription:number, idBenefit: number){
+    async assignBenefitToSuscription(idSubscription: number, idBenefit: number) {
         try {
-            const benefit = await prisma.benefit.findUnique({where: {id: idBenefit}});
-
-            if(!benefit){
-                throw new Error(`No se econtro el beneficio con el ID ${idBenefit}`);
-            }
-
+            // Buscar el beneficio en la base de datos
+            const benefit = await prisma.benefit.findUnique({
+                where: { id: idBenefit }
+            });
+    
+            // Verificar si el beneficio existe
+            if (benefit) {
+               // Actualizar la suscripción con el beneficio
             return await prisma.suscription.update({
-                where: {
-                    id: idSuscription
-                },
+                where: { id: idSubscription },
                 data: {
                     benefits: {
                         connectOrCreate: {
                             where: {
                                 idSuscription_idBenefit: {
                                     idBenefit,
-                                    idSuscription
+                                    idSuscription: idSubscription
                                 }
                             },
                             create: {
@@ -71,13 +71,18 @@ class SuscriptionRepository {
                         }
                     }
                 }
-            })
-
+            });
+    
+            }
+    
             
         } catch (error) {
-            throw new Error(`Error al asignar un beneficio a una suscripcion: ${error}`)
+            // Manejo de errores más específico
+            console.error('Error al asignar un beneficio a una suscripción:', error);
+            throw new Error(`Error al asignar un beneficio a una suscripción: ${error}`);
         }
     }
+    
 
     async assignPaymentMethodToSuscription(idSuscription:number, idPaymentMethod: number){
         try {

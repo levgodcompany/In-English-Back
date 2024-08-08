@@ -29,7 +29,6 @@ class LevelRepository {
 
     async create(data: Level) {
         try {
-            data.title = data.title.toLocaleLowerCase();
             const existingLevel = await prisma.level.findFirst({ where: { title: data.title } });
             if (existingLevel) {
                 throw new Error(`Ya existe un Level con el titulo ${data.title}`);

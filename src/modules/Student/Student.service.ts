@@ -3,6 +3,7 @@ import { Student } from "@prisma/client"
 import StudentRepository from "./Student.repository";
 import UnitService from "../Unit/Unit.service";
 import UnitRepository from "../Unit/Unit.repository";
+import LevelService from "../Level/Level.service";
 
 
 class StudentService {
@@ -51,13 +52,13 @@ class StudentService {
 
     // Métodos específicos para asignación de entidades
     async assignLevelToStudent(idStudent: number, idLevel: number) {
-        const level = await prisma.level.findUnique({ where: { id: idLevel } });
+        const level = await LevelService.findOne(idLevel);
 
         if (!level) {
             return `No se encontro el Level con el ID: ${idLevel}`
         }
 
-        const student = await prisma.student.findUnique({ where: { id: idStudent } })
+        const student = await  prisma.student.findUnique({ where: { id: idStudent } })
 
         if (!student) {
             return `No se encontro el Student con el ID: ${idStudent}`

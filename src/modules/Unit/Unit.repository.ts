@@ -39,6 +39,17 @@ class UnitRepository {
         }
     }
 
+    async findAllByIdLevel(idLevel: number) {
+        try {
+            const unities = await prisma.unit.findMany({
+                where: {idLevel: idLevel}
+            })
+            return unities
+        } catch (error) {
+            throw new Error(`Error al buscar las unidad: ${error}`);
+        }
+    }
+
     async update(id: number, data: Unit) {
         try {
             const unit = await prisma.unit.update({ where: { id }, data });
