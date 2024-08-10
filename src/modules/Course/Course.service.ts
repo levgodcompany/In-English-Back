@@ -58,23 +58,6 @@ class CourseService {
       throw new Error(`Error al eliminar el course: ${error}`);
     }
   }
-
-  // Métodos específicos para asignación de entidades
-  async assignActivityToCourse(idCourse: number, idAcivity: number) {
-    try {
-      return CourseRepsitory.assignActivityToCourse(idCourse, idAcivity);
-    } catch (error) {
-      throw new Error(`Error al associar el Course con Activity: ${error}`);
-    }
-  }
-
-  async removeActivityToCourse(idCourse: number, idAcivity: number) {
-    try {
-      CourseRepsitory.removeActivityToCourse(idCourse, idAcivity);
-    } catch (error) {
-      throw new Error(`Error al remover el Course de la Activity: ${error}`);
-    }
-  }
 }
 
 export default new CourseService();

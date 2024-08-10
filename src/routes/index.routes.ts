@@ -12,6 +12,9 @@ import PaymentMethodRouter from "../modules/PaymentMethod/PaymentMethod.routes"
 import StudentSuscriptionRouter from "../modules/StudentSuscription/StudentSuscription.routes"
 import SuscriptionRouter from "../modules/Suscription/Suscription.routes"
 
+import ExamLevelRouter from "../modules/ExamLevel/ExamLevel.routes"
+import ExamUnitRouter from "../modules/ExamUnit/ExamUnit.routes"
+
 const router = Router();
 
 router.use("/students", StudentRouter);
@@ -27,5 +30,8 @@ router.use("/payment", PaymentRouter);
 router.use("/payment-methods", PaymentMethodRouter);
 router.use("/student-suscription", StudentSuscriptionRouter);
 router.use("/suscription", SuscriptionRouter);
+
+router.use("/level-exams", ExamLevelRouter);
+router.use("/unities-exams", ExamUnitRouter);
 
 export default router

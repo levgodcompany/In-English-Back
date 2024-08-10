@@ -10,7 +10,5 @@ router.post("/", CourseController.create);
 router.put("/:idCourse", CourseController.update);
 router.get("/:idCourse", CourseController.findOne);
 router.delete("/:idCourse", CourseController.delete);
-router.post("/:idCourse/activity/:idAcivity", CourseController.assignActivityToCourse);
-router.delete("/:idCourse/activity/:idAcivity", CourseController.removeActivityToCourse);
 
-export default router
+export default router;

@@ -9,20 +9,21 @@ datasource db {
 
 // Modelo para el estudiante
 model Student {
-  id                 Int                  @id @default(autoincrement())
-  name               String
-  lastName           String
-  email              String               @unique
-  password           String
-  birthDate          DateTime // Fecha de nacimiento
-  idStatus           Int
-  levels             LevelStudent[]
-  units              UnitStudent[]
-  courses            CourseStudent[]
-  modules            ModuleStudent[]
-  activitySubmission ActivitySubmission[]
-  suscriptions       StudentSuscription[]
-  status             Status               @relation(fields: [idStatus], references: [id])
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  lastName            String
+  email               String                @unique
+  password            String
+  birthDate           DateTime // Fecha de nacimiento
+  idStatus            Int
+  levels              LevelStudent[]
+  units               UnitStudent[]
+  courses             CourseStudent[]
+  modules             ModuleStudent[]
+  suscriptions        StudentSuscription[]
+  status              Status                @relation(fields: [idStatus], references: [id])
+  examSubmissionUnit  ExamSubmissionUnit[]
+  examSubmissionLevel ExamSubmissionLevel[]
 
   @@map("Students")
 }
@@ -39,18 +40,20 @@ model Teacher {
   units     UnitTeacher[]
   courses   CourseTeacher[]
   modules   ModuleTeacher[]
+  examUnit  ExamUnit[]
+  examLevel ExamLevel[]
 
   @@map("Teachers")
 }
 
 // Modelo de los niveles
 model Level {
-  id           Int             @id @default(autoincrement())
+  id           Int            @id @default(autoincrement())
   title        String
   description  String
   order        Int // Nos permite organizar los niveles
   unities      Unit[] // Un nivel puede tener muchas unidades
-  activities   LevelActivity[]
+  exams        ExamLevel[] // Un módulo puede tener muchas actividades
   teachers     LevelTeacher[]
   students     LevelStudent[]
   suscriptions Suscription[]
@@ -86,13 +89,15 @@ model Benefit {
 
 // Modelo de los estados
 model Status {
-  id                  Int                  @id @default(autoincrement())
+  id                  Int                   @id @default(autoincrement())
   title               String
   description         String
   status              Int
   studentSuscriptions StudentSuscription[]
   payments            Payment[]
   students            Student[]
+  examSubmissionUnit  ExamSubmissionUnit[]
+  examSubmissionLevel ExamSubmissionLevel[]
 
   @@map("Status")
 }
@@ -126,14 +131,14 @@ model Payment {
 
 // Modelo de las unidades
 model Unit {
-  id          Int            @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   title       String
   description String
   order       Int // Nos permitirá organizar las unidades
-  level       Level          @relation(fields: [idLevel], references: [id]) // Muchas unidades pueden estar en un nivel
+  level       Level         @relation(fields: [idLevel], references: [id]) // Muchas unidades pueden estar en un nivel
   idLevel     Int
   courses     Course[] // Una unidad puede tener muchos cursos
-  activities  UnitActivity[]
+  exams       ExamUnit[] // Un módulo puede tener muchas actividades
   teachers    UnitTeacher[]
   students    UnitStudent[]
 
@@ -142,14 +147,13 @@ model Unit {
 
 // Modelo de los cursos
 model Course {
-  id          Int              @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   title       String
   description String
   order       Int
-  unit        Unit             @relation(fields: [idUnit], references: [id]) // Muchos cursos pueden pertenecer a una unidad
+  unit        Unit            @relation(fields: [idUnit], references: [id]) // Muchos cursos pueden pertenecer a una unidad
   idUnit      Int
   modules     Module[] // Un curso puede tener muchos módulos
-  activities  CourseActivity[]
   teachers    CourseTeacher[]
   students    CourseStudent[]
 
@@ -158,74 +162,81 @@ model Course {
 
 // Modelo de los módulos
 model Module {
-  id          Int              @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   title       String
   description String
   idCourse    Int
   order       Int
   fileURL     String?
   typeFile    String?
-  activities  ModuleActivity[] // Un módulo puede tener muchas actividades
-  course      Course           @relation(fields: [idCourse], references: [id]) // Muchos módulos pueden estar en un solo curso
+  course      Course          @relation(fields: [idCourse], references: [id]) // Muchos módulos pueden estar en un solo curso
   teachers    ModuleTeacher[]
   students    ModuleStudent[]
 
   @@map("Modules")
 }
 
-// Modelo de las actividades
-model Activity {
-  id             Int                  @id @default(autoincrement())
-  title          String
-  description    String?
-  fileURL        String?
-  typeFile       String?
-  order          Int
-  activityTypeId Int
-  levels         LevelActivity[]
-  units          UnitActivity[]
-  courses        CourseActivity[]
-  modules        ModuleActivity[]
-  submissions    ActivitySubmission[]
-  activityType   ActivityType         @relation(fields: [activityTypeId], references: [id])
+// Examenes
+model ExamUnit {
+  id                 Int                  @id @default(autoincrement())
+  idUnit             Int
+  idTeacher          Int
+  title              String
+  description        String
+  archive            String
+  passingScore       Int // Puntuación mínima para aprobar
+  numberAttempts     Int
+  examSubmissionUnit ExamSubmissionUnit[]
+  unit               Unit                 @relation(fields: [idUnit], references: [id])
+  teacher            Teacher              @relation(fields: [idTeacher], references: [id])
 
-  @@map("Activities")
+  @@map("ExamsUnities")
 }
 
-// Modelo de tipos de actividad
-model ActivityType {
-  id          Int        @id @default(autoincrement())
-  title       String
-  description String
-  activities  Activity[]
+model ExamLevel {
+  id                  Int                   @id @default(autoincrement())
+  idLevel             Int
+  idTeacher           Int
+  title               String
+  description         String
+  archive             String
+  passingScore        Int // Puntuación mínima para aprobar
+  NumberAttempts      Int
+  examSubmissionLevel ExamSubmissionLevel[]
+  level               Level                 @relation(fields: [idLevel], references: [id])
+  teacher             Teacher               @relation(fields: [idTeacher], references: [id])
 
-  @@map("ActivityTypes")
+  @@map("ExamsLevels")
 }
 
-// Modelo de la entrega de actividades
-model ActivitySubmission {
-  id            Int      @id @default(autoincrement())
-  studentId     Int
-  activityId    Int
-  submittedAt   DateTime @default(now())
-  content       String
-  fileURL       String
-  status        String
-  qualification Decimal
-  activity      Activity @relation(fields: [activityId], references: [id])
-  student       Student  @relation(fields: [studentId], references: [id])
+model ExamSubmissionUnit {
+  id             Int      @id @default(autoincrement())
+  submissionDate DateTime @default(now())
+  score          Int // Puntuación obtenida en el examen
+  idStatus       Int
+  idStudent      Int
+  archive        String
+  idExamUnit     Int
+  student        Student  @relation(fields: [idStudent], references: [id])
+  status         Status   @relation(fields: [idStatus], references: [id]) // Estado de la entrega: Submitted, Graded, etc.
+  exam           ExamUnit @relation(fields: [idExamUnit], references: [id])
 
-  @@map("ActivitySubmissions")
+  @@map("ExamSubmissionsUnities")
 }
 
-// Relación muchos a muchos entre Level y Activity
-model LevelActivity {
-  levelId    Int
-  activityId Int
-  level      Level    @relation(fields: [levelId], references: [id])
-  activity   Activity @relation(fields: [activityId], references: [id])
+model ExamSubmissionLevel {
+  id             Int       @id @default(autoincrement())
+  submissionDate DateTime  @default(now())
+  score          Int // Puntuación obtenida en el examen
+  idStatus       Int
+  idStudent      Int
+  archive        String
+  idExamUnit     Int
+  student        Student   @relation(fields: [idStudent], references: [id])
+  status         Status    @relation(fields: [idStatus], references: [id]) // Estado de la entrega: Submitted, Graded, etc.
+  exam           ExamLevel @relation(fields: [idExamUnit], references: [id])
 
-  @@id([levelId, activityId])
+  @@map("ExamSubmissionsLevel")
 }
 
 // Relación muchos a muchos entre Student y Suscription
@@ -264,36 +275,6 @@ model SuscriptionBenefit {
   suscription   Suscription @relation(fields: [idSuscription], references: [id])
 
   @@id([idSuscription, idBenefit])
-}
-
-// Relación muchos a muchos entre Unit y Activity
-model UnitActivity {
-  unitId     Int
-  activityId Int
-  unit       Unit     @relation(fields: [unitId], references: [id])
-  activity   Activity @relation(fields: [activityId], references: [id])
-
-  @@id([unitId, activityId])
-}
-
-// Relación muchos a muchos entre Course y Activity
-model CourseActivity {
-  courseId   Int
-  activityId Int
-  course     Course   @relation(fields: [courseId], references: [id])
-  activity   Activity @relation(fields: [activityId], references: [id])
-
-  @@id([courseId, activityId])
-}
-
-// Relación muchos a muchos entre Module y Activity
-model ModuleActivity {
-  moduleId   Int
-  activityId Int
-  module     Module   @relation(fields: [moduleId], references: [id])
-  activity   Activity @relation(fields: [activityId], references: [id])
-
-  @@id([moduleId, activityId])
 }
 
 // Relación muchos a muchos entre Level y Teacher

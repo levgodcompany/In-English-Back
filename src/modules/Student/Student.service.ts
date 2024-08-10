@@ -16,7 +16,7 @@ class StudentService {
   }
 
   // Metodo para obtener todos los Students
-  async findAll(){
+  async findAll() {
     try {
       const students = await StudentRepository.findAll();
       return students;

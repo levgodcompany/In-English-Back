@@ -1,5 +1,6 @@
 import { Router } from "express";
 import LevelController from "./Level.controller";
+import ExamLevelRouter from "../ExamLevel/ExamLevel.routes"
 
 const router = Router();
 
@@ -8,6 +9,6 @@ router.post("/", LevelController.create);
 router.put("/:idLevel", LevelController.update);
 router.get("/:idLevel", LevelController.findOne);
 router.delete("/:idLevel", LevelController.delete);
-router.get("/:idLevel/activity/:idAcivity", LevelController.assignActivityToLevel);
+router.use("/exams", ExamLevelRouter)
 
 export default router

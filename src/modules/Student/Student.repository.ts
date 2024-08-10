@@ -12,8 +12,8 @@ class StudentModel {
           id,
         },
         include: {
-          activitySubmission: true,
-
+          examSubmissionLevel: true,
+          examSubmissionUnit: true,
           levels: {
             include: {
               level: {
@@ -108,17 +108,17 @@ class StudentModel {
     try {
       const students = await prisma.student.findMany({
         include: {
-            levels: {
-                include: {
-                    level: {
-                        select: {
-                            title: true,
-                            id: true
-                        }
-                    }
-                }
-            }
-        }
+          levels: {
+            include: {
+              level: {
+                select: {
+                  title: true,
+                  id: true,
+                },
+              },
+            },
+          },
+        },
       });
       return students;
     } catch (error) {
@@ -183,7 +183,7 @@ class StudentModel {
       let entity: any;
       switch (entityType) {
         case "activity":
-          entity = await prisma.activity.findUnique({
+          entity = await prisma.examSubmissionLevel.findUnique({
             where: { id: idEntity },
           });
           break;

@@ -38,14 +38,16 @@ class CourseController {
 
   async findAllUnitiesByIdCourse(req: Request, res: Response): Promise<void> {
     try {
-        const { idUnit } = req.params
-        const courses = await CourseService.findAllUnitiesByIdCourse(Number(idUnit));
-        res.json(courses)
+      const { idUnit } = req.params;
+      const courses = await CourseService.findAllUnitiesByIdCourse(
+        Number(idUnit)
+      );
+      res.json(courses);
     } catch (error) {
-        console.log(error)
-        res.json(error)
+      console.log(error);
+      res.json(error);
     }
-}
+  }
 
   async findOne(req: Request, res: Response): Promise<void> {
     try {
@@ -76,34 +78,6 @@ class CourseController {
       body.order = Number(body.order);
       const course = await CourseService.update(Number(idCourse), body);
       res.json(course);
-    } catch (error) {
-      console.log(error);
-      res.json(error);
-    }
-  }
-
-  async assignActivityToCourse(req: Request, res: Response): Promise<void> {
-    try {
-      const { idCourse, idAcivity } = req.params;
-      const course = await CourseService.assignActivityToCourse(
-        Number(idCourse),
-        Number(idAcivity)
-      );
-      res.json(course);
-    } catch (error) {
-      console.log(error);
-      res.json(error);
-    }
-  }
-
-  async removeActivityToCourse(req: Request, res: Response): Promise<void> {
-    try {
-      const { idCourse, idAcivity } = req.params;
-      await CourseService.removeActivityToCourse(
-        Number(idCourse),
-        Number(idAcivity)
-      );
-      res.json("Eliminado con exito");
     } catch (error) {
       console.log(error);
       res.json(error);

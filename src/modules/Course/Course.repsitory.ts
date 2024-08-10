@@ -49,20 +49,20 @@ class CourseRepository {
     try {
       const courses = await prisma.course.findMany({
         where: {
-          idUnit: idUnit
+          idUnit: idUnit,
         },
         include: {
-            modules: {
-                select: {
-                    id: true,
-                    title: true,
-                    order: true,
-                    typeFile: true,
-                    fileURL: true,
-                    description: true
-                }
-            }
-        }
+          modules: {
+            select: {
+              id: true,
+              title: true,
+              order: true,
+              typeFile: true,
+              fileURL: true,
+              description: true,
+            },
+          },
+        },
       });
       return courses;
     } catch (error) {
@@ -85,49 +85,6 @@ class CourseRepository {
       return course;
     } catch (error) {
       throw new Error(`Error al eliminar el course: ${error}`);
-    }
-  }
-
-  // Métodos específicos para asignación de entidades
-  async assignActivityToCourse(idCourse: number, idAcivity: number) {
-    try {
-      const updatedCourse = await prisma.course.update({
-        where: { id: idCourse },
-        data: {
-          activities: {
-            connectOrCreate: {
-              where: {
-                courseId_activityId: {
-                  activityId: idAcivity,
-                  courseId: idCourse,
-                },
-              },
-              create: {
-                activityId: idAcivity,
-              },
-            },
-          },
-        },
-      });
-
-      return updatedCourse;
-    } catch (error) {
-      throw new Error(`Error al associar el Course con Activity: ${error}`);
-    }
-  }
-
-  async removeActivityToCourse(idCourse: number, idAcivity: number) {
-    try {
-      await prisma.courseActivity.delete({
-        where: {
-          courseId_activityId: {
-            activityId: idAcivity,
-            courseId: idCourse,
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error(`Error al remover el Course de la Activity: ${error}`);
     }
   }
 }
