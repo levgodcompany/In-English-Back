@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", CourseController.findAll);
 router.get("/unit/:idUnit", CourseController.findAllByIdUnit);
+router.get("/:idUnit/unities", CourseController.findAllUnitiesByIdCourse);
 router.post("/", CourseController.create);
 router.put("/:idCourse", CourseController.update);
 router.get("/:idCourse", CourseController.findOne);

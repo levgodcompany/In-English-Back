@@ -12,6 +12,7 @@ class ModuleController {
             const newModule = await ModuleService.create(module);
             res.json(newModule)
         } catch (error) {
+            console.log(error)
             res.json(error)
         }
     }
