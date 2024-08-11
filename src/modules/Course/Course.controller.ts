@@ -36,6 +36,15 @@ class CourseController {
     }
   }
 
+  async findAllInfoBasic(_req: Request, res: Response): Promise<void> {
+    try {
+      const courses = await CourseService.findAllInfoBasic();
+      res.json(courses);
+    } catch (error) {
+      res.json(error);
+    }
+  }
+
   async findAllUnitiesByIdCourse(req: Request, res: Response): Promise<void> {
     try {
       const { idUnit } = req.params;

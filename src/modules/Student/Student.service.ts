@@ -4,6 +4,7 @@ import StudentRepository from "./Student.repository";
 import UnitService from "../Unit/Unit.service";
 import UnitRepository from "../Unit/Unit.repository";
 import LevelService from "../Level/Level.service";
+import { StudentInfoBasic } from "./StudentDtos";
 
 class StudentService {
   async findOne(id: number) {
@@ -31,6 +32,21 @@ class StudentService {
       return students;
     } catch (error) {
       throw new Error("" + error);
+    }
+  }
+
+  async findAllInfoBasic() {
+    try {
+      const students = await StudentRepository.findAll();
+      return students.map((student) => {
+        const info: StudentInfoBasic = {
+          id: student.id,
+          fullName: `${student.name} ${student.lastName}`,
+        };
+        return info;
+      });
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 

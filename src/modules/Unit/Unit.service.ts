@@ -1,5 +1,6 @@
 import { Unit } from "@prisma/client";
 import UnitRepository from "./Unit.repository";
+import { UnitInfoBasic } from "./UnitDto";
 
 class UnitService {
   async create(data: Unit) {
@@ -23,6 +24,21 @@ class UnitService {
       return UnitRepository.findAll();
     } catch (error) {
       throw new Error(`Error al buscar las unidad: ${error}`);
+    }
+  }
+
+  async findAllInfoBasic() {
+    try {
+      const unities = await UnitRepository.findAll();
+      return unities.map((unit) => {
+        const info: UnitInfoBasic = {
+          id: unit.id,
+          title: unit.title,
+        };
+        return info;
+      });
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 

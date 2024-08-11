@@ -24,24 +24,26 @@ model Student {
   status              Status                @relation(fields: [idStatus], references: [id])
   examSubmissionUnit  ExamSubmissionUnit[]
   examSubmissionLevel ExamSubmissionLevel[]
+  cohortStudent       CohortStudent[]
 
   @@map("Students")
 }
 
 // Modelo para los profesores
 model Teacher {
-  id        Int             @id @default(autoincrement())
-  name      String
-  lastName  String
-  password  String
-  email     String
-  birthDate DateTime // Fecha de nacimiento
-  levels    LevelTeacher[]
-  units     UnitTeacher[]
-  courses   CourseTeacher[]
-  modules   ModuleTeacher[]
-  examUnit  ExamUnit[]
-  examLevel ExamLevel[]
+  id             Int             @id @default(autoincrement())
+  name           String
+  lastName       String
+  password       String
+  email          String
+  birthDate      DateTime // Fecha de nacimiento
+  levels         LevelTeacher[]
+  units          UnitTeacher[]
+  courses        CourseTeacher[]
+  modules        ModuleTeacher[]
+  examUnit       ExamUnit[]
+  examLevel      ExamLevel[]
+  cohortTeachers CohortTeacher[]
 
   @@map("Teachers")
 }
@@ -57,8 +59,79 @@ model Level {
   teachers     LevelTeacher[]
   students     LevelStudent[]
   suscriptions Suscription[]
+  cohorts      Cohort[]
 
   @@map("Levels")
+}
+
+// Modulo de Cohortes / camadas
+model Cohort {
+  id                    Int             @id @default(autoincrement())
+  title                 String
+  description           String
+  startDate             DateTime
+  endDate               DateTime
+  registrationStartDate DateTime
+  registrationEndDate   DateTime
+  idLevel               Int
+  level                 Level           @relation(fields: [idLevel], references: [id])
+  cohortStudents        CohortStudent[]
+  cohortTeachers        CohortTeacher[]
+  cohortUnities         CohortUnit[]
+  cohortCourses         CohortCourse[]
+  cohortModules         CohortModule[]
+
+  @@map("Cohorts")
+}
+
+// Relación entre Cohort y Student
+model CohortStudent {
+  idStudent Int
+  idCohort  Int
+  student   Student @relation(fields: [idStudent], references: [id])
+  cohort    Cohort  @relation(fields: [idCohort], references: [id])
+
+  @@id([idStudent, idCohort])
+}
+
+// Relación entre Cohort y Teacher
+model CohortTeacher {
+  idTeacher Int
+  idCohort  Int
+  teacher   Teacher @relation(fields: [idTeacher], references: [id])
+  cohort    Cohort  @relation(fields: [idCohort], references: [id])
+
+  @@id([idTeacher, idCohort])
+}
+
+// Relación entre Cohort y Unities
+model CohortUnit {
+  idUnit   Int
+  idCohort Int
+  unities  Unit   @relation(fields: [idUnit], references: [id])
+  cohort   Cohort @relation(fields: [idCohort], references: [id])
+
+  @@id([idUnit, idCohort])
+}
+
+// Relación entre Cohort y Courses
+model CohortCourse {
+  idCourse Int
+  idCohort Int
+  courses  Course @relation(fields: [idCourse], references: [id])
+  cohort   Cohort @relation(fields: [idCohort], references: [id])
+
+  @@id([idCourse, idCohort])
+}
+
+// Relación entre Cohort y Modules
+model CohortModule {
+  idModule Int
+  idCohort Int
+  modules  Module @relation(fields: [idModule], references: [id])
+  cohort   Cohort @relation(fields: [idCohort], references: [id])
+
+  @@id([idModule, idCohort])
 }
 
 // Modelo de suscripciones
@@ -131,47 +204,50 @@ model Payment {
 
 // Modelo de las unidades
 model Unit {
-  id          Int           @id @default(autoincrement())
-  title       String
-  description String
-  order       Int // Nos permitirá organizar las unidades
-  level       Level         @relation(fields: [idLevel], references: [id]) // Muchas unidades pueden estar en un nivel
-  idLevel     Int
-  courses     Course[] // Una unidad puede tener muchos cursos
-  exams       ExamUnit[] // Un módulo puede tener muchas actividades
-  teachers    UnitTeacher[]
-  students    UnitStudent[]
+  id            Int           @id @default(autoincrement())
+  title         String
+  description   String
+  order         Int // Nos permitirá organizar las unidades
+  level         Level         @relation(fields: [idLevel], references: [id]) // Muchas unidades pueden estar en un nivel
+  idLevel       Int
+  courses       Course[] // Una unidad puede tener muchos cursos
+  exams         ExamUnit[] // Un módulo puede tener muchas actividades
+  teachers      UnitTeacher[]
+  students      UnitStudent[]
+  cohortUnities CohortUnit[]
 
   @@map("Unities")
 }
 
 // Modelo de los cursos
 model Course {
-  id          Int             @id @default(autoincrement())
-  title       String
-  description String
-  order       Int
-  unit        Unit            @relation(fields: [idUnit], references: [id]) // Muchos cursos pueden pertenecer a una unidad
-  idUnit      Int
-  modules     Module[] // Un curso puede tener muchos módulos
-  teachers    CourseTeacher[]
-  students    CourseStudent[]
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String
+  order         Int
+  unit          Unit            @relation(fields: [idUnit], references: [id]) // Muchos cursos pueden pertenecer a una unidad
+  idUnit        Int
+  modules       Module[] // Un curso puede tener muchos módulos
+  teachers      CourseTeacher[]
+  students      CourseStudent[]
+  cohortCourses CohortCourse[]
 
   @@map("Courses")
 }
 
 // Modelo de los módulos
 model Module {
-  id          Int             @id @default(autoincrement())
-  title       String
-  description String
-  idCourse    Int
-  order       Int
-  fileURL     String?
-  typeFile    String?
-  course      Course          @relation(fields: [idCourse], references: [id]) // Muchos módulos pueden estar en un solo curso
-  teachers    ModuleTeacher[]
-  students    ModuleStudent[]
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String
+  idCourse      Int
+  order         Int
+  fileURL       String?
+  typeFile      String?
+  course        Course          @relation(fields: [idCourse], references: [id]) // Muchos módulos pueden estar en un solo curso
+  teachers      ModuleTeacher[]
+  students      ModuleStudent[]
+  cohortModules CohortModule[]
 
   @@map("Modules")
 }
@@ -224,17 +300,17 @@ model ExamSubmissionUnit {
   @@map("ExamSubmissionsUnities")
 }
 
-model ExamSubmissionLevel {
+model ExamSubmissionLevel {+
   id             Int       @id @default(autoincrement())
   submissionDate DateTime  @default(now())
   score          Int // Puntuación obtenida en el examen
   idStatus       Int
   idStudent      Int
   archive        String
-  idExamUnit     Int
+  idExamLevel     Int
   student        Student   @relation(fields: [idStudent], references: [id])
   status         Status    @relation(fields: [idStatus], references: [id]) // Estado de la entrega: Submitted, Graded, etc.
-  exam           ExamLevel @relation(fields: [idExamUnit], references: [id])
+  exam           ExamLevel @relation(fields: [idExamLevel], references: [id])
 
   @@map("ExamSubmissionsLevel")
 }

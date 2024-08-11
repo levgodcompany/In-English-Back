@@ -24,6 +24,15 @@ class UnitController {
     }
   }
 
+  async findAllInfoBasic(_req: Request, res: Response): Promise<void> {
+    try {
+      const unities = await UnitService.findAllInfoBasic();
+      res.json(unities);
+    } catch (error) {
+      res.json(error);
+    }
+  }
+
   async findAllByIdLevel(req: Request, res: Response): Promise<void> {
     try {
       const { idLevel } = req.params;

@@ -23,13 +23,13 @@ class LevelService {
   async findAllInfoBasic() {
     try {
       const levles = await LevelRepository.findAll();
-      return levles.map(level=> {
+      return levles.map((level) => {
         const info: LevelInfoBasic = {
           id: level.id,
-          title: level.title
-        }
+          title: level.title,
+        };
         return info;
-      })
+      });
     } catch (error) {
       throw new Error(`${error}`);
     }

@@ -4,6 +4,7 @@ import { studentController } from "./Student.controller";
 const router = express.Router();
 
 router.get("/", studentController.findAll)
+router.get("/info-basic", studentController.findAllInfoBasic);
 router.get("/levels", studentController.findAllAndLevels)
 router.get("/:id", studentController.findOne)
 router.post("/", studentController.create)

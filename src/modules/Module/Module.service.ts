@@ -1,5 +1,6 @@
 import { Module } from "@prisma/client";
 import ModuleRepository from "./Module.repository";
+import { ModuleInfoBasic } from "./ModuleDto";
 
 class ModueService {
   async create(data: Module) {
@@ -23,6 +24,22 @@ class ModueService {
       return ModuleRepository.findAll();
     } catch (error) {
       throw new Error(`Error al buscar los modules: ${error}`);
+    }
+  }
+
+  async findAllInfoBasic() {
+    try {
+      const modules = await ModuleRepository.findAll();
+      return modules.map((module) => {
+        const info: ModuleInfoBasic = {
+          id: module.id,
+          title: module.title,
+          idCourse: module.idCourse
+        };
+        return info;
+      });
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 

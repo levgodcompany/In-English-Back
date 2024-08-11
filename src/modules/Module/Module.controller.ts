@@ -25,6 +25,15 @@ class ModuleController {
     }
   }
 
+  async findAllInfoBasic(_req: Request, res: Response): Promise<void> {
+    try {
+      const modules = await ModuleService.findAllInfoBasic();
+      res.json(modules);
+    } catch (error) {
+      res.json(error);
+    }
+  }
+
   async findAllByIdCourse(req: Request, res: Response): Promise<void> {
     try {
       const { idCourse } = req.params;

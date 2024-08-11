@@ -33,6 +33,15 @@ class StudentController {
     }
   }
 
+  async findAllInfoBasic(_req: Request, res: Response): Promise<void> {
+    try {
+      const students = await studentService.findAllInfoBasic();
+      res.json(students);
+    } catch (error) {
+      res.json(error);
+    }
+  }
+
   async findAllAndLevels(_req: Request, res: Response): Promise<void> {
     try {
       const newStudent = await studentService.findAllAndLevels();

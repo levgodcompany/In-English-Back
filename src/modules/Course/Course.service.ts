@@ -1,6 +1,7 @@
 import { Course } from "@prisma/client";
 import { prisma } from "../../../prisma";
 import CourseRepsitory from "./Course.repsitory";
+import { CourseInfoBasic } from "./CourseDto";
 
 class CourseService {
   async create(data: Course) {
@@ -32,6 +33,22 @@ class CourseService {
       return CourseRepsitory.findAllByIdUnit(idUnit);
     } catch (error) {
       throw new Error(`Error al buscar los courses: ${error}`);
+    }
+  }
+
+  async findAllInfoBasic() {
+    try {
+      const courses = await CourseRepsitory.findAll();
+      return courses.map(course=> {
+        const info: CourseInfoBasic = {
+          id: course.id,
+          title: course.title,
+          idUnit: course.idUnit
+        }
+        return info;
+      })
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   }
 
