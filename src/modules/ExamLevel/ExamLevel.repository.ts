@@ -40,6 +40,37 @@ class ExamLevelRepository {
     }
   }
 
+
+  async findAllByIdLevel(idLevel: number) {
+    try {
+      const teachers = await prisma.examLevel.findMany({
+        where: {
+          idLevel: idLevel
+        },
+        include: {
+          teacher: {
+            select:{
+              name: true,
+              lastName: true
+            }
+          },
+          level: {
+            select: {
+              title: true
+            }
+          }
+        }
+      });
+      if (teachers.length === 0) {
+        throw new Error("No se encontraron Teachers");
+      }
+      return teachers;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Examen: ${error}`);
+    }
+  }
+
+
   async create(data: ExamLevel) {
     try {
       const newLevel = await prisma.examLevel.create({ data });

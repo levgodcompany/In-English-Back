@@ -1,5 +1,6 @@
 import { Teacher } from "@prisma/client";
 import TeacherRepository from "./Teacher.repository";
+import { TeacherInfoBasic } from "./TeacherDtos";
 
 class TeacherService {
   // Métodos CRUD para el Teacher
@@ -15,6 +16,23 @@ class TeacherService {
   async findAll() {
     try {
       return TeacherRepository.findAll();
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Teachers: ${error}`);
+    }
+  }
+
+  async findAllInfoBasic() {
+    try {
+      const teachers = await TeacherRepository.findAll();
+
+      return teachers.map(teacher=> {
+        const info:TeacherInfoBasic = {
+          id: teacher.id,
+          fullName: `${teacher.name} ${teacher.lastName}`
+        }
+        return info;
+      })
+
     } catch (error) {
       throw new Error(`Error al buscar todos los Teachers: ${error}`);
     }

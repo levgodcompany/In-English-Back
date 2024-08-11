@@ -15,9 +15,18 @@ class LevelController {
     }
   }
 
-  async findAll(req: Request, res: Response): Promise<void> {
+  async findAll(_req: Request, res: Response): Promise<void> {
     try {
       const levels = await LevelService.findAll();
+      res.json(levels);
+    } catch (error) {
+      res.json(error);
+    }
+  }
+
+  async findAllInfoBasic(req: Request, res: Response): Promise<void> {
+    try {
+      const levels = await LevelService.findAllInfoBasic();
       res.json(levels);
     } catch (error) {
       res.json(error);

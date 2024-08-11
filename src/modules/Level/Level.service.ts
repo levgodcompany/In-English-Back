@@ -1,6 +1,7 @@
 import { Level } from "@prisma/client";
 import { prisma } from "../../../prisma";
 import LevelRepository from "./Level.repository";
+import { LevelInfoBasic } from "./LevelDto";
 
 class LevelService {
   async create(data: Level) {
@@ -14,6 +15,21 @@ class LevelService {
   async findAll() {
     try {
       return LevelRepository.findAll();
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+  }
+
+  async findAllInfoBasic() {
+    try {
+      const levles = await LevelRepository.findAll();
+      return levles.map(level=> {
+        const info: LevelInfoBasic = {
+          id: level.id,
+          title: level.title
+        }
+        return info;
+      })
     } catch (error) {
       throw new Error(`${error}`);
     }

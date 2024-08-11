@@ -17,12 +17,9 @@ class LevelRepository {
   async findAll() {
     try {
       const teachers = await prisma.level.findMany();
-      if (teachers.length === 0) {
-        throw new Error("No se encontraron Teachers");
-      }
       return teachers;
     } catch (error) {
-      throw new Error(`Error al buscar todos los Teachers: ${error}`);
+      throw new Error(`Error al buscar todos los Levels: ${error}`);
     }
   }
 

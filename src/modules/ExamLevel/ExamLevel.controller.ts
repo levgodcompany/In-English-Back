@@ -23,7 +23,18 @@ class ExamLevelController {
       const exams = await ExamLevelService.findAll();
       res.json(exams);
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      res.json(error);
+    }
+  }
+
+  async findAllByIdLevel(req: Request, res: Response): Promise<void> {
+    try {
+      const {idLevel} = req.params
+      const exams = await ExamLevelService.findAllByIdLevel(Number(idLevel));
+      res.json(exams);
+    } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

@@ -4,6 +4,7 @@ import TeacherController from "./Teacher.controller";
 const router = Router();
 
 router.get("/", TeacherController.findAll);
+router.get("/info-basic", TeacherController.findAllInfoBasic);
 router.get("/:idTeacher", TeacherController.findOne);
 router.post("/", TeacherController.create);
 router.put("/:idTeacher", TeacherController.update);

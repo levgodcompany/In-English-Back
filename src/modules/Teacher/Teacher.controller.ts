@@ -32,6 +32,15 @@ class TeacherController {
     }
   }
 
+  async findAllInfoBasic(_req: Request, res: Response): Promise<void> {
+    try {
+      const teachers = await TeacherService.findAllInfoBasic();
+      res.json(teachers);
+    } catch (error) {
+      res.json(error);
+    }
+  }
+
   async update(req: Request, res: Response): Promise<void> {
     try {
       const { idTeacher } = req.params;

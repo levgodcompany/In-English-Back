@@ -5,6 +5,7 @@ import ExamLevelRouter from "../ExamLevel/ExamLevel.routes"
 const router = Router();
 
 router.get("/", LevelController.findAll);
+router.get("/info-basic", LevelController.findAllInfoBasic);
 router.post("/", LevelController.create);
 router.put("/:idLevel", LevelController.update);
 router.get("/:idLevel", LevelController.findOne);

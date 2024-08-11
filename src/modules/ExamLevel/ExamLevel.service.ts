@@ -18,9 +18,15 @@ class ExamLevelServices {
   async findAll() {
     try {
       const teachers = await ExamLevelRepository.findAll();
-      if (teachers.length === 0) {
-        throw new Error("No se encontraron Teachers");
-      }
+      return teachers;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Examen: ${error}`);
+    }
+  }
+
+  async findAllByIdLevel(idLevel: number) {
+    try {
+      const teachers = await ExamLevelRepository.findAllByIdLevel(idLevel);
       return teachers;
     } catch (error) {
       throw new Error(`Error al buscar todos los Examen: ${error}`);
