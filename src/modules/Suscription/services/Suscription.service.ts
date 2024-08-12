@@ -36,7 +36,7 @@ class SuscriptionService {
 
   async delete(id: number) {
     try {
-      return await SuscriptionRepository.delete(id);
+      return await SuscriptionRepository.deleteSuscriptionWithRelations(id);
     } catch (error) {
       throw new Error(`Error al buscar una suscription: ${error}`);
     }

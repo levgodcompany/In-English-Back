@@ -7,10 +7,13 @@ import {
 
 const router = express.Router();
 
+router.get("/info-basic", StudentRelationsController.findAllInfoBasic);
+router.get("/levels", StudentRelationsController.findAllAndLevels);
 router.get("/", StudentCRUDController.findAll);
 router.get("/:id", StudentCRUDController.findOne);
 router.post("/", StudentCRUDController.create);
 router.delete("/:id", StudentCRUDController.delete);
+
 
 // Assign
 router.put(
@@ -36,7 +39,5 @@ router.delete(
   StudentEntityAssignmentController.removeLevelFromStudent
 );
 
-router.get("/info-basic", StudentRelationsController.findAllInfoBasic);
-router.get("/levels", StudentRelationsController.findAllAndLevels);
 
 export default router;

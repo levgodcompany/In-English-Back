@@ -19,6 +19,7 @@ class BenefitController {
       const benefits = await BenefitServices.findAll();
       res.json(benefits);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -28,6 +29,7 @@ class BenefitController {
       const benefits = await BenefitServices.findOne(Number(idBenefit));
       res.json(benefits);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -39,6 +41,7 @@ class BenefitController {
       const benefits = await BenefitServices.update(Number(idBenefit), body);
       res.json(benefits);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -49,6 +52,7 @@ class BenefitController {
       const benefits = await BenefitServices.delete(Number(idBenefit));
       res.json(benefits);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

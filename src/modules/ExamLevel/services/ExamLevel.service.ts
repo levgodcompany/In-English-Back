@@ -52,7 +52,7 @@ class ExamLevelServices {
 
   async delete(id: number) {
     try {
-      const deletedLevel = await ExamLevelRepository.delete(id);
+      const deletedLevel = await ExamLevelRepository.deleteExamLevelWithRelations(id);
       return deletedLevel;
     } catch (error) {
       throw new Error(`Error al eliminar el Examen con ID ${id}: ${error}`);

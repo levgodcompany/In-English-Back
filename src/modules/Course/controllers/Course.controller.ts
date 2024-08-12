@@ -41,6 +41,7 @@ class CourseController {
       const courses = await CourseUnitService.findAllInfoBasic();
       res.json(courses);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

@@ -21,6 +21,7 @@ class ModuleController {
       const modules = await ModuleService.findAll();
       res.json(modules);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -30,6 +31,7 @@ class ModuleController {
       const modules = await ModuleService.findAllInfoBasic();
       res.json(modules);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -40,6 +42,7 @@ class ModuleController {
       const modules = await ModuleService.findAllByIdCourse(Number(idCourse));
       res.json(modules);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -50,6 +53,7 @@ class ModuleController {
       const module = await ModuleService.findOne(Number(idModule));
       res.json(module);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -60,6 +64,7 @@ class ModuleController {
       const module = await ModuleService.delete(Number(idModule));
       res.json(module);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -73,6 +78,7 @@ class ModuleController {
       const module = await ModuleService.update(Number(idModule), body);
       res.json(module);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

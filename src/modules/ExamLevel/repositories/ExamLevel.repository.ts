@@ -1,5 +1,6 @@
-import { ExamLevel } from "@prisma/client";
+import { ExamLevel, PrismaClient } from "@prisma/client";
 import { prisma } from "../../../../prisma";
+import { p } from "../../../utilities/CrudRepository";
 
 class ExamLevelRepository {
   async findOne(id: number) {
@@ -90,12 +91,119 @@ class ExamLevelRepository {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async delete(id: number) {
     try {
       const deletedLevel = await prisma.examLevel.delete({ where: { id } });
       return deletedLevel;
     } catch (error) {
       throw new Error(`Error al eliminar el Examen con ID ${id}: ${error}`);
+    }
+  }
+
+  public async deleteExamLevelWithRelations(
+    idExamLevel: number
+  ): Promise<void> {
+    try {
+      await prisma.$transaction(async (p) => {
+        // Eliminacion de realacion ExamLevel y ExamSubmissionLevel
+        await p.examSubmissionLevel.deleteMany({
+          where: {
+            idExamLevel,
+          },
+        });
+        // Finalmente, eliminar la Cohort
+        await p.cohort.delete({
+          where: {
+            id: idExamLevel,
+          },
+        });
+      });
+    } catch (error) {
+      console.error(`Error eliminando la cohort con ID ${idExamLevel}:`, error);
+      throw error;
+    }
+  }
+
+  public async deleteExamLevelById(ids: number[]): Promise<void> {
+    try {
+      await prisma.$transaction(async (p) => {
+        // Eliminacion de realacion ExamLevel y ExamSubmissionLevel
+        await p.examSubmissionLevel.deleteMany({
+          where: {
+            idExamLevel: {
+              in: ids,
+            },
+          },
+        });
+        // Finalmente, eliminar la Cohort
+        await p.cohort.deleteMany({
+          where: {
+            id: {
+              in: ids,
+            },
+          },
+        });
+      });
+    } catch (error) {
+      console.error(`Error eliminando la cohort con ID ${ids}:`, error);
+      throw error;
+    }
+  }
+
+  public async deleteExamLevelWithRelationsCascade(
+    idExamLevel: number,
+    prismaInstance: PrismaClient
+  ): Promise<void> {
+    try {
+      await prismaInstance.$transaction(async (p) => {
+        // Eliminacion de realacion ExamLevel y ExamSubmissionLevel
+        await p.examSubmissionLevel.deleteMany({
+          where: {
+            idExamLevel,
+          },
+        });
+        // Finalmente, eliminar la Cohort
+        await p.cohort.delete({
+          where: {
+            id: idExamLevel,
+          },
+        });
+      });
+    } catch (error) {
+      console.error(`Error eliminando la cohort con ID ${idExamLevel}:`, error);
+      throw error;
+    }
+  }
+
+  public async deleteExamLevelByIdCascade(ids: number[], p: p): Promise<void> {
+    try {
+      // await prismaInstance.$transaction(async (p) => {
+        // Eliminacion de realacion ExamLevel y ExamSubmissionLevel
+        await p.examSubmissionLevel.deleteMany({
+          where: {
+            idExamLevel: {
+              in: ids,
+            },
+          },
+        });
+        // Finalmente, eliminar la Cohort
+        await p.cohort.deleteMany({
+          where: {
+            id: {
+              in: ids,
+            },
+          },
+        });
+        console.log("-----------------------");
+        console.log("EXAMEN LEVEL ELIMINADO");
+        console.log("-----------------------");
+      // });
+    } catch (error) {
+      console.error(`Error eliminando la cohort con ID ${ids}:`, error);
+      throw error;
     }
   }
 }

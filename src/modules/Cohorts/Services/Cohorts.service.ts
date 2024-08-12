@@ -41,7 +41,7 @@ class CohortsServices {
 
   async delete(id: number) {
     try {
-      const deletedCohort = await CohortRepository.delete(id);
+      const deletedCohort = await CohortRepository.deleteCohortWithRelations(id);
       return deletedCohort;
     } catch (error) {
       throw new Error(`Error al eliminar el cohort con ID ${id}: ${error}`);

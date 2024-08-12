@@ -59,6 +59,7 @@ class UnitController {
       const unit = await UnitService.delete(Number(idUnit));
       res.json(unit);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

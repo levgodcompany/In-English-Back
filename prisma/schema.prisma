@@ -21,7 +21,7 @@ model Student {
   courses             CourseStudent[]
   modules             ModuleStudent[]
   suscriptions        StudentSuscription[]
-  status              Status                @relation(fields: [idStatus], references: [id])
+  status              Status                @relation(fields: [idStatus], references: [id], onDelete: Cascade)
   examSubmissionUnit  ExamSubmissionUnit[]
   examSubmissionLevel ExamSubmissionLevel[]
   cohortStudent       CohortStudent[]
@@ -55,7 +55,7 @@ model Level {
   description  String
   order        Int // Nos permite organizar los niveles
   unities      Unit[] // Un nivel puede tener muchas unidades
-  exams        ExamLevel[] // Un módulo puede tener muchas actividades
+  exams        ExamLevel[]
   teachers     LevelTeacher[]
   students     LevelStudent[]
   suscriptions Suscription[]
@@ -74,7 +74,7 @@ model Cohort {
   registrationStartDate DateTime
   registrationEndDate   DateTime
   idLevel               Int
-  level                 Level           @relation(fields: [idLevel], references: [id])
+  level                 Level           @relation(fields: [idLevel], references: [id], onDelete: Cascade)
   cohortStudents        CohortStudent[]
   cohortTeachers        CohortTeacher[]
   cohortUnities         CohortUnit[]
@@ -88,8 +88,8 @@ model Cohort {
 model CohortStudent {
   idStudent Int
   idCohort  Int
-  student   Student @relation(fields: [idStudent], references: [id])
-  cohort    Cohort  @relation(fields: [idCohort], references: [id])
+  student   Student @relation(fields: [idStudent], references: [id], onDelete: Cascade)
+  cohort    Cohort  @relation(fields: [idCohort], references: [id], onDelete: Cascade)
 
   @@id([idStudent, idCohort])
 }
@@ -98,8 +98,8 @@ model CohortStudent {
 model CohortTeacher {
   idTeacher Int
   idCohort  Int
-  teacher   Teacher @relation(fields: [idTeacher], references: [id])
-  cohort    Cohort  @relation(fields: [idCohort], references: [id])
+  teacher   Teacher @relation(fields: [idTeacher], references: [id], onDelete: Cascade)
+  cohort    Cohort  @relation(fields: [idCohort], references: [id], onDelete: Cascade)
 
   @@id([idTeacher, idCohort])
 }
@@ -108,8 +108,8 @@ model CohortTeacher {
 model CohortUnit {
   idUnit   Int
   idCohort Int
-  unities  Unit   @relation(fields: [idUnit], references: [id])
-  cohort   Cohort @relation(fields: [idCohort], references: [id])
+  unities  Unit   @relation(fields: [idUnit], references: [id], onDelete: Cascade)
+  cohort   Cohort @relation(fields: [idCohort], references: [id], onDelete: Cascade)
 
   @@id([idUnit, idCohort])
 }
@@ -118,8 +118,8 @@ model CohortUnit {
 model CohortCourse {
   idCourse Int
   idCohort Int
-  courses  Course @relation(fields: [idCourse], references: [id])
-  cohort   Cohort @relation(fields: [idCohort], references: [id])
+  courses  Course @relation(fields: [idCourse], references: [id], onDelete: Cascade)
+  cohort   Cohort @relation(fields: [idCohort], references: [id], onDelete: Cascade)
 
   @@id([idCourse, idCohort])
 }
@@ -128,8 +128,8 @@ model CohortCourse {
 model CohortModule {
   idModule Int
   idCohort Int
-  modules  Module @relation(fields: [idModule], references: [id])
-  cohort   Cohort @relation(fields: [idCohort], references: [id])
+  modules  Module @relation(fields: [idModule], references: [id], onDelete: Cascade)
+  cohort   Cohort @relation(fields: [idCohort], references: [id], onDelete: Cascade)
 
   @@id([idModule, idCohort])
 }
@@ -143,7 +143,7 @@ model Suscription {
   amount             Decimal // Monto de la suscripción
   numInstallments    Int // Número de cuotas
   discountPercentage Int // Porcentaje de descuento
-  level              Level                      @relation(fields: [idLevel], references: [id])
+  level              Level                      @relation(fields: [idLevel], references: [id], onDelete: Cascade)
   students           StudentSuscription[]
   paymentMethods     SuscriptionPaymentMethod[]
   benefits           SuscriptionBenefit[]
@@ -195,9 +195,9 @@ model Payment {
   amount             Decimal
   paymentDate        DateTime
   monthlyFee         Int // Cuota mensual
-  status             Status             @relation(fields: [idStatus], references: [id])
-  paymentMethod      PaymentMethod      @relation(fields: [idPaymentMethod], references: [id])
-  studentSuscription StudentSuscription @relation(fields: [idStudent, idSuscription], references: [idStudent, idSuscription])
+  status             Status             @relation(fields: [idStatus], references: [id], onDelete: Cascade)
+  paymentMethod      PaymentMethod      @relation(fields: [idPaymentMethod], references: [id], onDelete: Cascade)
+  studentSuscription StudentSuscription @relation(fields: [idStudent, idSuscription], references: [idStudent, idSuscription], onDelete: Cascade)
 
   @@map("Payments")
 }
@@ -208,7 +208,7 @@ model Unit {
   title         String
   description   String
   order         Int // Nos permitirá organizar las unidades
-  level         Level         @relation(fields: [idLevel], references: [id]) // Muchas unidades pueden estar en un nivel
+  level         Level         @relation(fields: [idLevel], references: [id], onDelete: Cascade) // Muchas unidades pueden estar en un nivel
   idLevel       Int
   courses       Course[] // Una unidad puede tener muchos cursos
   exams         ExamUnit[] // Un módulo puede tener muchas actividades
@@ -225,7 +225,7 @@ model Course {
   title         String
   description   String
   order         Int
-  unit          Unit            @relation(fields: [idUnit], references: [id]) // Muchos cursos pueden pertenecer a una unidad
+  unit          Unit            @relation(fields: [idUnit], references: [id], onDelete: Cascade) // Muchos cursos pueden pertenecer a una unidad
   idUnit        Int
   modules       Module[] // Un curso puede tener muchos módulos
   teachers      CourseTeacher[]
@@ -244,7 +244,7 @@ model Module {
   order         Int
   fileURL       String?
   typeFile      String?
-  course        Course          @relation(fields: [idCourse], references: [id]) // Muchos módulos pueden estar en un solo curso
+  course        Course          @relation(fields: [idCourse], references: [id], onDelete: Cascade) // Muchos módulos pueden estar en un solo curso
   teachers      ModuleTeacher[]
   students      ModuleStudent[]
   cohortModules CohortModule[]
@@ -263,8 +263,8 @@ model ExamUnit {
   passingScore       Int // Puntuación mínima para aprobar
   numberAttempts     Int
   examSubmissionUnit ExamSubmissionUnit[]
-  unit               Unit                 @relation(fields: [idUnit], references: [id])
-  teacher            Teacher              @relation(fields: [idTeacher], references: [id])
+  unit               Unit                 @relation(fields: [idUnit], references: [id], onDelete: Cascade)
+  teacher            Teacher              @relation(fields: [idTeacher], references: [id], onDelete: Cascade)
 
   @@map("ExamsUnities")
 }
@@ -279,8 +279,8 @@ model ExamLevel {
   passingScore        Int // Puntuación mínima para aprobar
   NumberAttempts      Int
   examSubmissionLevel ExamSubmissionLevel[]
-  level               Level                 @relation(fields: [idLevel], references: [id])
-  teacher             Teacher               @relation(fields: [idTeacher], references: [id])
+  level               Level                 @relation(fields: [idLevel], references: [id], onDelete: Cascade)
+  teacher             Teacher               @relation(fields: [idTeacher], references: [id], onDelete: Cascade)
 
   @@map("ExamsLevels")
 }
@@ -293,24 +293,24 @@ model ExamSubmissionUnit {
   idStudent      Int
   archive        String
   idExamUnit     Int
-  student        Student  @relation(fields: [idStudent], references: [id])
-  status         Status   @relation(fields: [idStatus], references: [id]) // Estado de la entrega: Submitted, Graded, etc.
-  exam           ExamUnit @relation(fields: [idExamUnit], references: [id])
+  student        Student  @relation(fields: [idStudent], references: [id], onDelete: Cascade)
+  status         Status   @relation(fields: [idStatus], references: [id], onDelete: Cascade) // Estado de la entrega: Submitted, Graded, etc.
+  exam           ExamUnit @relation(fields: [idExamUnit], references: [id], onDelete: Cascade)
 
   @@map("ExamSubmissionsUnities")
 }
 
-model ExamSubmissionLevel {+
+model ExamSubmissionLevel {
   id             Int       @id @default(autoincrement())
   submissionDate DateTime  @default(now())
   score          Int // Puntuación obtenida en el examen
   idStatus       Int
   idStudent      Int
   archive        String
-  idExamLevel     Int
-  student        Student   @relation(fields: [idStudent], references: [id])
-  status         Status    @relation(fields: [idStatus], references: [id]) // Estado de la entrega: Submitted, Graded, etc.
-  exam           ExamLevel @relation(fields: [idExamLevel], references: [id])
+  idExamLevel    Int
+  student        Student   @relation(fields: [idStudent], references: [id], onDelete: Cascade)
+  status         Status    @relation(fields: [idStatus], references: [id], onDelete: Cascade) // Estado de la entrega: Submitted, Graded, etc.
+  exam           ExamLevel @relation(fields: [idExamLevel], references: [id], onDelete: Cascade)
 
   @@map("ExamSubmissionsLevel")
 }
@@ -324,9 +324,9 @@ model StudentSuscription {
   endDate       DateTime?
   totalAmount   Decimal
   totalFees     Int // Total de cuotas
-  student       Student     @relation(fields: [idStudent], references: [id])
-  suscription   Suscription @relation(fields: [idSuscription], references: [id])
-  status        Status      @relation(fields: [idStatus], references: [id])
+  student       Student     @relation(fields: [idStudent], references: [id], onDelete: Cascade)
+  suscription   Suscription @relation(fields: [idSuscription], references: [id], onDelete: Cascade)
+  status        Status      @relation(fields: [idStatus], references: [id], onDelete: Cascade)
   payment       Payment[]
 
   @@id([idStudent, idSuscription])
@@ -337,8 +337,8 @@ model StudentSuscription {
 model SuscriptionPaymentMethod {
   idSuscription   Int
   idPaymentMethod Int
-  suscription     Suscription   @relation(fields: [idSuscription], references: [id])
-  paymentMethod   PaymentMethod @relation(fields: [idPaymentMethod], references: [id])
+  suscription     Suscription   @relation(fields: [idSuscription], references: [id], onDelete: Cascade)
+  paymentMethod   PaymentMethod @relation(fields: [idPaymentMethod], references: [id], onDelete: Cascade)
 
   @@id([idSuscription, idPaymentMethod])
 }
@@ -347,8 +347,8 @@ model SuscriptionPaymentMethod {
 model SuscriptionBenefit {
   idSuscription Int
   idBenefit     Int
-  benefit       Benefit     @relation(fields: [idBenefit], references: [id])
-  suscription   Suscription @relation(fields: [idSuscription], references: [id])
+  benefit       Benefit     @relation(fields: [idBenefit], references: [id], onDelete: Cascade)
+  suscription   Suscription @relation(fields: [idSuscription], references: [id], onDelete: Cascade)
 
   @@id([idSuscription, idBenefit])
 }
@@ -357,8 +357,8 @@ model SuscriptionBenefit {
 model LevelTeacher {
   levelId   Int
   teacherId Int
-  level     Level   @relation(fields: [levelId], references: [id])
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  level     Level   @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@id([levelId, teacherId])
 }
@@ -367,8 +367,8 @@ model LevelTeacher {
 model UnitTeacher {
   unitId    Int
   teacherId Int
-  unit      Unit    @relation(fields: [unitId], references: [id])
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  unit      Unit    @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@id([unitId, teacherId])
 }
@@ -377,8 +377,8 @@ model UnitTeacher {
 model CourseTeacher {
   courseId  Int
   teacherId Int
-  course    Course  @relation(fields: [courseId], references: [id])
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@id([courseId, teacherId])
 }
@@ -387,8 +387,8 @@ model CourseTeacher {
 model ModuleTeacher {
   moduleId  Int
   teacherId Int
-  module    Module  @relation(fields: [moduleId], references: [id])
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  module    Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@id([moduleId, teacherId])
 }
@@ -397,8 +397,8 @@ model ModuleTeacher {
 model LevelStudent {
   levelId   Int
   studentId Int
-  level     Level   @relation(fields: [levelId], references: [id])
-  student   Student @relation(fields: [studentId], references: [id])
+  level     Level   @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@id([levelId, studentId])
 }
@@ -407,8 +407,8 @@ model LevelStudent {
 model UnitStudent {
   unitId    Int
   studentId Int
-  unit      Unit    @relation(fields: [unitId], references: [id])
-  student   Student @relation(fields: [studentId], references: [id])
+  unit      Unit    @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@id([unitId, studentId])
 }
@@ -417,8 +417,8 @@ model UnitStudent {
 model CourseStudent {
   courseId  Int
   studentId Int
-  course    Course  @relation(fields: [courseId], references: [id])
-  student   Student @relation(fields: [studentId], references: [id])
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@id([courseId, studentId])
 }
@@ -427,8 +427,8 @@ model CourseStudent {
 model ModuleStudent {
   moduleId  Int
   studentId Int
-  module    Module  @relation(fields: [moduleId], references: [id])
-  student   Student @relation(fields: [studentId], references: [id])
+  module    Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@id([moduleId, studentId])
 }

@@ -20,6 +20,7 @@ class LevelController {
       const levels = await LevelService.findAll();
       res.json(levels);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -29,6 +30,7 @@ class LevelController {
       const levels = await LevelService.findAllInfoBasic();
       res.json(levels);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -39,6 +41,7 @@ class LevelController {
       const levels = await LevelService.findOne(Number(idLevel));
       res.json(levels);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -61,6 +64,7 @@ class LevelController {
       const levels = await LevelService.update(Number(idLevel), body);
       res.json(levels);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

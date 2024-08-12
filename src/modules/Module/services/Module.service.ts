@@ -61,7 +61,7 @@ class ModueService {
 
   async delete(id: number) {
     try {
-      return ModuleRepository.delete(id);
+      return ModuleRepository.deleteModuleWithRelations(id);
     } catch (error) {
       throw new Error(`Error al eliminar el module: ${error}`);
     }

@@ -19,6 +19,7 @@ class PaymentController {
       const payments = await PaymentServices.findAll();
       res.json(payments);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -28,6 +29,7 @@ class PaymentController {
       const payments = await PaymentServices.findOne(Number(idPayment));
       res.json(payments);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -39,6 +41,7 @@ class PaymentController {
       const payments = await PaymentServices.update(Number(idPayment), body);
       res.json(payments);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -49,6 +52,7 @@ class PaymentController {
       const payment = await PaymentServices.delete(Number(idPayment));
       res.json(payment);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

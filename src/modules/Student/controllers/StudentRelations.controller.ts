@@ -7,6 +7,7 @@ class StudentRelations {
       const students = await StudentCRUDService.findAllInfoBasic();
       res.json(students);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -16,6 +17,7 @@ class StudentRelations {
       const newStudent = await StudentRelationsService.findAllAndLevels();
       res.json(newStudent);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

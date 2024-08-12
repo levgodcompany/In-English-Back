@@ -19,6 +19,7 @@ class ExamUnitController {
       const exams = await ExamUnitServices.findAll();
       res.json(exams);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -29,6 +30,7 @@ class ExamUnitController {
       const exams = await ExamUnitServices.findOne(Number(idExam));
       res.json(exams);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -39,6 +41,7 @@ class ExamUnitController {
       const exam = await ExamUnitServices.delete(Number(idExam));
       res.json(exam);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -50,6 +53,7 @@ class ExamUnitController {
       const exam = await ExamUnitServices.update(Number(idExam), body);
       res.json(exam);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

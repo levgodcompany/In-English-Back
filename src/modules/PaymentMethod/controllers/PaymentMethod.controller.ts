@@ -19,6 +19,7 @@ class PaymentMethodController {
       const paymentMethods = await PaymentMethodServices.findAll();
       res.json(paymentMethods);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -30,6 +31,7 @@ class PaymentMethodController {
       );
       res.json(paymentMethod);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -44,6 +46,7 @@ class PaymentMethodController {
       );
       res.json(paymentMethod);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -56,6 +59,7 @@ class PaymentMethodController {
       );
       res.json(paymentMethod);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

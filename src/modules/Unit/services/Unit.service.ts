@@ -62,7 +62,7 @@ class UnitService {
 
   async delete(id: number) {
     try {
-      return UnitRepository.delete(id);
+      return UnitRepository.deleteUnityWithRelations(id);
     } catch (error) {
       throw new Error(`Error al eliminar la unidad: ${error}`);
     }

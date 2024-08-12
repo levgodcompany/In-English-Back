@@ -45,6 +45,7 @@ class ExamLevelController {
       const exams = await ExamLevelService.findOne(Number(idExam));
       res.json(exams);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -55,6 +56,7 @@ class ExamLevelController {
       const exam = await ExamLevelService.delete(Number(idExam));
       res.json(exam);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }
@@ -66,6 +68,7 @@ class ExamLevelController {
       const exam = await ExamLevelService.update(Number(idExam), body);
       res.json(exam);
     } catch (error) {
+      console.log(error);
       res.json(error);
     }
   }

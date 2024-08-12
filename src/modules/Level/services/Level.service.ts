@@ -1,6 +1,7 @@
 import { Level } from "@prisma/client";
 import { LevelInfoBasic } from "../LevelDto";
 import { LevelRepository } from "../Repositories";
+import ModuleService from "../../Module/services/Module.service";
 
 class LevelService {
   async create(data: Level) {
@@ -52,7 +53,7 @@ class LevelService {
 
   async delete(id: number) {
     try {
-      return LevelRepository.delete(id);
+      return LevelRepository.deleteLevelWithRelations(id);
     } catch (error) {
       throw new Error(`Error al eliminar el Level con ID ${id}: ${error}`);
     }

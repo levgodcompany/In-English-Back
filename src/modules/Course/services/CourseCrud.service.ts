@@ -36,7 +36,7 @@ class CourseCrudService {
 
   async delete(id: number) {
     try {
-      return CourseCRUDRepository.delete(id);
+      return CourseCRUDRepository.deleteCourseWithRelations(id);
     } catch (error) {
       throw new Error(`Error al eliminar el course: ${error}`);
     }
