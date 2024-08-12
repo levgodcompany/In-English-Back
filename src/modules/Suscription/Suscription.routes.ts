@@ -1,16 +1,16 @@
 import { Router } from "express";
-import SuscriptionController from "./Suscription.controller";
+import { SuscriptionAssignmentsController, SuscriptionController } from "./controllers";
 
 const router = Router();
 
 router.post("/", SuscriptionController.create)
 
-router.put("/benefits/:idSuscription", SuscriptionController.assignBenefitsToSuscription)
-router.put("/payment-methods/:idSuscription", SuscriptionController.assignPaymentMethodsToSuscription)
+router.put("/benefits/:idSuscription", SuscriptionAssignmentsController.assignBenefitsToSuscription)
+router.put("/payment-methods/:idSuscription", SuscriptionAssignmentsController.assignPaymentMethodsToSuscription)
 
-router.put("/:idSuscription/:idBenefit", SuscriptionController.assignBenefitToSuscription)
-router.put("/:idSuscription/:idPaymentMethod", SuscriptionController.assignPaymentMethodToSuscription)
-router.put("/:idSuscription/:idStudent", SuscriptionController.assignStudentToSuscription)
+router.put("/:idSuscription/:idBenefit", SuscriptionAssignmentsController.assignBenefitToSuscription)
+router.put("/:idSuscription/:idPaymentMethod", SuscriptionAssignmentsController.assignPaymentMethodToSuscription)
+router.put("/:idSuscription/:idStudent", SuscriptionAssignmentsController.assignStudentToSuscription)
 router.put("/:idSuscription", SuscriptionController.update)
 
 router.get("/", SuscriptionController.findAll)

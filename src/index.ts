@@ -1,9 +1,8 @@
 import express from "express";
 import router from "./routes/index.routes";
-import cors from "cors"
+import cors from "cors";
 
 const app = express();
-
 
 app.use(express.json());
 
@@ -13,12 +12,10 @@ app.use(cors());
 
 app.use("/api/v1/", router);
 
-
 app.all("*", (req, res) => {
-    res.send(`Oh, can't find ${req.originalUrl} on this server!`)
-    
+  res.send(`Oh, can't find ${req.originalUrl} on this server!`);
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on port: ${PORT}`);
+  console.log(`Server running on port: ${PORT}`);
 });

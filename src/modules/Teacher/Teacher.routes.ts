@@ -1,5 +1,5 @@
 import { Router } from "express";
-import TeacherController from "./Teacher.controller";
+import { TeacherAssignmentsController, TeacherController } from "./controllers";
 
 const router = Router();
 
@@ -9,9 +9,21 @@ router.get("/:idTeacher", TeacherController.findOne);
 router.post("/", TeacherController.create);
 router.put("/:idTeacher", TeacherController.update);
 router.delete("/:idTeacher", TeacherController.delete);
-router.put("/:idTeacher/level/:idLevel", TeacherController.assignLevelToTeacher);
-router.put("/:idTeacher/unit/:idUnit", TeacherController.assignUnitToTeacher);
-router.put("/:idTeacher/course/:idCourse", TeacherController.assignCourseToTeacher);
-router.put("/:idTeacher/module/:idModule", TeacherController.assignModuleToTeacher);
+router.put(
+  "/:idTeacher/level/:idLevel",
+  TeacherAssignmentsController.assignLevelToTeacher
+);
+router.put(
+  "/:idTeacher/unit/:idUnit",
+  TeacherAssignmentsController.assignUnitToTeacher
+);
+router.put(
+  "/:idTeacher/course/:idCourse",
+  TeacherAssignmentsController.assignCourseToTeacher
+);
+router.put(
+  "/:idTeacher/module/:idModule",
+  TeacherAssignmentsController.assignModuleToTeacher
+);
 
 export default router;
