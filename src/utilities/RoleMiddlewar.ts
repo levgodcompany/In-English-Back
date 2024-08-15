@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 interface AuthRequest extends Request {
   user?: { userId: number; role: string }; // Añadimos una propiedad opcional para el usuario

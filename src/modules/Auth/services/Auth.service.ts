@@ -1,12 +1,15 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { TokenExpiryOptions } from "../../../utilities";
 
 abstract class AuthService<T> {
   private secretKey: string;
   private readonly SALT_ROUNDS = 10;
+  private tokenExpiry = TokenExpiryOptions.hours.oneHour;
 
-  constructor(secretKey: string, private tokenExpiry: string = "1h", private role: string) {
+  constructor(secretKey: string, tokenExpiry: string, private role: string) {
     this.secretKey = secretKey;
+    this.tokenExpiry = tokenExpiry;
   }
 
   protected setTokenExpiry(expiry: string): void {

@@ -13,4 +13,5 @@ export {
 
 export { default as AuthMiddleware } from "./AuthMiddleware";
 export { default as RoleMiddleware } from "./RoleMiddlewar";
-export { Rol } from "./Roles"
+export { Rol } from "./Roles";
+export { TokenExpiryOptions } from "./TokenExpiryOptions";

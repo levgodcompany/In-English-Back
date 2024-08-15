@@ -1,4 +1,4 @@
 export const Rol = {
-    STUDENT: "student",
-    TEACHER: "teacher"
-}
+  STUDENT: "student",
+  TEACHER: "teacher",
+};

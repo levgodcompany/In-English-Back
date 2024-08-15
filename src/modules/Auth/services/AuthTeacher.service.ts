@@ -2,12 +2,12 @@ import { Teacher } from "@prisma/client";
 import AuthService from "./Auth.service";
 import { TeacherService } from "../../Teacher/services/index";
 import { response } from "../dto/AuthDto";
-import { Rol } from "../../../utilities";
+import { Rol, TokenExpiryOptions } from "../../../utilities";
 
 class AuthTeacherService extends AuthService<Teacher> {
   constructor() {
     const jwt = process.env.JWT_SECRET || "secret";
-    super(jwt, "1h", Rol.TEACHER);
+    super(jwt, TokenExpiryOptions.hours.oneHour, Rol.TEACHER);
   }
 
   async register(data: Teacher): Promise<{ user: response; token: string }> {
