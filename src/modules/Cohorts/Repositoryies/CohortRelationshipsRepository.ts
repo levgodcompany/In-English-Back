@@ -17,6 +17,87 @@ class CohortRelationshipsRepository {
     }
   }
 
+
+  async findOneAllInfo(id: number) {
+    try {
+      return await prisma.cohort.findUnique({ 
+        where: { id },
+        include: {
+          cohortCourses: {
+            include: {
+              courses: {
+                select: {
+                  id: true,
+                  description: true,
+                  title: true,
+                  idUnit: true,
+                }
+              }
+            }
+          },
+          cohortModules: {
+            include: {
+              modules: {
+                select: {
+                  id: true,
+                  title: true,
+                  description: true,
+                  order: true,
+                }
+              }
+            }
+          },
+          cohortStudents: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  name: true,
+                  lastName: true,
+                  email: true,      
+                }
+              }
+            }
+          },
+          cohortTeachers: {
+            include: {
+              teacher: {
+                select: {
+                  id: true,
+                  name: true,
+                  lastName: true,
+                  email: true, 
+                }
+              }
+            }
+          },
+          cohortUnities: {
+            include: {
+              unities: {
+                select: {
+                  id: true,
+                  title: true,
+                  description: true,
+                  order: true
+                }
+              }
+            }
+          },
+          level: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+            }
+          }
+        }
+      });
+    } catch (error) {
+      throw new Error(`Error al buscar el cohort con ID ${id}: ${error}`);
+    }
+  }
+
+
   async findAllCohortCourseByIdCohort(idCohort: number) {
     try {
       return await prisma.cohortCourse.findMany({

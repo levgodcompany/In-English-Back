@@ -70,6 +70,19 @@ class CohortRelationshipsController {
     }
   }
 
+  async findOneAllInfo(req: Request, res: Response): Promise<void> {
+    try {
+      const { idCohort } = req.params;
+      const cohorts = await CohortRelationshipsService.findOneAllInfo(
+        Number(idCohort)
+      );
+      res.json(cohorts);
+    } catch (error) {
+      console.log(error);
+      res.json(error);
+    }
+  }
+
   async findAllCohortStudentByIdCohort(
     req: Request,
     res: Response

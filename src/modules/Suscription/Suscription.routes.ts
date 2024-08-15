@@ -1,21 +1,73 @@
 import { Router } from "express";
-import { SuscriptionAssignmentsController, SuscriptionController } from "./controllers";
+import {
+  SuscriptionAssignmentsController,
+  SuscriptionController,
+} from "./controllers";
+import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
 
 const router = Router();
 
-router.post("/", SuscriptionController.create)
+const authMiddleware = new AuthMiddleware();
+const roleMiddleware = new RoleMiddleware();
 
-router.put("/benefits/:idSuscription", SuscriptionAssignmentsController.assignBenefitsToSuscription)
-router.put("/payment-methods/:idSuscription", SuscriptionAssignmentsController.assignPaymentMethodsToSuscription)
+router.post("/", SuscriptionController.create);
 
-router.put("/:idSuscription/:idBenefit", SuscriptionAssignmentsController.assignBenefitToSuscription)
-router.put("/:idSuscription/:idPaymentMethod", SuscriptionAssignmentsController.assignPaymentMethodToSuscription)
-router.put("/:idSuscription/:idStudent", SuscriptionAssignmentsController.assignStudentToSuscription)
-router.put("/:idSuscription", SuscriptionController.update)
+router.put(
+  "/benefits/:idSuscription",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionAssignmentsController.assignBenefitsToSuscription
+);
+router.put(
+  "/payment-methods/:idSuscription",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionAssignmentsController.assignPaymentMethodsToSuscription
+);
 
-router.get("/", SuscriptionController.findAll)
-router.get("/:idSuscription", SuscriptionController.findOne)
+router.put(
+  "/:idSuscription/:idBenefit",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionAssignmentsController.assignBenefitToSuscription
+);
+router.put(
+  "/:idSuscription/:idPaymentMethod",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionAssignmentsController.assignPaymentMethodToSuscription
+);
+router.put(
+  "/:idSuscription/:idStudent",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionAssignmentsController.assignStudentToSuscription
+);
+router.put(
+  "/:idSuscription",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionController.update
+);
 
-router.delete("/:idSuscription", SuscriptionController.delete)
+router.get(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionController.findAll
+);
+router.get(
+  "/:idSuscription",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionController.findOne
+);
+
+router.delete(
+  "/:idSuscription",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  SuscriptionController.delete
+);
 
 export default router;

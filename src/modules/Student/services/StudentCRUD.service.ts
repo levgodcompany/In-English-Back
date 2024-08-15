@@ -1,12 +1,22 @@
 import { Student } from "@prisma/client";
 import { StudentCRUDRepository } from "../repositories";
 import { StudentInfoBasic } from "../StudentDtos";
+import { NotFoundError } from "../../../utilities";
 
 class StudentCRUD {
   async findOne(id: number) {
     const student = await StudentCRUDRepository.findOne(id);
     if (!student) {
       return `No se encontro el Student ${id}`;
+    }
+
+    return student;
+  }
+
+  async findOneByEmail(email: string) {
+    const student = await StudentCRUDRepository.findOneByEmail(email);
+    if (!student) {
+      throw new NotFoundError(`No se encontro el Student ${email}`);
     }
 
     return student;

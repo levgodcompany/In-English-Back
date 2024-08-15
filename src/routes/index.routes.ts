@@ -1,5 +1,6 @@
 import { Router } from "express";
 import StudentRouter from "../modules/Student/Student.routes"
+import AuthRouter from "../modules/Auth/Auth.routes"
 import TeacherRouter from "../modules/Teacher/Teacher.routes"
 import LevelRouter from "../modules/Level/Level.routes"
 import UnitRouter from "../modules/Unit/Unit.routes"
@@ -18,6 +19,7 @@ import CohortsRouter from "../modules/Cohorts/Cohorts.routes"
 
 const router = Router();
 
+router.use("/auht", AuthRouter);
 router.use("/students", StudentRouter);
 router.use("/teachers", TeacherRouter);
 router.use("/levels", LevelRouter);

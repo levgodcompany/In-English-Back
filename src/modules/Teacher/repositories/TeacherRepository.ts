@@ -16,6 +16,18 @@ class TeacherRepository {
     }
   }
 
+  async findOneByEmail(email: string) {
+    try {
+      const teacher = await prisma.teacher.findFirst({ where: { email: email} });
+      if (!teacher) {
+        throw new Error(`No se encontró el Teacher con Email: ${email}`);
+      }
+      return teacher;
+    } catch (error) {
+      throw new Error(`Error al buscar el Teacher con Email ${email}: ${error}`);
+    }
+  }
+
   async findAll() {
     try {
       const teachers = await prisma.teacher.findMany();

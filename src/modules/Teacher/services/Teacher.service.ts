@@ -13,6 +13,14 @@ class TeacherService {
     }
   }
 
+  async findOneByEmail(email: string) {
+    try {
+      return TeacherRepository.findOneByEmail(email);
+    } catch (error) {
+      throw new Error(`Error al buscar el Teacher con Email ${email}: ${error}`);
+    }
+  }
+
   async findAll() {
     try {
       return TeacherRepository.findAll();

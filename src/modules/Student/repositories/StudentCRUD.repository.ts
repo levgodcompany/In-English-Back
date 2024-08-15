@@ -7,48 +7,17 @@ class StudentCRUD implements ICrudRepository<Student> {
     try {
       const student = await prisma.student.findUnique({
         where: { id },
-        include: {
-          examSubmissionLevel: true,
-          examSubmissionUnit: true,
-          levels: {
-            include: {
-              level: {
-                select: { title: true, description: true, order: true },
-              },
-            },
-          },
-          modules: {
-            include: {
-              module: {
-                select: { title: true, description: true, teachers: true },
-              },
-            },
-          },
-          courses: {
-            include: {
-              course: {
-                select: {
-                  idUnit: true,
-                  title: true,
-                  description: true,
-                  teachers: true,
-                },
-              },
-            },
-          },
-          units: {
-            include: {
-              unit: {
-                select: {
-                  idLevel: true,
-                  title: true,
-                  description: true,
-                  teachers: true,
-                },
-              },
-            },
-          },
-        },
+      });
+      return student;
+    } catch (error) {
+      throw new Error(`Error al buscar el Student: ${error}`);
+    }
+  }
+
+  async findOneByEmail(email: string) {
+    try {
+      const student = await prisma.student.findUnique({
+        where: { email: email },
       });
       return student;
     } catch (error) {

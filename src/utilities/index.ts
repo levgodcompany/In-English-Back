@@ -10,3 +10,7 @@ export {
   UnauthorizedError,
   ValidationError,
 } from "./Errors";
+
+export { default as AuthMiddleware } from "./AuthMiddleware";
+export { default as RoleMiddleware } from "./RoleMiddlewar";
+export { Rol } from "./Roles"

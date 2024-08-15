@@ -13,6 +13,18 @@ class CohortRelationshipsService {
       throw new Error(`Error al buscar todos los cohorts: ${error}`);
     }
   }
+
+  async findOneAllInfo(idCohort: number) {
+    try {
+      const cohorts = await CohortRelationshipsRepository.findOneAllInfo(
+        idCohort
+      );
+
+      return cohorts;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+    }
+  }
   async findAllCohortCourseByIdCohort(idCohort: number) {
     try {
       const cohorts =

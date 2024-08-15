@@ -1,15 +1,59 @@
 import { Router } from "express";
 import { CourseController } from "./controllers";
+import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
 
 const router = Router();
 
-router.get("/", CourseController.findAll);
-router.get("/unit/:idUnit", CourseController.findAllByIdUnit);
-router.get("/info-basic", CourseController.findAllInfoBasic);
-router.get("/:idUnit/unities", CourseController.findAllUnitiesByIdCourse);
-router.post("/", CourseController.create);
-router.put("/:idCourse", CourseController.update);
-router.get("/:idCourse", CourseController.findOne);
-router.delete("/:idCourse", CourseController.delete);
+const authMiddleware = new AuthMiddleware();
+const roleMiddleware = new RoleMiddleware();
+
+router.get(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.findAll
+);
+router.get(
+  "/unit/:idUnit",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.findAllByIdUnit
+);
+router.get(
+  "/info-basic",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.findAllInfoBasic
+);
+router.get(
+  "/:idUnit/unities",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.findAllUnitiesByIdCourse
+);
+router.post(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.create
+);
+router.put(
+  "/:idCourse",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.update
+);
+router.get(
+  "/:idCourse",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.findOne
+);
+router.delete(
+  "/:idCourse",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  CourseController.delete
+);
 
 export default router;
