@@ -13,6 +13,8 @@ model Student {
   name                String
   lastName            String
   email               String                @unique
+  dni                 String?                @unique
+  tel                 String?
   password            String
   birthDate           DateTime // Fecha de nacimiento
   idStatus            Int
@@ -25,8 +27,33 @@ model Student {
   examSubmissionUnit  ExamSubmissionUnit[]
   examSubmissionLevel ExamSubmissionLevel[]
   cohortStudent       CohortStudent[]
+  studentTutors       StudentTutor[]
 
   @@map("Students")
+}
+
+model Tutor {
+  id            Int            @id @default(autoincrement())
+  name          String
+  lastName      String
+  email         String         @unique
+  dni           String         @unique
+  password      String
+  birthDate     DateTime // Fecha de nacimiento
+  relationship  String // Parentesco
+  tel           String?
+  studentTutors StudentTutor[]
+
+  @@map("Tutors")
+}
+
+model StudentTutor {
+  idStudent Int
+  idTutor   Int
+  student   Student @relation(fields: [idStudent], references: [id])
+  tutor     Tutor   @relation(fields: [idTutor], references: [id])
+
+  @@id([idStudent, idTutor])
 }
 
 // Modelo para los profesores
@@ -48,18 +75,38 @@ model Teacher {
   @@map("Teachers")
 }
 
+model TypeLevel {
+  id              Int              @id @default(autoincrement())
+  title           String
+  description     String
+  typeLevelLevels TypeLevelLevel[]
+
+  @@map("TypeLevels")
+}
+
+// Tabla de relacion TypeLevel y Level
+model TypeLevelLevel {
+  idLevel     Int
+  idTypeLevel Int
+  level       Level     @relation(fields: [idLevel], references: [id])
+  typeLevel   TypeLevel @relation(fields: [idTypeLevel], references: [id])
+
+  @@id([idLevel, idTypeLevel])
+}
+
 // Modelo de los niveles
 model Level {
-  id           Int            @id @default(autoincrement())
-  title        String
-  description  String
-  order        Int // Nos permite organizar los niveles
-  unities      Unit[] // Un nivel puede tener muchas unidades
-  exams        ExamLevel[]
-  teachers     LevelTeacher[]
-  students     LevelStudent[]
-  suscriptions Suscription[]
-  cohorts      Cohort[]
+  id              Int              @id @default(autoincrement())
+  title           String
+  description     String
+  order           Int // Nos permite organizar los niveles
+  unities         Unit[] // Un nivel puede tener muchas unidades
+  exams           ExamLevel[]
+  teachers        LevelTeacher[]
+  students        LevelStudent[]
+  suscriptions    Suscription[]
+  cohorts         Cohort[]
+  typeLevelLevels TypeLevelLevel[]
 
   @@map("Levels")
 }

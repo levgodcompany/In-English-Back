@@ -10,25 +10,25 @@ const roleMiddleware = new RoleMiddleware();
 router.get(
   "/",
   authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
   CourseController.findAll
 );
 router.get(
   "/unit/:idUnit",
   authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
   CourseController.findAllByIdUnit
 );
 router.get(
   "/info-basic",
   authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
   CourseController.findAllInfoBasic
 );
 router.get(
   "/:idUnit/unities",
   authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
   CourseController.findAllUnitiesByIdCourse
 );
 router.post(

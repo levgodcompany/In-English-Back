@@ -16,10 +16,14 @@ import SuscriptionRouter from "../modules/Suscription/Suscription.routes"
 import ExamLevelRouter from "../modules/ExamLevel/ExamLevel.routes"
 import ExamUnitRouter from "../modules/ExamUnit/ExamUnit.routes"
 import CohortsRouter from "../modules/Cohorts/Cohorts.routes"
+import LandingRouter from "../modules/Landing/Landing.routes"
+import TypeLevelRouter from "../modules/TypeLevel/TypeLevel.routes"
 
 const router = Router();
 
 router.use("/auht", AuthRouter);
+router.use("/type-levels", TypeLevelRouter);
+router.use("/landing", LandingRouter);
 router.use("/students", StudentRouter);
 router.use("/teachers", TeacherRouter);
 router.use("/levels", LevelRouter);

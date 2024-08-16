@@ -10,19 +10,19 @@ const roleMiddleware = new RoleMiddleware();
 router.get(
   "/",
   authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
   UnitController.findAll
 );
 router.get(
   "/info-basic",
   authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
   UnitController.findAllInfoBasic
 );
 router.get(
   "/level/:idLevel",
   authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
   UnitController.findAllByIdLevel
 );
 router.post(
