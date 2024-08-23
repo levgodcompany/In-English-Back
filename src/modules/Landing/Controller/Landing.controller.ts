@@ -12,6 +12,16 @@ class LandingController {
     }
   }
 
+  async findAllTeacher(_req: Request, res: Response) {
+    try {
+      const levles = await LandingService.findAllTeacher();
+      res.json(levles);
+    } catch (error) {
+      console.log(error);
+      res.json(error);
+    }
+  }
+
   async findAllCohortsByIdLevel(req: Request, res: Response) {
     try {
       const { idLevel } = req.params;

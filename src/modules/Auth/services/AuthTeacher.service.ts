@@ -7,7 +7,7 @@ import { Rol, TokenExpiryOptions } from "../../../utilities";
 class AuthTeacherService extends AuthService<Teacher> {
   constructor() {
     const jwt = process.env.JWT_SECRET || "secret";
-    super(jwt, TokenExpiryOptions.hours.oneHour, Rol.TEACHER);
+    super(jwt, TokenExpiryOptions.hours.sixHours, Rol.TEACHER);
   }
 
   async register(data: Teacher): Promise<{ user: response; token: string }> {

@@ -1,6 +1,5 @@
 import { Router } from "express";
-import ExamLevelRouter from "../ExamLevel/ExamLevel.routes";
-import { LevelController } from "./controllers";
+import { LevelController, LevelRelationController } from "./controllers";
 import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities/index";
 
 const router = Router();
@@ -8,47 +7,74 @@ const router = Router();
 const authMiddleware = new AuthMiddleware();
 const roleMiddleware = new RoleMiddleware();
 
+// Middleware combinados para reutilización
+const authenticate = authMiddleware.authenticateToken.bind(authMiddleware);
+const authorizeTeacher = roleMiddleware.authorizeRole([Rol.TEACHER]);
+const authorizeStudentAndTeacher = roleMiddleware.authorizeRole([
+  Rol.STUDENT,
+  Rol.TEACHER,
+]);
+
+// Rutas GET
 router.get(
   "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.STUDENT, Rol.TEACHER]),
+  authenticate,
+  authorizeStudentAndTeacher,
   LevelController.findAll
 );
 router.get(
   "/info-basic",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
+  authenticate,
+  authorizeStudentAndTeacher,
   LevelController.findAllInfoBasic
-);
-router.post(
-  "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  LevelController.create
-);
-router.put(
-  "/:idLevel",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  LevelController.update
 );
 router.get(
   "/:idLevel",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.STUDENT, Rol.TEACHER]),
+  authenticate,
+  authorizeStudentAndTeacher,
   LevelController.findOne
 );
+router.get(
+  "/info/:idLevel",
+  authenticate,
+  authorizeStudentAndTeacher,
+  LevelController.findOneAll
+);
+
+
+
+
+router.get(
+  "/relation/suscription/:idLevel",
+  authenticate,
+  authorizeTeacher,
+  LevelRelationController.findAllSuscriptionByIdLevel
+);
+
+router.get(
+  "/relation/type-level/:idLevel",
+  authenticate,
+  authorizeTeacher,
+  LevelRelationController.findTypeLevelsByIdLevel
+);
+
+
+
+
+
+
+// Rutas POST
+router.post("/", authenticate, authorizeTeacher, LevelController.create);
+
+// Rutas PUT
+router.put("/:idLevel", authenticate, authorizeTeacher, LevelController.update);
+
+// Rutas DELETE
 router.delete(
   "/:idLevel",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  authenticate,
+  authorizeTeacher,
   LevelController.delete
-);
-router.use(
-  "/exams",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.STUDENT, Rol.TEACHER]),
-  ExamLevelRouter
 );
 
 export default router;

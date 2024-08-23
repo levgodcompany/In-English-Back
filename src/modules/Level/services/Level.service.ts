@@ -43,6 +43,14 @@ class LevelService {
     }
   }
 
+  async findOneAll(id: number) {
+    try {
+      return LevelRepository.findOneAll(id);
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+  }
+
   async update(id: number, data: Level) {
     try {
       return LevelRepository.update(id, data);

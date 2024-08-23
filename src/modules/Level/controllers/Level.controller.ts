@@ -46,6 +46,17 @@ class LevelController {
     }
   }
 
+  async findOneAll(req: Request, res: Response): Promise<void> {
+    try {
+      const { idLevel } = req.params;
+      const levels = await LevelService.findOneAll(Number(idLevel));
+      res.json(levels);
+    } catch (error) {
+      console.log(error);
+      res.json(error);
+    }
+  }
+
   async delete(req: Request, res: Response): Promise<void> {
     try {
       const { idLevel } = req.params;

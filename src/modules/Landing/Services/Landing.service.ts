@@ -12,6 +12,16 @@ class LandingService {
     }
   }
 
+  async findAllTeacher() {
+    try {
+      const teachers = await LandingRepository.findAllTeacher();
+      
+      return teachers;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Levels: ${error}`);
+    }
+  }
+
   async findAllSuscriptionByIdLevel(idLevel: number) {
     try {
       const suscriptions = await LandingRepository.findAllSuscriptionByIdLevel(

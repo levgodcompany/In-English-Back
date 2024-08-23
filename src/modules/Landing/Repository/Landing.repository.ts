@@ -60,6 +60,23 @@ class LandingRepository {
     }
   }
 
+
+  async findAllTeacher() {
+    try {
+      const levels = await prisma.teacher.findMany({
+        select: {
+          id: true,
+          name: true,
+          lastName: true,
+          imgUrl: true
+        }
+      })
+      return levels;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Levels: ${error}`);
+    }
+  }
+
   async findAllSuscriptionByIdLevel(idLevel: number) {
     try {
       const levels = await prisma.suscription.findMany({
@@ -97,11 +114,51 @@ class LandingRepository {
 
   async findAllCohortsByIdLevel(idLevel: number) {
     try {
-      const levels = await prisma.cohort.findMany({
+      const levels = await prisma.level.findFirst({
         where: {
-          idLevel: idLevel,
+          id: idLevel
         },
-      });
+        include: {
+          teachers: {
+            include: {
+              teacher: {
+                select: {
+                  id: true,
+                  name: true,
+                  lastName: true,
+                  imgUrl: true
+                }
+              }
+            }
+          },
+          cohorts: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              endDate: true,
+              startDate: true,
+              registrationEndDate: true,
+              registrationStartDate: true
+            }
+          }
+        }
+      })
+      // const levels = await prisma.cohort.findMany({
+      //   where: {
+      //     idLevel: idLevel,
+      //   },
+      //   include: {
+      //     level: {
+      //       select: {
+      //         id: true,
+      //         title: true,
+      //         description: true,
+      //         order: true,
+      //       }
+      //     }
+      //   }
+      // });
       return levels;
     } catch (error) {
       throw new Error(`Error al buscar todos los Levels: ${error}`);
