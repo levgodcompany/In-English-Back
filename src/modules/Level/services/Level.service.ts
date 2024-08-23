@@ -2,13 +2,15 @@ import { Level } from "@prisma/client";
 import { LevelInfoBasic } from "../LevelDto";
 import { LevelRepository } from "../Repositories";
 import ModuleService from "../../Module/services/Module.service";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class LevelService {
   async create(data: Level) {
     try {
       return LevelRepository.create(data);
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -16,7 +18,7 @@ class LevelService {
     try {
       return LevelRepository.findAll();
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -31,7 +33,7 @@ class LevelService {
         return info;
       });
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -39,7 +41,7 @@ class LevelService {
     try {
       return LevelRepository.findOne(id);
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -47,7 +49,7 @@ class LevelService {
     try {
       return LevelRepository.findOneAll(id);
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -55,7 +57,7 @@ class LevelService {
     try {
       return LevelRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar el Level con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -63,7 +65,7 @@ class LevelService {
     try {
       return LevelRepository.deleteLevelWithRelations(id);
     } catch (error) {
-      throw new Error(`Error al eliminar el Level con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

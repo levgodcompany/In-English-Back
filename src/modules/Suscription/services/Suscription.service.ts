@@ -1,12 +1,14 @@
 import { Suscription } from "@prisma/client";
 import { SuscriptionRepository } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class SuscriptionService {
   async create(data: Suscription) {
     try {
       return await SuscriptionRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear una suscription: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -14,7 +16,7 @@ class SuscriptionService {
     try {
       return await SuscriptionRepository.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar todas las suscriptions: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -22,7 +24,7 @@ class SuscriptionService {
     try {
       return await SuscriptionRepository.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar una suscription: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -30,7 +32,7 @@ class SuscriptionService {
     try {
       return await SuscriptionRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar una suscription: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -38,7 +40,7 @@ class SuscriptionService {
     try {
       return await SuscriptionRepository.deleteSuscriptionWithRelations(id);
     } catch (error) {
-      throw new Error(`Error al buscar una suscription: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

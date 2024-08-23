@@ -1,13 +1,15 @@
 import { Module } from "@prisma/client";
 import { ModuleInfoBasic } from "../ModuleDto";
 import { ModuleRepository } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class ModueService {
   async create(data: Module) {
     try {
       return ModuleRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear el module: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -15,7 +17,7 @@ class ModueService {
     try {
       return ModuleRepository.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar el module: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -23,7 +25,7 @@ class ModueService {
     try {
       return ModuleRepository.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar los modules: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -39,7 +41,7 @@ class ModueService {
         return info;
       });
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -47,7 +49,7 @@ class ModueService {
     try {
       return ModuleRepository.findAllByIdCourse(idCourse);
     } catch (error) {
-      throw new Error(`Error al buscar los modules: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -55,7 +57,7 @@ class ModueService {
     try {
       return ModuleRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar el module: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -63,7 +65,7 @@ class ModueService {
     try {
       return ModuleRepository.deleteModuleWithRelations(id);
     } catch (error) {
-      throw new Error(`Error al eliminar el module: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

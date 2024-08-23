@@ -1,3 +1,5 @@
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { transformLevelData, transformSubscriptionData } from "../Dto/LandingDto";
 import LandingRepository from "../Repository/Landing.repository";
 
@@ -8,7 +10,7 @@ class LandingService {
       
       return transformLevelData(levels)
     } catch (error) {
-      throw new Error(`Error al buscar todos los Levels: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -18,7 +20,7 @@ class LandingService {
       
       return teachers;
     } catch (error) {
-      throw new Error(`Error al buscar todos los Levels: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -33,7 +35,7 @@ class LandingService {
       });
       return suscriptionsDto;
     } catch (error) {
-      throw new Error(`Error al buscar todos los Levels: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -42,7 +44,7 @@ class LandingService {
       const levels = await LandingRepository.findAllCohortsByIdLevel(idLevel);
       return levels;
     } catch (error) {
-      throw new Error(`Error al buscar todos los Levels: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

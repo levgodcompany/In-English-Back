@@ -1,9 +1,9 @@
 import { Suscription } from "@prisma/client";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { SuscriptionService } from "../services";
 
 class SuscriptionController {
-  async create(req: Request, res: Response): Promise<void> {
+  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const body: Suscription = req.body;
       body.idLevel = Number(body.idLevel);
@@ -13,20 +13,20 @@ class SuscriptionController {
       res.json(suscripcion);
     } catch (error) {
       console.log("Error", error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAll(_req: Request, res: Response): Promise<void> {
+  async findAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const suscriptions = await SuscriptionService.findAll();
       res.json(suscriptions);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
-  async findOne(req: Request, res: Response): Promise<void> {
+  async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idSuscription } = req.params;
       const suscripcion = await SuscriptionService.findOne(
@@ -35,11 +35,11 @@ class SuscriptionController {
       res.json(suscripcion);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async update(req: Request, res: Response): Promise<void> {
+  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const body: Suscription = req.body;
       const { idSuscription } = req.params;
@@ -50,11 +50,11 @@ class SuscriptionController {
       res.json(suscripcion);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async delete(req: Request, res: Response): Promise<void> {
+  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idSuscription } = req.params;
       const suscription = await SuscriptionService.delete(
@@ -63,7 +63,7 @@ class SuscriptionController {
       res.json(suscription);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 }

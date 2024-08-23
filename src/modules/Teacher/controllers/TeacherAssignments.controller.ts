@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { TeacherAssignmentsService } from "../services";
 
 class TeacherAssignmentsController {
-  async assignLevelToTeacher(req: Request, res: Response): Promise<void> {
+  async assignLevelToTeacher(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idTeacher, idLevel } = req.params;
       const teacher = await TeacherAssignmentsService.assignLevelToTeacher(
@@ -11,11 +11,11 @@ class TeacherAssignmentsController {
       );
       res.json(teacher);
     } catch (error) {
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignUnitToTeacher(req: Request, res: Response): Promise<void> {
+  async assignUnitToTeacher(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idTeacher, idUnit } = req.params;
       const teacher = await TeacherAssignmentsService.assignUnitToTeacher(
@@ -24,11 +24,11 @@ class TeacherAssignmentsController {
       );
       res.json(teacher);
     } catch (error) {
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignCourseToTeacher(req: Request, res: Response): Promise<void> {
+  async assignCourseToTeacher(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idTeacher, idCourse } = req.params;
       const teacher = await TeacherAssignmentsService.assignCourseToTeacher(
@@ -37,11 +37,11 @@ class TeacherAssignmentsController {
       );
       res.json(teacher);
     } catch (error) {
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignModuleToTeacher(req: Request, res: Response): Promise<void> {
+  async assignModuleToTeacher(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idTeacher, idModule } = req.params;
       const teacher = await TeacherAssignmentsService.assignModuleToTeacher(
@@ -50,7 +50,7 @@ class TeacherAssignmentsController {
       );
       res.json(teacher);
     } catch (error) {
-      res.json(error);
+      next(error)
     }
   }
 }

@@ -1,3 +1,5 @@
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { CohortRelationshipsRepository } from "../Repositoryies";
 
 class CohortRelationshipsService {
@@ -10,7 +12,7 @@ class CohortRelationshipsService {
 
       return cohorts;
     } catch (error) {
-      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -22,7 +24,7 @@ class CohortRelationshipsService {
 
       return cohorts;
     } catch (error) {
-      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   async findAllCohortCourseByIdCohort(idCohort: number) {
@@ -34,7 +36,7 @@ class CohortRelationshipsService {
 
       return cohorts;
     } catch (error) {
-      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   async findAllCohortModuleByIdCohort(idCohort: number) {
@@ -46,7 +48,7 @@ class CohortRelationshipsService {
 
       return cohorts;
     } catch (error) {
-      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   async findAllCohortTeacherByIdCohort(idCohort: number) {
@@ -58,7 +60,7 @@ class CohortRelationshipsService {
 
       return cohorts;
     } catch (error) {
-      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   async findAllCohortStudentByIdCohort(idCohort: number) {
@@ -70,7 +72,7 @@ class CohortRelationshipsService {
 
       return cohorts;
     } catch (error) {
-      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

@@ -18,6 +18,7 @@ import ExamUnitRouter from "../modules/ExamUnit/ExamUnit.routes"
 import CohortsRouter from "../modules/Cohorts/Cohorts.routes"
 import LandingRouter from "../modules/Landing/Landing.routes"
 import TypeLevelRouter from "../modules/TypeLevel/TypeLevel.routes"
+import errorHandler from "./errorHandler";
 
 const router = Router();
 
@@ -42,5 +43,8 @@ router.use("/cohorts", CohortsRouter);
 
 router.use("/level-exams", ExamLevelRouter);
 router.use("/unities-exams", ExamUnitRouter);
+
+// Middleware de manejo de errores
+router.use(errorHandler);
 
 export default router

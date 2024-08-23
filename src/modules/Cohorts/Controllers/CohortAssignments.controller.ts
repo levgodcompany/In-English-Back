@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response,  NextFunction } from "express";
 import { CohortAssignmentsService } from "../Services";
 
 class CohortAssignmentsController {
-  async assignTeacherToCohort(req: Request, res: Response): Promise<void> {
+  async assignTeacherToCohort(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCohort, idTeacher } = req.params;
       const teacher = await CohortAssignmentsService.assignTeacherToCohort(
@@ -12,11 +12,11 @@ class CohortAssignmentsController {
       res.json(teacher);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignStudentToCohort(req: Request, res: Response): Promise<void> {
+  async assignStudentToCohort(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCohort, idStudent } = req.params;
       const teacher = await CohortAssignmentsService.assignStudentToCohort(
@@ -26,11 +26,11 @@ class CohortAssignmentsController {
       res.json(teacher);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignUnitToCohort(req: Request, res: Response): Promise<void> {
+  async assignUnitToCohort(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCohort, idUnit } = req.params;
       const teacher = await CohortAssignmentsService.assignUnitToCohort(
@@ -40,11 +40,11 @@ class CohortAssignmentsController {
       res.json(teacher);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignCourseToCohort(req: Request, res: Response): Promise<void> {
+  async assignCourseToCohort(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCohort, idCourse } = req.params;
       const teacher = await CohortAssignmentsService.assignCourseToCohort(
@@ -54,11 +54,11 @@ class CohortAssignmentsController {
       res.json(teacher);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignModuleToCohort(req: Request, res: Response): Promise<void> {
+  async assignModuleToCohort(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCohort, idModule } = req.params;
       const teacher = await CohortAssignmentsService.assignModuleToCohort(
@@ -68,7 +68,7 @@ class CohortAssignmentsController {
       res.json(teacher);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 }

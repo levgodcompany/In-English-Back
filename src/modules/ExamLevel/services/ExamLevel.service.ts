@@ -1,17 +1,22 @@
 import { ExamLevel } from "@prisma/client";
 import { ExamLevelRepository } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class ExamLevelServices {
   async findOne(id: number) {
-    try {
-      const level = await ExamLevelRepository.findOne(id);
-      if (!level) {
-        throw new Error(`No se encontró el Examen con ID: ${id}`);
-      }
-      return level;
-    } catch (error) {
-      throw new Error(`Error al buscar el Examen con ID ${id}: ${error}`);
+    // try {
+    const level = await ExamLevelRepository.findOne(id);
+    if (!level) {
+      throw new CustomError(
+        `No se encontró el Examen con ID: ${id}`,
+        HttpStatus.NOT_FOUND
+      );
     }
+    return level;
+    // } catch (error) {
+    //   throw new Error(`Error al buscar el Examen con ID ${id}: ${error}`);
+    // }
   }
 
   async findAll() {
@@ -19,7 +24,7 @@ class ExamLevelServices {
       const teachers = await ExamLevelRepository.findAll();
       return teachers;
     } catch (error) {
-      throw new Error(`Error al buscar todos los Examen: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -28,7 +33,7 @@ class ExamLevelServices {
       const teachers = await ExamLevelRepository.findAllByIdLevel(idLevel);
       return teachers;
     } catch (error) {
-      throw new Error(`Error al buscar todos los Examen: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -37,7 +42,7 @@ class ExamLevelServices {
       const newLevel = await ExamLevelRepository.create(data);
       return newLevel;
     } catch (error) {
-      throw new Error(`Error al crear el Examen: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -46,16 +51,17 @@ class ExamLevelServices {
       const updatedLevel = await ExamLevelRepository.update(id, data);
       return updatedLevel;
     } catch (error) {
-      throw new Error(`Error al actualizar el Examen con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async delete(id: number) {
     try {
-      const deletedLevel = await ExamLevelRepository.deleteExamLevelWithRelations(id);
+      const deletedLevel =
+        await ExamLevelRepository.deleteExamLevelWithRelations(id);
       return deletedLevel;
     } catch (error) {
-      throw new Error(`Error al eliminar el Examen con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

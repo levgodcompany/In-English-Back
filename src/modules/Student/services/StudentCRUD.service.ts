@@ -1,13 +1,17 @@
 import { Student } from "@prisma/client";
 import { StudentCRUDRepository } from "../repositories";
 import { StudentInfoBasic } from "../StudentDtos";
-import { NotFoundError } from "../../../utilities";
+import { HttpStatus, NotFoundError } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 
 class StudentCRUD {
   async findOne(id: number) {
     const student = await StudentCRUDRepository.findOne(id);
     if (!student) {
-      return `No se encontro el Student ${id}`;
+      throw new CustomError(
+        `No se encontro el Student ${id}`,
+        HttpStatus.NOT_FOUND
+      );
     }
 
     return student;
@@ -16,7 +20,10 @@ class StudentCRUD {
   async findOneByEmail(email: string) {
     const student = await StudentCRUDRepository.findOneByEmail(email);
     if (!student) {
-      throw new NotFoundError(`No se encontro el Student ${email}`);
+      throw new CustomError(
+        `No se encontro el Student con el email ${email}`,
+        HttpStatus.NOT_FOUND
+      );
     }
 
     return student;
@@ -27,7 +34,7 @@ class StudentCRUD {
       const students = await StudentCRUDRepository.findAll();
       return students;
     } catch (error) {
-      throw new Error("" + error);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -42,7 +49,7 @@ class StudentCRUD {
         return info;
       });
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -51,7 +58,7 @@ class StudentCRUD {
       const student = await StudentCRUDRepository.create(data);
       return student;
     } catch (error) {
-      throw new Error("" + error);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

@@ -1,12 +1,14 @@
 import { Benefit } from "@prisma/client";
 import { BenefitRepository } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class BenefitServices {
   async create(data: Benefit) {
     try {
       return await BenefitRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear un benefit: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -14,7 +16,7 @@ class BenefitServices {
     try {
       return await BenefitRepository.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar todas los benefits: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -22,7 +24,7 @@ class BenefitServices {
     try {
       return await BenefitRepository.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar un benefit: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -30,7 +32,7 @@ class BenefitServices {
     try {
       return await BenefitRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar un benefit: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -38,7 +40,7 @@ class BenefitServices {
     try {
       return await BenefitRepository.delete(id);
     } catch (error) {
-      throw new Error(`Error al eliminar un benefit: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

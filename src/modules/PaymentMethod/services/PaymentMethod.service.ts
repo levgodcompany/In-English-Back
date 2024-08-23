@@ -1,12 +1,14 @@
 import { PaymentMethod } from "@prisma/client";
 import { PaymentMethodRepositoy } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class PaymentMethodServices {
   async create(data: PaymentMethod) {
     try {
       return await PaymentMethodRepositoy.create(data);
     } catch (error) {
-      throw new Error(`Error al crear un paymentMethod: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -14,7 +16,7 @@ class PaymentMethodServices {
     try {
       return await PaymentMethodRepositoy.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar todas los paymentMethods: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -22,7 +24,7 @@ class PaymentMethodServices {
     try {
       return await PaymentMethodRepositoy.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar un paymentMethod: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -30,7 +32,7 @@ class PaymentMethodServices {
     try {
       return await PaymentMethodRepositoy.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar un paymentMethod: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -38,7 +40,7 @@ class PaymentMethodServices {
     try {
       return await PaymentMethodRepositoy.delete(id);
     } catch (error) {
-      throw new Error(`Error al eliminar un paymentMethod: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

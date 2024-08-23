@@ -1,12 +1,17 @@
 import { Course } from "@prisma/client";
 import { CourseCRUDRepository } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class CourseCrudService {
   async create(data: Course) {
     try {
       return CourseCRUDRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear el course: ${error}`);
+      throw new CustomError(
+        `${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -14,7 +19,10 @@ class CourseCrudService {
     try {
       return CourseCRUDRepository.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar el course: ${error}`);
+      throw new CustomError(
+        `${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -22,7 +30,10 @@ class CourseCrudService {
     try {
       return CourseCRUDRepository.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar los courses: ${error}`);
+      throw new CustomError(
+        `${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -30,7 +41,10 @@ class CourseCrudService {
     try {
       return CourseCRUDRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar el Course: ${error}`);
+      throw new CustomError(
+        `${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -38,7 +52,10 @@ class CourseCrudService {
     try {
       return CourseCRUDRepository.deleteCourseWithRelations(id);
     } catch (error) {
-      throw new Error(`Error al eliminar el course: ${error}`);
+      throw new CustomError(
+        `${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

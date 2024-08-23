@@ -2,7 +2,8 @@ import { Teacher } from "@prisma/client";
 import AuthService from "./Auth.service";
 import { TeacherService } from "../../Teacher/services/index";
 import { response } from "../dto/AuthDto";
-import { Rol, TokenExpiryOptions } from "../../../utilities";
+import { HttpStatus, Rol, TokenExpiryOptions } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 
 class AuthTeacherService extends AuthService<Teacher> {
   constructor() {
@@ -29,7 +30,7 @@ class AuthTeacherService extends AuthService<Teacher> {
         token,
       };
     } catch (error) {
-      throw error;
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -37,29 +38,32 @@ class AuthTeacherService extends AuthService<Teacher> {
     email: string,
     password: string
   ): Promise<{ user: response; token: string }> {
-    try {
-      const teacher = await TeacherService.findOneByEmail(email);
+    // try {
+    const teacher = await TeacherService.findOneByEmail(email);
 
-      if (
-        !teacher ||
-        !(await this.comparePasswords(password, teacher.password))
-      ) {
-        throw new Error("Invalid email or password");
-      }
-
-      const token = this.generateToken(teacher.id);
-      return {
-        user: {
-          id: teacher.id,
-          email: teacher.email,
-          name: teacher.name,
-          lastName: teacher.lastName,
-        },
-        token,
-      };
-    } catch (error) {
-      throw error;
+    if (
+      !teacher ||
+      !(await this.comparePasswords(password, teacher.password))
+    ) {
+      throw new CustomError(
+        "Invalid email or password",
+        HttpStatus.UNAUTHORIZED
+      );
     }
+
+    const token = this.generateToken(teacher.id);
+    return {
+      user: {
+        id: teacher.id,
+        email: teacher.email,
+        name: teacher.name,
+        lastName: teacher.lastName,
+      },
+      token,
+    };
+    // } catch (error) {
+    //   throw error;
+    // }
   }
 }
 

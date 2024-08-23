@@ -1,3 +1,5 @@
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { TypeLevelRelationsRepository } from "../Repository";
 
 class TypeLevelRelationsService {
@@ -9,7 +11,7 @@ class TypeLevelRelationsService {
       );
       return update;
     } catch (error) {
-      throw error;
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -17,7 +19,7 @@ class TypeLevelRelationsService {
     try {
       await TypeLevelRelationsRepository.remove(idLevel, idTypeLevel);
     } catch (error) {
-      throw error;
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

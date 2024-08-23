@@ -16,15 +16,18 @@ abstract class AuthService<T> {
     this.tokenExpiry = expiry;
   }
 
-  protected setRole(role: string){
-    this.role = role
+  protected setRole(role: string) {
+    this.role = role;
   }
 
   // Método abstracto para registrar un nuevo usuario (estudiante/teacher)
   abstract register(data: T): Promise<{ user: any; token: string }>;
 
   // Método abstracto para autenticar un usuario (estudiante/teacher)
-  abstract login(email: string, password: string): Promise<{ user: any; token: string }>;
+  abstract login(
+    email: string,
+    password: string
+  ): Promise<{ user: any; token: string }>;
 
   // Método para generar un token JWT
   protected generateToken(userId: number): string {
@@ -48,7 +51,10 @@ abstract class AuthService<T> {
   }
 
   // Método para comparar un password con su hash
-  protected async comparePasswords(password: string, hashedPassword: string): Promise<boolean> {
+  protected async comparePasswords(
+    password: string,
+    hashedPassword: string
+  ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
   }
 
@@ -61,7 +67,9 @@ abstract class AuthService<T> {
 
   // Métodos adicionales (por ejemplo, para restablecer contraseñas y verificar correos)
   protected generatePasswordResetToken(userId: number): string {
-    return jwt.sign({ userId }, this.secretKey, { expiresIn: this.tokenExpiry });
+    return jwt.sign({ userId }, this.secretKey, {
+      expiresIn: this.tokenExpiry,
+    });
   }
 
   protected verifyPasswordResetToken(token: string): any {
@@ -69,7 +77,9 @@ abstract class AuthService<T> {
   }
 
   protected generateEmailVerificationToken(userId: number): string {
-    return jwt.sign({ userId }, this.secretKey, { expiresIn: this.tokenExpiry });
+    return jwt.sign({ userId }, this.secretKey, {
+      expiresIn: this.tokenExpiry,
+    });
   }
 
   protected verifyEmailVerificationToken(token: string): any {

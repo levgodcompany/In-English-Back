@@ -1,6 +1,8 @@
 import { Teacher } from "@prisma/client";
 import { TeacherRepository } from "../repositories";
 import { TeacherInfoBasic } from "../TeacherDtos";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class TeacherService {
   // Métodos CRUD para el Teacher
@@ -9,7 +11,7 @@ class TeacherService {
     try {
       return TeacherRepository.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar el Teacher con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -17,7 +19,7 @@ class TeacherService {
     try {
       return TeacherRepository.findOneByEmail(email);
     } catch (error) {
-      throw new Error(`Error al buscar el Teacher con Email ${email}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -25,7 +27,7 @@ class TeacherService {
     try {
       return TeacherRepository.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar todos los Teachers: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,7 +43,7 @@ class TeacherService {
         return info;
       });
     } catch (error) {
-      throw new Error(`Error al buscar todos los Teachers: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -49,7 +51,7 @@ class TeacherService {
     try {
       return TeacherRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear el Teacher: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -57,7 +59,7 @@ class TeacherService {
     try {
       return TeacherRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar el Teacher con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -65,7 +67,7 @@ class TeacherService {
     try {
       return TeacherRepository.delete(id);
     } catch (error) {
-      throw new Error(`Error al eliminar el Teacher con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

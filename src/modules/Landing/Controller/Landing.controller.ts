@@ -1,28 +1,28 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import LandingService from "../services/Landing.service";
 
 class LandingController {
-  async findAllLevels(_req: Request, res: Response) {
+  async findAllLevels(_req: Request, res: Response, next: NextFunction) {
     try {
       const levles = await LandingService.findAllLevels();
       res.json(levles);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAllTeacher(_req: Request, res: Response) {
+  async findAllTeacher(_req: Request, res: Response, next: NextFunction) {
     try {
       const levles = await LandingService.findAllTeacher();
       res.json(levles);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAllCohortsByIdLevel(req: Request, res: Response) {
+  async findAllCohortsByIdLevel(req: Request, res: Response, next: NextFunction) {
     try {
       const { idLevel } = req.params;
       const cohorts = await LandingService.findAllCohortsByIdLevel(
@@ -31,11 +31,11 @@ class LandingController {
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAllSuscriptionByIdLevel(req: Request, res: Response) {
+  async findAllSuscriptionByIdLevel(req: Request, res: Response, next: NextFunction) {
     try {
       const { idLevel } = req.params;
       const suscriptions = await LandingService.findAllSuscriptionByIdLevel(
@@ -44,7 +44,7 @@ class LandingController {
       res.json(suscriptions);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 }

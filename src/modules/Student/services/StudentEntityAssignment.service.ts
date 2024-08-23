@@ -1,4 +1,6 @@
 import { prisma } from "../../../../prisma";
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { LevelService } from "../../Level/services";
 import UnitRepository from "../../Unit/repositories/Unit.repository";
 import { StudentEntityAssignmentRepository } from "../repositories";
@@ -9,7 +11,7 @@ class StudentEntityAssignment {
     const level = await LevelService.findOne(idLevel);
 
     if (!level) {
-      return `No se encontro el Level con el ID: ${idLevel}`;
+      throw new CustomError(`No se encontro el Nivel con el ID: ${idLevel}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -17,7 +19,7 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
     }
 
     return await StudentEntityAssignmentRepository.assignLevelToStudent(
@@ -30,7 +32,7 @@ class StudentEntityAssignment {
     const unit = await UnitRepository.findOne(idUnit);
 
     if (!unit) {
-      return `No se encontro el Unit con el ID: ${idUnit}`;
+      throw new CustomError(`No se encontro la Unidad: ${idUnit}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -39,13 +41,13 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
     }
     const levelIndex = student.levels.findIndex(
       (level) => level.levelId == unit.idLevel
     );
     if (levelIndex == -1) {
-      return `No esta matriculado al nivel`;
+      throw new CustomError(`No esta matriculado al nivel`, HttpStatus.GONE);
     }
 
     return await StudentEntityAssignmentRepository.assignUnitToStudent(
@@ -58,7 +60,7 @@ class StudentEntityAssignment {
     const course = await prisma.course.findUnique({ where: { id: idCourse } });
 
     if (!course) {
-      return `No se encontro el Course con el ID: ${idCourse}`;
+      throw new CustomError(`No se encontro el curso con el ID: ${idCourse}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -67,7 +69,8 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
+
     }
 
     const unitIndex = student.units.findIndex(
@@ -75,7 +78,7 @@ class StudentEntityAssignment {
     );
 
     if (unitIndex === -1) {
-      return `No se puede asignar esta Course, no esta asignado a la Unit`;
+      throw new CustomError(`No se puede asignar a este Curso, no se encuentra a la unidad que depende el curso`, HttpStatus.GONE);
     }
 
     return await StudentEntityAssignmentRepository.assignCourseToStudent(
@@ -88,7 +91,7 @@ class StudentEntityAssignment {
     const module = await prisma.module.findUnique({ where: { id: idModule } });
 
     if (!module) {
-      return `No se encontro el Module con el ID: ${idModule}`;
+      throw new CustomError(`No se encontro el Modulo con el ID: ${idModule}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -96,7 +99,7 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
     }
 
     return await StudentEntityAssignmentRepository.assignModuleToStudent(
@@ -110,7 +113,7 @@ class StudentEntityAssignment {
     const level = await prisma.level.findUnique({ where: { id: idLevel } });
 
     if (!level) {
-      return `No se encontro el Level con el ID: ${idLevel}`;
+      throw new CustomError(`No se encontro el Nivel con el ID: ${idLevel}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -118,7 +121,7 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
     }
 
     return await StudentEntityAssignmentRepository.removeLevelToStudent(
@@ -131,7 +134,7 @@ class StudentEntityAssignment {
     const unit = await prisma.unit.findUnique({ where: { id: idUnit } });
 
     if (!unit) {
-      return `No se encontro el Unit con el ID: ${idUnit}`;
+      throw new CustomError(`No se encontro la unidad con el ID: ${idUnit}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -139,7 +142,7 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
     }
     return await StudentEntityAssignmentRepository.removeLevelToStudent(
       idStudent,
@@ -151,7 +154,7 @@ class StudentEntityAssignment {
     const course = await prisma.course.findUnique({ where: { id: idCourse } });
 
     if (!course) {
-      return `No se encontro el Course con el ID: ${idCourse}`;
+      throw new CustomError(`No se encontro el curso con el ID: ${idCourse}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -159,7 +162,7 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
     }
 
     return await StudentEntityAssignmentRepository.removeLevelToStudent(
@@ -172,7 +175,7 @@ class StudentEntityAssignment {
     const module = await prisma.module.findUnique({ where: { id: idModule } });
 
     if (!module) {
-      return `No se encontro el Module con el ID: ${idModule}`;
+      throw new CustomError(`No se encontro el Modulo con el ID: ${idModule}`, HttpStatus.NOT_FOUND);
     }
 
     const student = await prisma.student.findUnique({
@@ -180,7 +183,7 @@ class StudentEntityAssignment {
     });
 
     if (!student) {
-      return `No se encontro el Student con el ID: ${idStudent}`;
+      throw new CustomError(`No se encontro el estudiante con el ID: ${idStudent}`, HttpStatus.NOT_FOUND);
     }
     return await StudentEntityAssignmentRepository.removeLevelToStudent(
       idStudent,

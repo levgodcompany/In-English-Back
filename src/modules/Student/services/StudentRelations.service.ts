@@ -1,4 +1,6 @@
 import { prisma } from "../../../../prisma";
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { StudentRelationsRepository } from "../repositories";
 
 class StudentRelations {
@@ -15,7 +17,7 @@ class StudentRelations {
       });
       return student;
     } catch (error) {
-      throw new Error(`Error al buscar el Student con relaciones: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -31,9 +33,7 @@ class StudentRelations {
       });
       return students;
     } catch (error) {
-      throw new Error(
-        `Error al buscar los estudiantes con sus relaciones: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -42,7 +42,7 @@ class StudentRelations {
       const students = await StudentRelationsRepository.findAllAndLevels();
       return students;
     } catch (error) {
-      throw new Error("" + error);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

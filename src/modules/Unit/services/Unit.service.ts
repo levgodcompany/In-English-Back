@@ -1,13 +1,15 @@
 import { Unit } from "@prisma/client";
 import { UnitInfoBasic } from "../UnitDto";
 import { UnitRepository } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class UnitService {
   async create(data: Unit) {
     try {
       return UnitRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear la unidad: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -15,7 +17,7 @@ class UnitService {
     try {
       return UnitRepository.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar la unidad: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -23,7 +25,7 @@ class UnitService {
     try {
       return UnitRepository.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar las unidad: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -38,7 +40,7 @@ class UnitService {
         return info;
       });
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -46,9 +48,7 @@ class UnitService {
     try {
       return UnitRepository.findAllByIdLevel(idLevel);
     } catch (error) {
-      throw new Error(
-        `Error al buscar las unidad por el idLevel ID ${idLevel}: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -56,7 +56,7 @@ class UnitService {
     try {
       return UnitRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar la unidad: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -64,7 +64,7 @@ class UnitService {
     try {
       return UnitRepository.deleteUnityWithRelations(id);
     } catch (error) {
-      throw new Error(`Error al eliminar la unidad: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

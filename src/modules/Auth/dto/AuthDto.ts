@@ -9,3 +9,13 @@ export type response = {
   lastName: string;
   email: string;
 };
+
+
+export type StudetnDto = {
+  name: string;
+  lastName: string;
+  email: string;
+  dni: string;
+  birthDate: string;
+  tel: string;
+}

@@ -1,3 +1,5 @@
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { BenefitRepository } from "../../Benefit/repositories";
 import { PaymentMethodRepositoy } from "../../PaymentMethod/repositories";
 import { SuscriptionAssignmentsRepository } from "../repositories";
@@ -10,9 +12,7 @@ class SuscriptionAssignmentsService {
         idBenefit
       );
     } catch (error) {
-      throw new Error(
-        `Error al asignar un beneficio a una suscripcion: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -30,9 +30,7 @@ class SuscriptionAssignmentsService {
         );
       });
     } catch (error) {
-      throw new Error(
-        `Error al asignar un beneficio a una suscripcion: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -46,9 +44,7 @@ class SuscriptionAssignmentsService {
         idPaymentMethod
       );
     } catch (error) {
-      throw new Error(
-        `Error al asignar un beneficio a una suscripcion: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -68,9 +64,7 @@ class SuscriptionAssignmentsService {
         );
       }
     } catch (error) {
-      throw new Error(
-        `Error al asignar un beneficio a una suscripcion: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -81,9 +75,7 @@ class SuscriptionAssignmentsService {
         idStudent
       );
     } catch (error) {
-      throw new Error(
-        `Error al asignar un beneficio a una suscripcion: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

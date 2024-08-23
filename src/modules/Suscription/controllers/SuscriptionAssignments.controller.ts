@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { SuscriptionAssignmentsService } from "../services";
 
 class SuscriptionAssignmentsController {
-  async assignStudentToSuscription(req: Request, res: Response): Promise<void> {
+  async assignStudentToSuscription(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idSuscription, idStudent } = req.params;
       const suscription =
@@ -13,11 +13,11 @@ class SuscriptionAssignmentsController {
       res.json(suscription);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignBenefitToSuscription(req: Request, res: Response): Promise<void> {
+  async assignBenefitToSuscription(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idSuscription, idBenefit } = req.params;
       const suscription =
@@ -28,13 +28,13 @@ class SuscriptionAssignmentsController {
       res.json(suscription);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
   async assignBenefitsToSuscription(
     req: Request,
-    res: Response
+    res: Response, next: NextFunction
   ): Promise<void> {
     try {
       const { idSuscription } = req.params;
@@ -48,13 +48,13 @@ class SuscriptionAssignmentsController {
       res.json(suscription);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
   async assignPaymentMethodToSuscription(
     req: Request,
-    res: Response
+    res: Response, next: NextFunction
   ): Promise<void> {
     try {
       const { idSuscription, idPaymentMethod } = req.params;
@@ -66,13 +66,13 @@ class SuscriptionAssignmentsController {
       res.json(suscription);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
   async assignPaymentMethodsToSuscription(
     req: Request,
-    res: Response
+    res: Response, next: NextFunction
   ): Promise<void> {
     try {
       const { idSuscription } = req.params;
@@ -85,7 +85,7 @@ class SuscriptionAssignmentsController {
       res.json(suscription);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 }

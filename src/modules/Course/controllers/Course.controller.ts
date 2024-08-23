@@ -1,9 +1,9 @@
 import { Course } from "@prisma/client";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { CourseCrudService, CourseUnitService } from "../services";
 
 class CourseController {
-  async create(req: Request, res: Response): Promise<void> {
+  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const body: Course = req.body;
       body.order = Number(body.order);
@@ -11,42 +11,42 @@ class CourseController {
       res.json(course);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAll(_req: Request, res: Response): Promise<void> {
+  async findAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const courses = await CourseCrudService.findAll();
       res.json(courses);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAllByIdUnit(req: Request, res: Response): Promise<void> {
+  async findAllByIdUnit(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idUnit } = req.params;
       const courses = await CourseUnitService.findAllByIdUnit(Number(idUnit));
       res.json(courses);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAllInfoBasic(_req: Request, res: Response): Promise<void> {
+  async findAllInfoBasic(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const courses = await CourseUnitService.findAllInfoBasic();
       res.json(courses);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findAllUnitiesByIdCourse(req: Request, res: Response): Promise<void> {
+  async findAllUnitiesByIdCourse(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idUnit } = req.params;
       const courses = await CourseUnitService.findAllUnitiesByIdCourse(
@@ -55,33 +55,33 @@ class CourseController {
       res.json(courses);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async findOne(req: Request, res: Response): Promise<void> {
+  async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCourse } = req.params;
       const course = await CourseCrudService.findOne(Number(idCourse));
       res.json(course);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async delete(req: Request, res: Response): Promise<void> {
+  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCourse } = req.params;
       const course = await CourseCrudService.delete(Number(idCourse));
       res.json(course);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async update(req: Request, res: Response): Promise<void> {
+  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCourse } = req.params;
       const body = req.body;
@@ -90,7 +90,7 @@ class CourseController {
       res.json(course);
     } catch (error) {
       console.log(error);
-      res.json(error);
+      next(error)
     }
   }
 }

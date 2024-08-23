@@ -1,3 +1,5 @@
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { CohortAssignmentsRepository } from "../Repositoryies";
 
 class CohortAssignmentsService {
@@ -11,9 +13,7 @@ class CohortAssignmentsService {
         );
       return updatedTeacher;
     } catch (error) {
-      throw new Error(
-        `Error al asignar Teacher con el ID ${idTeacher} al Cohort con ID ${idCohort}: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -27,9 +27,7 @@ class CohortAssignmentsService {
 
       return updatedTeacher;
     } catch (error) {
-      throw new Error(
-        `Error al asignar Student con el ID ${idStudent} al Cohort con ID ${idCohort}: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -40,9 +38,7 @@ class CohortAssignmentsService {
 
       return updatedTeacher;
     } catch (error) {
-      throw new Error(
-        `Error al asignar Unit con el ID ${idUnit} al Cohort con ID ${idCohort}: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -56,9 +52,7 @@ class CohortAssignmentsService {
 
       return updatedTeacher;
     } catch (error) {
-      throw new Error(
-        `Error al asignar Course con el ID ${idCohort} al Cohort con ID ${idCohort}: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -72,9 +66,7 @@ class CohortAssignmentsService {
 
       return updatedTeacher;
     } catch (error) {
-      throw new Error(
-        `Error al asignar Module con el ID ${idModule} al Cohort con ID ${idCohort}: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

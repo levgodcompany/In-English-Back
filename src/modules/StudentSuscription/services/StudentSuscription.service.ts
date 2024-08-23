@@ -1,12 +1,14 @@
 import { StudentSuscription } from "@prisma/client";
 import { StudentSuscriptionRepository } from "../repositories";
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 
 class StudentSuscriptionServices {
   async create(data: StudentSuscription) {
     try {
       return await StudentSuscriptionRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear un studentSuscription: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -14,9 +16,7 @@ class StudentSuscriptionServices {
     try {
       return await StudentSuscriptionRepository.findAll();
     } catch (error) {
-      throw new Error(
-        `Error al buscar todas los studentSuscriptions: ${error}`
-      );
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -27,7 +27,7 @@ class StudentSuscriptionServices {
         idSuscription
       );
     } catch (error) {
-      throw new Error(`Error al buscar un studentSuscription: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -42,7 +42,7 @@ class StudentSuscriptionServices {
 
       student.find((student) => student.status.status === 100);
     } catch (error) {
-      throw new Error(`Error al buscar un studentSuscription: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

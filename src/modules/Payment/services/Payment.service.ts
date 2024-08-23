@@ -1,12 +1,14 @@
 import { Payment } from "@prisma/client";
 import { PaymentRepository } from "../repositories";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class PaymentServices {
   async create(data: Payment) {
     try {
       return await PaymentRepository.create(data);
     } catch (error) {
-      throw new Error(`Error al crear un payment: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -14,7 +16,7 @@ class PaymentServices {
     try {
       return await PaymentRepository.findAll();
     } catch (error) {
-      throw new Error(`Error al buscar todas los payments: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -22,7 +24,7 @@ class PaymentServices {
     try {
       return await PaymentRepository.findOne(id);
     } catch (error) {
-      throw new Error(`Error al buscar un payment: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -30,7 +32,7 @@ class PaymentServices {
     try {
       return await PaymentRepository.update(id, data);
     } catch (error) {
-      throw new Error(`Error al actualizar un payment: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -38,7 +40,7 @@ class PaymentServices {
     try {
       return await PaymentRepository.delete(id);
     } catch (error) {
-      throw new Error(`Error al eliminar un payment: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

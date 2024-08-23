@@ -1,4 +1,6 @@
 import { prisma } from "../../../../prisma";
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 
 class StudentLevelManagement {
   async updateStudentLevel(
@@ -20,7 +22,7 @@ class StudentLevelManagement {
         },
       });
     } catch (error) {
-      throw new Error(`Error al actualizar el Level del Student: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

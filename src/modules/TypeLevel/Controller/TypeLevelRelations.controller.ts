@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { TypeLevelRelationsService } from "../Services";
 
 class TypeLevelRelationsController {
-  async assigLevel(req: Request, res: Response): Promise<void> {
+  async assigLevel(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idLevel, idTypeLevel } = req.params;
       const typeLevel = await TypeLevelRelationsService.assigLevel(
@@ -11,11 +11,11 @@ class TypeLevelRelationsController {
       );
       res.json(typeLevel);
     } catch (error) {
-      res.json(error);
+      next(error)
     }
   }
 
-  async remove(req: Request, res: Response): Promise<void> {
+  async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idLevel, idTypeLevel } = req.params;
       const typeLevel = await TypeLevelRelationsService.remove(
@@ -24,7 +24,7 @@ class TypeLevelRelationsController {
       );
       res.json(typeLevel);
     } catch (error) {
-      res.json(error);
+      next(error)
     }
   }
 }

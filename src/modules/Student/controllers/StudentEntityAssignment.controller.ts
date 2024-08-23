@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { StudentEntityAssignmentService } from "../services";
 
 class StudentEntityAssignment {
-  async assignLevelToStudent(req: Request, res: Response): Promise<void> {
+  async assignLevelToStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idStudent, idLevel } = req.params;
       const newStudent =
@@ -13,11 +13,11 @@ class StudentEntityAssignment {
       res.json(newStudent);
     } catch (error) {
       console.log("Error", error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignUnitToStudent(req: Request, res: Response): Promise<void> {
+  async assignUnitToStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idStudent, idUnit } = req.params;
       const newStudent =
@@ -28,11 +28,11 @@ class StudentEntityAssignment {
       res.json(newStudent);
     } catch (error) {
       console.log("Error", error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignCourseToStudent(req: Request, res: Response): Promise<void> {
+  async assignCourseToStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idStudent, idCourse } = req.params;
       const newStudent =
@@ -43,11 +43,11 @@ class StudentEntityAssignment {
       res.json(newStudent);
     } catch (error) {
       console.log("Error", error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async assignModuleToStudent(req: Request, res: Response): Promise<void> {
+  async assignModuleToStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idStudent, idModule } = req.params;
       const newStudent =
@@ -58,11 +58,11 @@ class StudentEntityAssignment {
       res.json(newStudent);
     } catch (error) {
       console.log("Error", error);
-      res.json(error);
+      next(error)
     }
   }
 
-  async removeLevelFromStudent(req: Request, res: Response): Promise<void> {
+  async removeLevelFromStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idStudent, idLevel } = req.params;
       const newStudent =
@@ -73,7 +73,7 @@ class StudentEntityAssignment {
       res.json(newStudent);
     } catch (error) {
       console.log("Error", error);
-      res.json(error);
+      next(error)
     }
   }
 }

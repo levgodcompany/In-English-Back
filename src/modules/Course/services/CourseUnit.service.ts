@@ -1,3 +1,5 @@
+import { HttpStatus } from "../../../utilities";
+import { CustomError } from "../../../utilities/Errors";
 import { CourseInfoBasic } from "../CourseDto";
 import { CourseCRUDRepository, CourseUnitRepository } from "../repositories";
 
@@ -6,7 +8,7 @@ class CourseUnitService {
     try {
       return CourseUnitRepository.findAllByIdUnit(idUnit);
     } catch (error) {
-      throw new Error(`Error al buscar los courses: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -22,7 +24,7 @@ class CourseUnitService {
         return info;
       });
     } catch (error) {
-      throw new Error(`${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -30,7 +32,7 @@ class CourseUnitService {
     try {
       return CourseUnitRepository.findAllUnitiesByIdCourse(idUnit);
     } catch (error) {
-      throw new Error(`Error al buscar los courses: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

@@ -1,5 +1,7 @@
 import { Cohort } from "@prisma/client";
 import { CohortRepository } from "../Repositoryies";
+import { CustomError } from "../../../utilities/Errors";
+import { HttpStatus } from "../../../utilities";
 
 class CohortsServices {
   async findOne(id: number) {
@@ -7,7 +9,7 @@ class CohortsServices {
       const cohort = await CohortRepository.findOne(id);
       return cohort;
     } catch (error) {
-      throw new Error(`Error al buscar el cohort con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -17,7 +19,7 @@ class CohortsServices {
 
       return cohorts;
     } catch (error) {
-      throw new Error(`Error al buscar todos los cohorts: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -26,7 +28,7 @@ class CohortsServices {
       const newCohort = await CohortRepository.create(data);
       return newCohort;
     } catch (error) {
-      throw new Error(`Error al crear el cohort: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -35,16 +37,18 @@ class CohortsServices {
       const updatedCohort = await CohortRepository.update(id, data);
       return updatedCohort;
     } catch (error) {
-      throw new Error(`Error al actualizar el cohort con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async delete(id: number) {
     try {
-      const deletedCohort = await CohortRepository.deleteCohortWithRelations(id);
+      const deletedCohort = await CohortRepository.deleteCohortWithRelations(
+        id
+      );
       return deletedCohort;
     } catch (error) {
-      throw new Error(`Error al eliminar el cohort con ID ${id}: ${error}`);
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

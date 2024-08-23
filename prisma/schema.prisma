@@ -17,13 +17,14 @@ model Student {
   tel                 String?
   password            String
   birthDate           DateTime // Fecha de nacimiento
-  idStatus            Int
+  status              String                @default("005")
+  // idStatus            Int
   levels              LevelStudent[]
   units               UnitStudent[]
   courses             CourseStudent[]
   modules             ModuleStudent[]
   suscriptions        StudentSuscription[]
-  status              Status                @relation(fields: [idStatus], references: [id], onDelete: Cascade)
+  // status              Status                @relation(fields: [idStatus], references: [id], onDelete: Cascade)
   examSubmissionUnit  ExamSubmissionUnit[]
   examSubmissionLevel ExamSubmissionLevel[]
   cohortStudent       CohortStudent[]
@@ -38,8 +39,6 @@ model Tutor {
   lastName      String
   email         String         @unique
   dni           String         @unique
-  password      String
-  birthDate     DateTime // Fecha de nacimiento
   relationship  String // Parentesco
   tel           String?
   studentTutors StudentTutor[]
@@ -216,7 +215,7 @@ model Status {
   status              Int
   studentSuscriptions StudentSuscription[]
   payments            Payment[]
-  students            Student[]
+  // students            Student[]
   examSubmissionUnit  ExamSubmissionUnit[]
   examSubmissionLevel ExamSubmissionLevel[]
 
