@@ -1,13 +1,80 @@
 import { Router } from "express";
-import LevelController from "./Level.controller";
+import { LevelController, LevelRelationController } from "./controllers";
+import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities/index";
 
 const router = Router();
 
-router.get("/", LevelController.findAll);
-router.post("/", LevelController.create);
-router.put("/:idLevel", LevelController.update);
-router.get("/:idLevel", LevelController.findOne);
-router.delete("/:idLevel", LevelController.delete);
-router.get("/:idLevel/activity/:idAcivity", LevelController.assignActivityToLevel);
+const authMiddleware = new AuthMiddleware();
+const roleMiddleware = new RoleMiddleware();
 
-export default router
+// Middleware combinados para reutilización
+const authenticate = authMiddleware.authenticateToken.bind(authMiddleware);
+const authorizeTeacher = roleMiddleware.authorizeRole([Rol.TEACHER]);
+const authorizeStudentAndTeacher = roleMiddleware.authorizeRole([
+  Rol.STUDENT,
+  Rol.TEACHER,
+]);
+
+// Rutas GET
+router.get(
+  "/",
+  authenticate,
+  authorizeStudentAndTeacher,
+  LevelController.findAll
+);
+router.get(
+  "/info-basic",
+  authenticate,
+  authorizeStudentAndTeacher,
+  LevelController.findAllInfoBasic
+);
+router.get(
+  "/:idLevel",
+  authenticate,
+  authorizeStudentAndTeacher,
+  LevelController.findOne
+);
+router.get(
+  "/info/:idLevel",
+  authenticate,
+  authorizeStudentAndTeacher,
+  LevelController.findOneAll
+);
+
+
+
+
+router.get(
+  "/relation/suscription/:idLevel",
+  authenticate,
+  authorizeTeacher,
+  LevelRelationController.findAllSuscriptionByIdLevel
+);
+
+router.get(
+  "/relation/type-level/:idLevel",
+  authenticate,
+  authorizeTeacher,
+  LevelRelationController.findTypeLevelsByIdLevel
+);
+
+
+
+
+
+
+// Rutas POST
+router.post("/", authenticate, authorizeTeacher, LevelController.create);
+
+// Rutas PUT
+router.put("/:idLevel", authenticate, authorizeTeacher, LevelController.update);
+
+// Rutas DELETE
+router.delete(
+  "/:idLevel",
+  authenticate,
+  authorizeTeacher,
+  LevelController.delete
+);
+
+export default router;

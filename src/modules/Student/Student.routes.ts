@@ -1,22 +1,85 @@
-import express from 'express';
-import { studentController } from "./Student.controller";
+import express from "express";
+import {
+  StudentCRUDController,
+  StudentEntityAssignmentController,
+  StudentRelationsController,
+} from "./controllers";
+import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
 
 const router = express.Router();
 
-router.get("/", studentController.findAll)
-router.get("/levels", studentController.findAllAndLevels)
-router.get("/:id", studentController.findOne)
-router.post("/", studentController.create)
+const authMiddleware = new AuthMiddleware();
+const roleMiddleware = new RoleMiddleware();
+
+router.get(
+  "/info-basic",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentRelationsController.findAllInfoBasic
+);
+router.get(
+  "/levels",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentRelationsController.findAllAndLevels
+);
+router.get(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentCRUDController.findAll
+);
+router.get(
+  "/:id",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentCRUDController.findOne
+);
+router.post(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentCRUDController.create
+);
+router.delete(
+  "/:id",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentCRUDController.delete
+);
 
 // Assign
-router.put("/:idStudent/level/:idLevel", studentController.assignLevelToStudent)
-router.put("/:idStudent/unit/:idUnit", studentController.assignUnitToStudent)
-router.put("/:idStudent/course/:idCourse", studentController.assignCourseToStudent)
-router.put("/:idStudent/module/:idModule", studentController.assignModuleToStudent)
+router.put(
+  "/:idStudent/level/:idLevel",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentEntityAssignmentController.assignLevelToStudent
+);
+router.put(
+  "/:idStudent/unit/:idUnit",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentEntityAssignmentController.assignUnitToStudent
+);
+router.put(
+  "/:idStudent/course/:idCourse",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentEntityAssignmentController.assignCourseToStudent
+);
+router.put(
+  "/:idStudent/module/:idModule",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentEntityAssignmentController.assignModuleToStudent
+);
 
 // remove
-router.delete("/:idStudent/level/:idLevel", studentController.removeLevelFromStudent)
-
-router.delete("/:id", studentController.delete)
+router.delete(
+  "/:idStudent/level/:idLevel",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  StudentEntityAssignmentController.removeLevelFromStudent
+);
 
 export default router;

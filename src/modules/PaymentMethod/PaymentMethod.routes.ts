@@ -1,12 +1,41 @@
 import { Router } from "express";
-import PaymentMethodController from "./PaymentMethod.controller";
+import { PaymentMethodController } from "./controllers";
+import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
 
 const router = Router();
 
-router.post("/", PaymentMethodController.create)
-router.delete("/:idPaymentMethod", PaymentMethodController.delete)
-router.get("/", PaymentMethodController.findAll)
-router.get("/:idPaymentMethod", PaymentMethodController.findOne)
-router.put("/:idPaymentMethod", PaymentMethodController.update)
+const authMiddleware = new AuthMiddleware();
+const roleMiddleware = new RoleMiddleware();
+
+router.post(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  PaymentMethodController.create
+);
+router.delete(
+  "/:idPaymentMethod",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  PaymentMethodController.delete
+);
+router.get(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  PaymentMethodController.findAll
+);
+router.get(
+  "/:idPaymentMethod",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  PaymentMethodController.findOne
+);
+router.put(
+  "/:idPaymentMethod",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  PaymentMethodController.update
+);
 
 export default router;

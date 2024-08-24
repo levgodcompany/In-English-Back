@@ -1,16 +1,71 @@
 import { Router } from "express";
-import TeacherController from "./Teacher.controller";
+import { TeacherAssignmentsController, TeacherController } from "./controllers";
+import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
 
 const router = Router();
 
-router.get("/", TeacherController.findAll);
-router.get("/:idTeacher", TeacherController.findOne);
-router.post("/", TeacherController.create);
-router.put("/:idTeacher", TeacherController.update);
-router.delete("/:idTeacher", TeacherController.delete);
-router.put("/:idTeacher/level/:idLevel", TeacherController.assignLevelToTeacher);
-router.put("/:idTeacher/unit/:idUnit", TeacherController.assignUnitToTeacher);
-router.put("/:idTeacher/course/:idCourse", TeacherController.assignCourseToTeacher);
-router.put("/:idTeacher/module/:idModule", TeacherController.assignModuleToTeacher);
+const authMiddleware = new AuthMiddleware();
+const roleMiddleware = new RoleMiddleware();
+
+router.get(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherController.findAll
+);
+router.get(
+  "/info-basic",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherController.findAllInfoBasic
+);
+router.get(
+  "/:idTeacher",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherController.findOne
+);
+router.post(
+  "/",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherController.create
+);
+router.put(
+  "/:idTeacher",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherController.update
+);
+router.delete(
+  "/:idTeacher",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherController.delete
+);
+router.put(
+  "/:idTeacher/level/:idLevel",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherAssignmentsController.assignLevelToTeacher
+);
+router.put(
+  "/:idTeacher/unit/:idUnit",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherAssignmentsController.assignUnitToTeacher
+);
+router.put(
+  "/:idTeacher/course/:idCourse",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherAssignmentsController.assignCourseToTeacher
+);
+router.put(
+  "/:idTeacher/module/:idModule",
+  authMiddleware.authenticateToken.bind(authMiddleware),
+  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  TeacherAssignmentsController.assignModuleToTeacher
+);
 
 export default router;
