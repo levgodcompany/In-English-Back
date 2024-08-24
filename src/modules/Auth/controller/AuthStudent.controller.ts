@@ -12,24 +12,29 @@ class AuthStudentController {
       const student = await AuthStudentService.login(body.email, body.password);
       res.json(student);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const body: Student = req.body;
-      body.status = '014';
-      body.password = '';
+      const { idLevel, idCohort } = req.params;
+      body.status = "014";
+      body.password = "";
       body.password = `${body.dni}`;
-      body.birthDate = new Date(body.birthDate)
-      const student = await AuthStudentService.register(body);
-      res.status(HttpStatus.CREATED).json(student);
+      body.birthDate = new Date(body.birthDate);
+      await AuthStudentService.inscription(
+        body,
+        Number(idLevel),
+        Number(idCohort)
+      );
+      res.status(HttpStatus.CREATED).json("Inscripto exitosamente")
     } catch (error) {
-      if(error instanceof CustomError) {
-        next(error)
-      }else {
-        res.json("non custom")
+      if (error instanceof CustomError) {
+        next(error);
+      } else {
+        res.json("non custom");
       }
     }
   }

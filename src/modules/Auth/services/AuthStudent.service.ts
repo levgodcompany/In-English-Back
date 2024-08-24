@@ -1,13 +1,31 @@
 import { Student } from "@prisma/client";
 import AuthService from "./Auth.service";
-import { StudentCRUDService } from "../../Student/services/index";
+import {
+  StudentCRUDService,
+  StudentEntityAssignmentService,
+} from "../../Student/services/index";
 import { HttpStatus, Rol, TokenExpiryOptions } from "../../../utilities";
 import { CustomError } from "../../../utilities/Errors";
+import CohortAssignmentsService from "../../Cohorts/Services/CohortAssignments.service";
 
 class AuthStudentService extends AuthService<Student> {
   constructor() {
     const jwt = process.env.JWT_SECRET || "secret";
     super(jwt, TokenExpiryOptions.hours.oneHour, Rol.STUDENT);
+  }
+
+  async inscription(data: Student, idLevel: number, idCohort: number) {
+    try {
+      const student = await this.register(data);
+      const idStudent = student.user.id;
+      await StudentEntityAssignmentService.assignLevelToStudent(
+        idStudent,
+        idLevel
+      );
+      await CohortAssignmentsService.assignStudentToCohort(idCohort, idStudent);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async register(data: Student) {
@@ -17,7 +35,6 @@ class AuthStudentService extends AuthService<Student> {
         ...data,
         password: hashedPassword,
       });
-
       const token = this.generateToken(newStudent.id);
       return {
         user: {
