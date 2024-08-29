@@ -7,6 +7,7 @@ import {
 import { HttpStatus, Rol, TokenExpiryOptions } from "../../../utilities";
 import { CustomError } from "../../../utilities/Errors";
 import CohortAssignmentsService from "../../Cohorts/Services/CohortAssignments.service";
+import { prisma } from "../../../../prisma";
 
 class AuthStudentService extends AuthService<Student> {
   constructor() {
@@ -63,18 +64,27 @@ class AuthStudentService extends AuthService<Student> {
       );
     }
 
-    if (student.status == "014") {
+    const exep = ['014', '003', '005', '007', '012', '015']
+
+    if (exep.includes(student.status)) {
       throw new CustomError(`Usuario no avilitado`, HttpStatus.NOT_FOUND);
     }
+
+    const levelStudent = await prisma.levelStudent.findFirst({
+      where: {
+        studentId: student.id
+      }
+    });
+   
 
     const token = this.generateToken(student.id);
 
     return {
       user: {
         id: student.id,
-        name: student.name,
-        lastName: student.lastName,
+        fullName: `${student.name} ${student.lastName}`,
         email: student.email,
+        idLevel: levelStudent != null ? levelStudent.levelId : 0,
       },
       token,
     };

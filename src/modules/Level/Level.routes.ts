@@ -41,6 +41,13 @@ router.get(
   LevelController.findOneAll
 );
 
+router.get(
+  "/teachers/:idLevel",
+  authenticate,
+  authorizeStudentAndTeacher,
+  LevelController.findAllTeacherByIdLevel
+);
+
 
 
 

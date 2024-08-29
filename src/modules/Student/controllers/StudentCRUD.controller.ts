@@ -32,6 +32,21 @@ class StudentCRUD {
     }
   }
 
+  async updateActiveStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { idStudent, idStatus } = req.params;
+      const newStudent =
+        await StudentCRUDService.updateActiveStudent(
+          Number(idStudent),
+          idStatus
+        );
+      res.json(newStudent);
+    } catch (error) {
+      console.log("Error", error);
+      next(error)
+    }
+  }
+
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;

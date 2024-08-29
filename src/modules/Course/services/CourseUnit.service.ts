@@ -35,6 +35,14 @@ class CourseUnitService {
       throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findAllCourseByIdUnitAndIdStudent(idUnit: number, idStudent: number) {
+    try {
+      return CourseUnitRepository.findAllCourseByIdUnitAndIdStudent(idUnit, idStudent);
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
 
 export default new CourseUnitService();

@@ -45,6 +45,28 @@ class LevelService {
     }
   }
 
+  async findAllTeacherByIdLevel(id: number) {
+    // try {
+    const teachersLevel = await LevelRepository.findAllTeacherByIdLevel(id);
+    if (!teachersLevel) {
+      return []
+    }
+    const res = teachersLevel.cohortTeachers.map((ct) => {
+      // ct.teacher.
+      return {
+        id: ct.teacher.id,
+        fullName: `${ct.teacher.name} ${ct.teacher.lastName}`,
+        imgUrl: ct.teacher.imgUrl,
+      };
+    });
+
+    return res;
+
+    // } catch (error) {
+    //   throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+  }
+
   async findOneAll(id: number) {
     try {
       return LevelRepository.findOneAll(id);

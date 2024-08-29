@@ -44,6 +44,15 @@ class StudentRelations {
     }
   }
 
+  async findAllAndLevelsPreRegister() {
+    try {
+      const students = await prisma.student.findMany();
+      return students;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Student${error}`);
+    }
+  }
+
   // Metodo para obtener todos los student con sus relaciones
   async findAllStudentsWithRelations(relations: string[]) {
     try {

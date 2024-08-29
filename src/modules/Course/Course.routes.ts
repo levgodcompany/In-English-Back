@@ -7,52 +7,64 @@ const router = Router();
 const authMiddleware = new AuthMiddleware();
 const roleMiddleware = new RoleMiddleware();
 
+// Middleware combinados para reutilización
+const authenticate = authMiddleware.authenticateToken.bind(authMiddleware);
+const authorizeTeacher = roleMiddleware.authorizeRole([Rol.TEACHER]);
+const authorizeStudentAndTeacher = roleMiddleware.authorizeRole([
+  Rol.TEACHER,
+  Rol.STUDENT,
+]);
+
 router.get(
   "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
+  authenticate,
+  authorizeStudentAndTeacher,
   CourseController.findAll
 );
 router.get(
   "/unit/:idUnit",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
+  authenticate,
+  authorizeStudentAndTeacher,
   CourseController.findAllByIdUnit
 );
 router.get(
   "/info-basic",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
+  authenticate,
+  authorizeStudentAndTeacher,
   CourseController.findAllInfoBasic
 );
 router.get(
   "/:idUnit/unities",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
+  authenticate,
+  authorizeStudentAndTeacher,
   CourseController.findAllUnitiesByIdCourse
 );
-router.post(
-  "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  CourseController.create
+
+router.get(
+  "/unit/:idUnit/student/:idStudent",
+  authenticate,
+  authorizeStudentAndTeacher,
+  CourseController.findAllCourseByIdUnitAndIdStudent
 );
+
+router.post("/", authenticate, authorizeTeacher, CourseController.create);
+
 router.put(
   "/:idCourse",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  authenticate,
+  authorizeTeacher,
   CourseController.update
 );
 router.get(
   "/:idCourse",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  authenticate,
+  authorizeTeacher,
   CourseController.findOne
 );
 router.delete(
   "/:idCourse",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  authenticate,
+  authorizeTeacher,
   CourseController.delete
 );
 
