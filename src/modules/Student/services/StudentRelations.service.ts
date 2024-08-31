@@ -46,6 +46,15 @@ class StudentRelations {
     }
   }
 
+  async totalModuleToCourse(idCourse: number, idStudent: number) {
+    try {
+      const students = await StudentRelationsRepository.totalModuleToCourse(idCourse, idStudent);
+      return students;
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 }
 
 export default new StudentRelations();

@@ -50,7 +50,7 @@ class CourseUnitRepository {
         fileURL: string | null;
         typeFile: string | null;
       };
-      
+
       type CourseAndModules = {
         id: number;
         title: string;
@@ -59,7 +59,7 @@ class CourseUnitRepository {
         idUnit: number;
         modules: Module[];
       };
-      
+
       const rawResults = await prisma.$queryRaw<any[]>`
         SELECT 
           c.id AS course_id, 
@@ -74,6 +74,7 @@ class CourseUnitRepository {
           m."fileURL" AS module_fileurl, 
           m.description AS module_description
         FROM public."Courses" c
+        INNER JOIN public."CohortCourse" cc ON cc."idCourse" = c.id
         LEFT JOIN public."Modules" m ON c.id = m."idCourse"
         INNER JOIN public."CohortModule" cm ON m.id = cm."idModule"
         INNER JOIN public."Cohorts" ct ON cm."idCohort" = ct.id
@@ -81,12 +82,12 @@ class CourseUnitRepository {
         INNER JOIN public."Students" s ON cs."idStudent" = s.id
         WHERE c."idUnit" = ${idUnit} AND s.id = ${idStudent};
       `;
-      
+
       const groupedCourses: CourseAndModules[] = [];
-      
+
       rawResults.forEach((result) => {
-        let course = groupedCourses.find(c => c.id === result.course_id);
-      
+        let course = groupedCourses.find((c) => c.id === result.course_id);
+
         if (!course) {
           course = {
             id: result.course_id,
@@ -94,11 +95,11 @@ class CourseUnitRepository {
             description: result.course_description,
             order: result.course_order,
             idUnit: result.course_idUnit,
-            modules: []
+            modules: [],
           };
           groupedCourses.push(course);
         }
-      
+
         if (result.module_id) {
           course.modules.push({
             id: result.module_id,
@@ -107,13 +108,39 @@ class CourseUnitRepository {
             idCourse: result.course_id,
             order: result.module_order,
             fileURL: result.module_fileurl,
-            typeFile: result.module_typefile
+            typeFile: result.module_typefile,
           });
         }
       });
-      
+
       return groupedCourses;
-      
+    } catch (error) {
+      throw new Error(`Error al buscar los courses: ${error}`);
+    }
+  }
+
+  async totalModuleTuCourse(idCourse: number, idStudent: number) {
+    try {
+      type Total = {
+        id: number;
+        total: number;
+      };
+
+      const rawResults = await prisma.$queryRaw<Total[]>`
+        SELECT 
+          c.id,
+          COUNT(cm."idModule") AS total
+        FROM public."Courses" c
+        INNER JOIN public."CohortCourse" cc ON cc."idCourse" = c.id
+        LEFT JOIN public."Modules" m ON cc."idCourse" = m."idCourse"
+        INNER JOIN public."CohortModule" cm ON m.id = cm."idModule"
+        INNER JOIN public."Cohorts" ct ON cm."idCohort" = ct.id
+        INNER JOIN public."CohortStudent" cs ON ct.id = cs."idCohort"
+        INNER JOIN public."Students" s ON cs."idStudent" = s.id
+        WHERE cc."idCourse" = ${idCourse} and s.id = ${idStudent}
+        GROUP BY c.id;
+      `;
+      return rawResults;
     } catch (error) {
       throw new Error(`Error al buscar los courses: ${error}`);
     }

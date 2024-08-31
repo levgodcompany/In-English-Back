@@ -80,6 +80,7 @@ model TypeLevel {
   title           String
   description     String
   typeLevelLevels TypeLevelLevel[]
+  order Int?
 
   @@map("TypeLevels")
 }

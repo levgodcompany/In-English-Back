@@ -38,9 +38,24 @@ class CourseUnitService {
 
   async findAllCourseByIdUnitAndIdStudent(idUnit: number, idStudent: number) {
     try {
-      return CourseUnitRepository.findAllCourseByIdUnitAndIdStudent(idUnit, idStudent);
+      return CourseUnitRepository.findAllCourseByIdUnitAndIdStudent(
+        idUnit,
+        idStudent
+      );
     } catch (error) {
       throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async totalModuleTuCourse(idCourse: number, idStudent: number) {
+    try {
+      const result = await CourseUnitRepository.totalModuleTuCourse(
+        idCourse,
+        idStudent
+      );
+      return result;
+    } catch (error) {
+      throw new Error(`Error al buscar los courses: ${error}`);
     }
   }
 }

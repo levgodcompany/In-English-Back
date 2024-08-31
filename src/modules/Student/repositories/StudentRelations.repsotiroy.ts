@@ -72,6 +72,33 @@ class StudentRelations {
       );
     }
   }
+
+  // El total de modulos que a completado un student de un curso
+  async totalModuleToCourse(idCourse: number, idStudent: number) {
+    try {
+      type Total = {
+        id: number;
+        total: number;
+      };
+
+      const rawResults = await prisma.$queryRaw<Total[]>`
+          SELECT 
+	          s.id,
+	          COUNT(ms."moduleId") as total
+          FROM public."Students" s
+          INNER JOIN public."ModuleStudent" ms ON ms."studentId" = s.id
+          INNER JOIN public."Modules" m ON m.id = ms."moduleId"
+          WHERE m."idCourse" = ${idCourse} AND s.id = ${idStudent}
+          GROUP BY s.id;
+        `;
+
+      return rawResults;
+    } catch (error) {
+      throw new Error(
+        `Error al buscar el total de modulo completados por un estudiante: ${error}`
+      );
+    }
+  }
 }
 
 export default new StudentRelations();
