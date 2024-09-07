@@ -44,6 +44,19 @@ class StudentRelations {
     }
   }
 
+  async findAllLevelsCohorts(idLevel: number, idStudent: number) {
+    try {
+      const students = await prisma.cohort.findMany({
+        where: {
+          idLevel: idLevel
+        },
+      })
+      return students;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Student${error}`);
+    }
+  } 
+
   async findAllAndLevelsPreRegister() {
     try {
       const students = await prisma.student.findMany();

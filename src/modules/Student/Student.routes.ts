@@ -1,91 +1,38 @@
-import express from "express";
+import { Router } from "express";
 import {
   StudentCRUDController,
   StudentEntityAssignmentController,
   StudentRelationsController,
 } from "./controllers";
-import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
+import { authenticate, authorizeStudentAndTeacher, authorizeTeacher } from "../../middlewares";
 
-const router = express.Router();
+const router = Router();
 
-const authMiddleware = new AuthMiddleware();
-const roleMiddleware = new RoleMiddleware();
+// Middlewares globales para todas las rutas en este archivo
+router.use(authenticate);
+router.use(authorizeTeacher);
 
-// Middleware combinados para reutilización
-const authenticate = authMiddleware.authenticateToken.bind(authMiddleware);
-const authorizeTeacher = roleMiddleware.authorizeRole([Rol.TEACHER]);
-// const authorizeStudentAndTeacher = roleMiddleware.authorizeRole([
-//   Rol.TEACHER,
-//   Rol.STUDENT,
-// ]);
+// Rutas para obtener información básica y relaciones
+router.get("/info-basic", StudentRelationsController.findAllInfoBasic);
+router.get("/levels", StudentRelationsController.findAllAndLevels);
 
-router.get(
-  "/info-basic",
-  authenticate,
-  authorizeTeacher,
-  StudentRelationsController.findAllInfoBasic
-);
-router.get(
-  "/levels",
-  authenticate,
-  authorizeTeacher,
-  StudentRelationsController.findAllAndLevels
-);
+// Rutas CRUD para estudiantes
+router.get("/", StudentCRUDController.findAll);
+router.get("/:id", StudentCRUDController.findOne);
+router.post("/", StudentCRUDController.create);
+router.put("/active/:idStudent/:idStatus", StudentCRUDController.updateActiveStudent);
+router.delete("/:id", StudentCRUDController.delete);
 
-router.put(
-  "/active/:idStudent/:idStatus",
-  authenticate,
-  authorizeTeacher,
-  StudentCRUDController.updateActiveStudent
-);
+// Rutas para asignar entidades al estudiante
+router.put("/:idStudent/level/:idLevel", StudentEntityAssignmentController.assignLevelToStudent);
+router.put("/:idStudent/unit/:idUnit", StudentEntityAssignmentController.assignUnitToStudent);
+router.put("/:idStudent/course/:idCourse", StudentEntityAssignmentController.assignCourseToStudent);
+router.put("/:idStudent/module/:idModule", StudentEntityAssignmentController.assignModuleToStudent);
 
-router.get("/", authenticate, authorizeTeacher, StudentCRUDController.findAll);
-router.get(
-  "/:id",
-  authenticate,
-  authorizeTeacher,
-  StudentCRUDController.findOne
-);
-router.post("/", authenticate, authorizeTeacher, StudentCRUDController.create);
-router.delete(
-  "/:id",
-  authenticate,
-  authorizeTeacher,
-  StudentCRUDController.delete
-);
+// Rutas para remover entidades del estudiante
+router.delete("/:idStudent/level/:idLevel", StudentEntityAssignmentController.removeLevelFromStudent);
 
-// Assign
-router.put(
-  "/:idStudent/level/:idLevel",
-  authenticate,
-  authorizeTeacher,
-  StudentEntityAssignmentController.assignLevelToStudent
-);
-router.put(
-  "/:idStudent/unit/:idUnit",
-  authenticate,
-  authorizeTeacher,
-  StudentEntityAssignmentController.assignUnitToStudent
-);
-router.put(
-  "/:idStudent/course/:idCourse",
-  authenticate,
-  authorizeTeacher,
-  StudentEntityAssignmentController.assignCourseToStudent
-);
-router.put(
-  "/:idStudent/module/:idModule",
-  authenticate,
-  authorizeTeacher,
-  StudentEntityAssignmentController.assignModuleToStudent
-);
-
-// remove
-router.delete(
-  "/:idStudent/level/:idLevel",
-  authenticate,
-  authorizeTeacher,
-  StudentEntityAssignmentController.removeLevelFromStudent
-);
+router.use(authorizeStudentAndTeacher);
+router.get('level/:idLevel/cohorts/student/:idStudent')
 
 export default router;

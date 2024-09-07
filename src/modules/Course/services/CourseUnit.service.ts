@@ -36,11 +36,12 @@ class CourseUnitService {
     }
   }
 
-  async findAllCourseByIdUnitAndIdStudent(idUnit: number, idStudent: number) {
+  async findAllCourseByIdUnitAndIdStudent(idUnit: number, idStudent: number, idCohort: number) {
     try {
       return CourseUnitRepository.findAllCourseByIdUnitAndIdStudent(
         idUnit,
-        idStudent
+        idStudent,
+        idCohort
       );
     } catch (error) {
       throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);

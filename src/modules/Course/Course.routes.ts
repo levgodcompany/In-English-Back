@@ -1,71 +1,21 @@
 import { Router } from "express";
 import { CourseController } from "./controllers";
-import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
+import { authorizeTeacher, authenticate, authorizeStudentAndTeacher } from "../../middlewares";
 
 const router = Router();
 
-const authMiddleware = new AuthMiddleware();
-const roleMiddleware = new RoleMiddleware();
+router.use(authenticate);
 
-// Middleware combinados para reutilización
-const authenticate = authMiddleware.authenticateToken.bind(authMiddleware);
-const authorizeTeacher = roleMiddleware.authorizeRole([Rol.TEACHER]);
-const authorizeStudentAndTeacher = roleMiddleware.authorizeRole([
-  Rol.TEACHER,
-  Rol.STUDENT,
-]);
+router.get("/", authorizeStudentAndTeacher, CourseController.findAll);
+router.get("/unit/:idUnit", authorizeStudentAndTeacher, CourseController.findAllByIdUnit);
+router.get("/info-basic", authorizeStudentAndTeacher, CourseController.findAllInfoBasic);
+router.get("/:idUnit/unities", authorizeStudentAndTeacher, CourseController.findAllUnitiesByIdCourse);
+router.get("/unit/:idUnit/cohort/:idCohort/student/:idStudent", authorizeStudentAndTeacher, CourseController.findAllCourseByIdUnitAndIdStudent);
 
-router.get(
-  "/",
-  authenticate,
-  authorizeStudentAndTeacher,
-  CourseController.findAll
-);
-router.get(
-  "/unit/:idUnit",
-  authenticate,
-  authorizeStudentAndTeacher,
-  CourseController.findAllByIdUnit
-);
-router.get(
-  "/info-basic",
-  authenticate,
-  authorizeStudentAndTeacher,
-  CourseController.findAllInfoBasic
-);
-router.get(
-  "/:idUnit/unities",
-  authenticate,
-  authorizeStudentAndTeacher,
-  CourseController.findAllUnitiesByIdCourse
-);
-
-router.get(
-  "/unit/:idUnit/student/:idStudent",
-  authenticate,
-  authorizeStudentAndTeacher,
-  CourseController.findAllCourseByIdUnitAndIdStudent
-);
-
-router.post("/", authenticate, authorizeTeacher, CourseController.create);
-
-router.put(
-  "/:idCourse",
-  authenticate,
-  authorizeTeacher,
-  CourseController.update
-);
-router.get(
-  "/:idCourse",
-  authenticate,
-  authorizeTeacher,
-  CourseController.findOne
-);
-router.delete(
-  "/:idCourse",
-  authenticate,
-  authorizeTeacher,
-  CourseController.delete
-);
+router.use(authorizeTeacher);
+router.post("/", CourseController.create);
+router.put("/:idCourse", CourseController.update);
+router.get("/:idCourse", CourseController.findOne);
+router.delete("/:idCourse", CourseController.delete);
 
 export default router;

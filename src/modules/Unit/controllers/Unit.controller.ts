@@ -2,6 +2,7 @@ import { Unit } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import { UnitService } from "../services";
 import { HttpStatus } from "../../../utilities";
+import { CohortRelationshipsService } from "../../Cohorts/Services";
 
 class UnitController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -62,14 +63,22 @@ class UnitController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { idLevel, idStudent } = req.params;
-      const unities = await UnitService.findAllUnitByIdLevelAndByIdStudent(Number(idLevel), Number(idStudent));
-      res.json(unities);
+      const { idLevel, idStudent, idCohort } = req.params;
+      
+      const unities = await UnitService.findAllUnitByIdLevelAndByIdStudent(
+        Number(idLevel),
+        Number(idStudent),
+        Number(idCohort)
+      );
+      const totalClass = await CohortRelationshipsService.findTotalClassOnLive(Number(idCohort));
+      res.json({
+        unities: unities,
+        totalClass: totalClass
+      });
     } catch (error) {
       next(error);
     }
   }
-
 
   async findAllTeacherByIdUnit(
     req: Request,

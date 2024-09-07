@@ -5,6 +5,7 @@ import {
   CohortsController,
 } from "./Controllers";
 import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
+import { authorizeStudentAndTeacher } from "../../middlewares";
 
 const router = Router();
 
@@ -18,18 +19,8 @@ const authorizeTeacher = roleMiddleware.authorizeRole([Rol.TEACHER]);
 //   Rol.TEACHER,
 // ]);
 
-router.post(
-  "/",
-  authenticate,
-  authorizeTeacher,
-  CohortsController.create
-);
-router.get(
-  "/",
-  authenticate,
-  authorizeTeacher,
-  CohortsController.findAll
-);
+router.post("/", authenticate, authorizeTeacher, CohortsController.create);
+router.get("/", authenticate, authorizeTeacher, CohortsController.findAll);
 
 router.get(
   "/all-info/:idCohort",
@@ -67,6 +58,16 @@ router.get(
   authorizeTeacher,
   CohortRelationshipsController.findAllCohortStudentByIdCohort
 );
+
+router.get(
+  "/cohort/total-class/:idCohort",
+  authenticate,
+  authorizeStudentAndTeacher,
+  CohortRelationshipsController.findTotalClassOnLive
+);
+
+
+
 
 router.get(
   "/:idCohort",

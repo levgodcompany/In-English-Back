@@ -39,7 +39,11 @@ class CourseUnitRepository {
     }
   }
 
-  async findAllCourseByIdUnitAndIdStudent(idUnit: number, idStudent: number) {
+  async findAllCourseByIdUnitAndIdStudent(
+    idUnit: number,
+    idStudent: number,
+    idCohort: number
+  ) {
     try {
       type Module = {
         id: number;
@@ -49,6 +53,7 @@ class CourseUnitRepository {
         order: number;
         fileURL: string | null;
         typeFile: string | null;
+        enabled: boolean;
       };
 
       type CourseAndModules = {
@@ -57,6 +62,7 @@ class CourseUnitRepository {
         description: string;
         order: number;
         idUnit: number;
+        enabled: boolean;
         modules: Module[];
       };
 
@@ -72,7 +78,9 @@ class CourseUnitRepository {
           m."order" AS module_order, 
           m."typeFile" AS module_typefile, 
           m."fileURL" AS module_fileurl, 
-          m.description AS module_description
+          m.description AS module_description,
+          cc.enabled,
+          cm.enabled as module_enabled
         FROM public."Courses" c
         INNER JOIN public."CohortCourse" cc ON cc."idCourse" = c.id
         LEFT JOIN public."Modules" m ON c.id = m."idCourse"
@@ -80,7 +88,7 @@ class CourseUnitRepository {
         INNER JOIN public."Cohorts" ct ON cm."idCohort" = ct.id
         INNER JOIN public."CohortStudent" cs ON ct.id = cs."idCohort"
         INNER JOIN public."Students" s ON cs."idStudent" = s.id
-        WHERE c."idUnit" = ${idUnit} AND s.id = ${idStudent};
+        WHERE c."idUnit" = ${idUnit} AND s.id = ${idStudent} and cc."idCohort" = ${idCohort} and cm."idCohort" = ${idCohort};
       `;
 
       const groupedCourses: CourseAndModules[] = [];
@@ -95,21 +103,49 @@ class CourseUnitRepository {
             description: result.course_description,
             order: result.course_order,
             idUnit: result.course_idUnit,
+            enabled: result.enabled,
             modules: [],
           };
           groupedCourses.push(course);
         }
 
         if (result.module_id) {
-          course.modules.push({
-            id: result.module_id,
-            title: result.module_title,
-            description: result.module_description,
-            idCourse: result.course_id,
-            order: result.module_order,
-            fileURL: result.module_fileurl,
-            typeFile: result.module_typefile,
-          });
+          if (course && !course.enabled) {
+            course.modules.push({
+              id: result.module_id,
+              title: result.module_title,
+              description: "",
+              idCourse: result.course_id,
+              order: result.module_order,
+              fileURL: "",
+              typeFile: "",
+              enabled: false,
+            });
+          } else {
+            if (result.module_enabled == false) {
+              course.modules.push({
+                id: result.module_id,
+                title: result.module_title,
+                description: "",
+                idCourse: result.course_id,
+                order: result.module_order,
+                fileURL: "",
+                typeFile: "",
+                enabled: false,
+              });
+            } else {
+              course.modules.push({
+                id: result.module_id,
+                title: result.module_title,
+                description: result.module_description,
+                idCourse: result.course_id,
+                order: result.module_order,
+                fileURL: result.module_fileurl,
+                typeFile: result.module_typefile,
+                enabled: result.module_enabled,
+              });
+            }
+          }
         }
       });
 

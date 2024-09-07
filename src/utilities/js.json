@@ -1,0 +1,43 @@
+{
+    
+ {
+        "id": 8,
+        "name": "Leandro",
+        "lastName": "Veron",
+        "email": "lean@gmail.com",
+        "levels": [
+            {
+                "id": 14,
+                "title": "Inglés Básico A2",
+                "cohorts": [
+                    {
+                        "id": 23,
+                        "title": "A2-01",
+                        "enabled": true
+                    },
+                    {
+                        "id": 24,
+                        "title": "A2-02",
+                        "enabled": true
+                    }
+                ]
+            },
+            {
+                "id": 13,
+                "title": "Inglés Básico A1",
+                "cohorts": [
+                    {
+                        "id": 22,
+                        "title": "A1-01",
+                        "cohortStudents": []
+                    },
+                    {
+                        "id": 25,
+                        "title": "A1-01",
+                        "enabled": true
+                    }
+                ]
+            }
+        ]
+    }
+}

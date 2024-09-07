@@ -61,10 +61,11 @@ class CourseController {
 
   async findAllCourseByIdUnitAndIdStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { idUnit, idStudent } = req.params;
+      const { idUnit, idStudent, idCohort } = req.params;
       const courses = await CourseUnitService.findAllCourseByIdUnitAndIdStudent(
         Number(idUnit),
-        Number(idStudent)
+        Number(idStudent),
+        Number(idCohort)
       );
       res.json(courses);
     } catch (error) {

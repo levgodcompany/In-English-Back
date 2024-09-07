@@ -11,10 +11,10 @@ class AuthMiddleware {
   private secretKey = process.env.JWT_SECRET || "secret";
 
   // Middleware para autenticación
-  authenticateToken(req: AuthRequest, res: Response, next: NextFunction) {
+  authenticateToken(req: AuthRequest, _res: Response, next: NextFunction) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1]; // El formato es "Bearer TOKEN"
-
+    
     if (token == null) {
       throw new CustomError(`Se requiere autenticación para acceder al recurso`, HttpStatus.UNAUTHORIZED);
     }  // Si no hay token, respuesta 401 (No autorizado)

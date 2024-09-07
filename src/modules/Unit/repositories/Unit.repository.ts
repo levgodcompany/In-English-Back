@@ -52,26 +52,31 @@ class UnitRepository implements ICrudRepository<Unit> {
       throw new Error(`Error al buscar las unidad: ${error}`);
     }
   }
+  
 
-  async findAllUnitByIdLevelAndByIdStudent(idLevel: number, idStudent: number) {
+  async findAllUnitByIdLevelAndByIdStudent(idLevel: number, idStudent: number, idCohort: number) {
     try {
+      console.log(idLevel, idStudent, idCohort)
       type result = {
         id: number;
         title: string;
         description: string;
         order: number;
         idLevel: number;
+        enabled: boolean;
       };
       const unities = await prisma.$queryRaw<result[]>`
       select 
-	      u.*
+	      u.*,
+        cu.enabled
 	    from public."Students" s
       inner join public."CohortStudent" cs ON cs."idStudent" = s.id
       inner join public."Cohorts" ct ON ct.id = cs."idCohort"
       inner join public."CohortUnit" cu ON cu."idCohort" = ct.id
       inner join public."Unities" u ON u.id = cu."idUnit"
-      where u."idLevel"= ${idLevel} and s.id = ${idStudent};
+      where u."idLevel"= ${idLevel} and s.id = ${idStudent} and ct.id = ${idCohort} ;
       `;
+ 
       return unities;
     } catch (error) {
       throw new Error(`Error al buscar las unidad: ${error}`);

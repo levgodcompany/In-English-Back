@@ -17,10 +17,9 @@ class CohortRelationshipsRepository {
     }
   }
 
-
   async findOneAllInfo(id: number) {
     try {
-      return await prisma.cohort.findUnique({ 
+      return await prisma.cohort.findUnique({
         where: { id },
         include: {
           cohortCourses: {
@@ -31,9 +30,9 @@ class CohortRelationshipsRepository {
                   description: true,
                   title: true,
                   idUnit: true,
-                }
-              }
-            }
+                },
+              },
+            },
           },
           cohortModules: {
             include: {
@@ -43,9 +42,9 @@ class CohortRelationshipsRepository {
                   title: true,
                   description: true,
                   order: true,
-                }
-              }
-            }
+                },
+              },
+            },
           },
           cohortStudents: {
             include: {
@@ -54,10 +53,10 @@ class CohortRelationshipsRepository {
                   id: true,
                   name: true,
                   lastName: true,
-                  email: true,      
-                }
-              }
-            }
+                  email: true,
+                },
+              },
+            },
           },
           cohortTeachers: {
             include: {
@@ -66,10 +65,10 @@ class CohortRelationshipsRepository {
                   id: true,
                   name: true,
                   lastName: true,
-                  email: true, 
-                }
-              }
-            }
+                  email: true,
+                },
+              },
+            },
           },
           cohortUnities: {
             include: {
@@ -78,24 +77,40 @@ class CohortRelationshipsRepository {
                   id: true,
                   title: true,
                   description: true,
-                  order: true
-                }
-              }
-            }
+                  order: true,
+                },
+              },
+            },
           },
           level: {
             select: {
               id: true,
               title: true,
               description: true,
-            }
-          }
-        }
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error(`Error al buscar el cohort con ID ${id}: ${error}`);
     }
   }
+
+  async findTotalClassOnLive(idCohort: number) {
+    try {
+      const totalClasses = await prisma.classOnlive.count({
+        where: {
+          idCohort,
+        },
+      });
+      return totalClasses;
+    } catch (error) {
+      throw new Error(
+        `Error al buscar todos las clases de la cohort: ${error}`
+      );
+    }
+  }
+
 
 
   async findAllCohortCourseByIdCohort(idCohort: number) {
