@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class CohortAssignmentsRepository {
   async assignTeacherToCohort(idCohort: number, idTeacher: number) {

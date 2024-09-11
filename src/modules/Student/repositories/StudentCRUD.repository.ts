@@ -1,5 +1,5 @@
 import { Student } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 import { ICrudRepository } from "../../../utilities";
 
 class StudentCRUD implements ICrudRepository<Student> {

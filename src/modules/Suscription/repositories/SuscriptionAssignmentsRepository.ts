@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class SuscriptionAssignmentsRepository {
   async assignBenefitToSuscription(idSubscription: number, idBenefit: number) {

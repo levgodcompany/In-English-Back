@@ -1,5 +1,5 @@
 import { Status } from "@prisma/client";
-import { prisma } from "../../../prisma";
+import { prisma } from "../../prisma";
 
 class StatusRepository {
   async create(data: Status) {

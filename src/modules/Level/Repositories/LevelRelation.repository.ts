@@ -1,5 +1,5 @@
 import { Suscription } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class LevelRelationRepository {
   async findOne(id: number) {

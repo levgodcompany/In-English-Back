@@ -1,5 +1,5 @@
 import { StudentSuscription } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class StudentSuscriptionRepository {
   async create(data: StudentSuscription) {

@@ -7,7 +7,7 @@ import {
 import { HttpStatus, Rol, TokenExpiryOptions } from "../../../utilities";
 import { CustomError } from "../../../utilities/Errors";
 import CohortAssignmentsService from "../../Cohorts/Services/CohortAssignments.service";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 import { transformStudentData } from "../dto/loginStudentDto";
 
 class AuthStudentService extends AuthService<Student> {

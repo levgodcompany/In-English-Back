@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class StudentRelations {
   async findOneStudentWithRelations(id: number, relations: string[]) {

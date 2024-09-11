@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 import { HttpStatus } from "../../../utilities";
 import { CustomError } from "../../../utilities/Errors";
 import { StudentRelationsRepository } from "../repositories";

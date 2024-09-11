@@ -1,5 +1,5 @@
 import { Level } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 import { ICrudRepository } from "../../../utilities";
 import UnitRepository from "../../Unit/repositories/Unit.repository";
 import ExamLevelRepository from "../../ExamLevel/repositories/ExamLevel.repository";

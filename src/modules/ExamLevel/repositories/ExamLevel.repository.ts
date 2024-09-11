@@ -1,5 +1,5 @@
 import { ExamLevel, PrismaClient } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 import { p } from "../../../utilities/CrudRepository";
 
 class ExamLevelRepository {

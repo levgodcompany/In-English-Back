@@ -1,5 +1,5 @@
 import { PaymentMethod } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class PaymentMethodRepositoy {
   async create(data: PaymentMethod) {

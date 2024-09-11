@@ -1,6 +1,6 @@
 import { TypeLevel } from "@prisma/client";
 import { ICrudRepository } from "../../../utilities";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class TypeLevelRepository implements ICrudRepository<TypeLevel> {
   async create(data: TypeLevel): Promise<TypeLevel> {

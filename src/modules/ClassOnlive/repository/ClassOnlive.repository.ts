@@ -1,5 +1,5 @@
 import { ClassOnlive } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class ClassOnliveRepository {
   private table = prisma.classOnlive;

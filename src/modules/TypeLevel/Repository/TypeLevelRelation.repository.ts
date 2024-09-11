@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class TypeLevelRelationsRepository {
   async assigLevel(idLevel: number, idTypeLevel: number) {

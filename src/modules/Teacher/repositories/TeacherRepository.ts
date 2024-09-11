@@ -1,5 +1,5 @@
 import { Teacher } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class TeacherRepository {
   // Métodos CRUD para el Teacher

@@ -1,5 +1,5 @@
 import { ExamUnit } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class ExamLevelRepository {
   async findOne(id: number) {

@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 
 class CourseRelationRepository {
   async assigStudentToCourse(idStudent: number, idCourse: number) {

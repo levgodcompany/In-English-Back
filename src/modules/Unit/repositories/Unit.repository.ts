@@ -1,5 +1,5 @@
 import { PrismaClient, Unit } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 import { ICrudRepository } from "../../../utilities";
 import CourseCrudRepository from "../../Course/repositories/CourseCrud.repository";
 import { p } from "../../../utilities/CrudRepository";

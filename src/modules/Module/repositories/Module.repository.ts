@@ -1,5 +1,5 @@
 import { Module, PrismaClient } from "@prisma/client";
-import { prisma } from "../../../../prisma";
+import { prisma } from "../../../prisma";
 import { p } from "../../../utilities/CrudRepository";
 
 class ModuleRepository {
