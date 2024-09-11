@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import LandingService from "../services/Landing.service";
+import LandingService from "../Services/Landing.service";
 
 class LandingController {
   async findAllLevels(_req: Request, res: Response, next: NextFunction) {
