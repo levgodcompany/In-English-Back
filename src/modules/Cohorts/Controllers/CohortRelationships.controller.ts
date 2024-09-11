@@ -4,7 +4,8 @@ import { CohortRelationshipsService } from "../Services";
 class CohortRelationshipsController {
   async findAllCohortUnitByIdCohort(
     req: Request,
-    res: Response, next: NextFunction
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { idCohort } = req.params;
@@ -15,13 +16,32 @@ class CohortRelationshipsController {
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
+  async findTotalClassOnLive(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { idCohort } = req.params;
+      const cohorts = await CohortRelationshipsService.findTotalClassOnLive(
+        Number(idCohort)
+      );
+      res.json(cohorts);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+
   async findAllCohortCourseByIdCohort(
     req: Request,
-    res: Response, next: NextFunction
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { idCohort } = req.params;
@@ -32,13 +52,14 @@ class CohortRelationshipsController {
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
   async findAllCohortModuleByIdCohort(
     req: Request,
-    res: Response, next: NextFunction
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { idCohort } = req.params;
@@ -49,13 +70,14 @@ class CohortRelationshipsController {
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
   async findAllCohortTeacherByIdCohort(
     req: Request,
-    res: Response, next: NextFunction
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { idCohort } = req.params;
@@ -66,11 +88,15 @@ class CohortRelationshipsController {
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
-  async findOneAllInfo(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findOneAllInfo(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { idCohort } = req.params;
       const cohorts = await CohortRelationshipsService.findOneAllInfo(
@@ -79,13 +105,14 @@ class CohortRelationshipsController {
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
   async findAllCohortStudentByIdCohort(
     req: Request,
-    res: Response, next: NextFunction
+    res: Response,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { idCohort } = req.params;
@@ -96,7 +123,7 @@ class CohortRelationshipsController {
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 }

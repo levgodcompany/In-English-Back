@@ -16,6 +16,20 @@ class CohortRelationshipsService {
     }
   }
 
+  async findTotalClassOnLive(idCohort: number) {
+    try {
+      const cohorts = await CohortRelationshipsRepository.findTotalClassOnLive(
+        idCohort
+      );
+
+      return cohorts;
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+
+
   async findOneAllInfo(idCohort: number) {
     try {
       const cohorts = await CohortRelationshipsRepository.findOneAllInfo(

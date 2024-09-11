@@ -1,53 +1,22 @@
 import { Router } from "express";
 import { UnitController } from "./controllers";
-import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
+import { authorizeTeacher, authenticate, authorizeStudentAndTeacher } from "../../middlewares";
 
 const router = Router();
 
-const authMiddleware = new AuthMiddleware();
-const roleMiddleware = new RoleMiddleware();
+router.use(authenticate);
 
-router.get(
-  "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
-  UnitController.findAll
-);
-router.get(
-  "/info-basic",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
-  UnitController.findAllInfoBasic
-);
-router.get(
-  "/level/:idLevel",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER, Rol.STUDENT]),
-  UnitController.findAllByIdLevel
-);
-router.post(
-  "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  UnitController.create
-);
-router.put(
-  "/:idUnit",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  UnitController.update
-);
-router.get(
-  "/:idUnit",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  UnitController.findOne
-);
-router.delete(
-  "/:idUnit",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  UnitController.delete
-);
+router.use(authorizeStudentAndTeacher);
+router.get("/", UnitController.findAll);
+router.get("/info-basic",  UnitController.findAllInfoBasic);
+router.get("/level/:idLevel",  UnitController.findAllByIdLevel);
+router.get("/levels/:idLevel/cohort/:idCohort/student/:idStudent",  UnitController.findAllUnitByIdLevelAndByIdStudent);
+router.get("/teachers/:idUnit",  UnitController.findAllTeacherByIdUnit);
+
+router.use(authorizeTeacher);
+router.post("/", UnitController.create);
+router.put("/:idUnit", UnitController.update);
+router.get("/:idUnit", UnitController.findOne);
+router.delete("/:idUnit", UnitController.delete);
 
 export default router;

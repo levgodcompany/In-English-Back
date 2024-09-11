@@ -66,6 +66,12 @@ class StudentCRUD {
     return await StudentCRUDRepository.update(id, data);
   }
 
+  async updateActiveStudent(id: number, idStatus: string) {
+    const student = await this.findOne(id);
+    student.status = idStatus;
+    return await StudentCRUDRepository.update(id, student);
+  }
+
   async delete(id: number) {
     return StudentCRUDRepository.delete(id);
   }

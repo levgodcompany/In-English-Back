@@ -29,6 +29,7 @@ model Student {
   examSubmissionLevel ExamSubmissionLevel[]
   cohortStudent       CohortStudent[]
   studentTutors       StudentTutor[]
+  classOnliveStudents  ClassOnliveStudent[]
 
   @@map("Students")
 }
@@ -80,6 +81,7 @@ model TypeLevel {
   title           String
   description     String
   typeLevelLevels TypeLevelLevel[]
+  order           Int?
 
   @@map("TypeLevels")
 }
@@ -127,8 +129,28 @@ model Cohort {
   cohortUnities         CohortUnit[]
   cohortCourses         CohortCourse[]
   cohortModules         CohortModule[]
+  classOnlives          ClassOnlive[]
 
   @@map("Cohorts")
+}
+
+model ClassOnlive {
+  id                 Int                  @id @default(autoincrement())
+  title              String?
+  description        String?
+  url                String
+  idCohort           Int
+  cohort             Cohort               @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  classOnliveStudents ClassOnliveStudent[]
+}
+
+model ClassOnliveStudent {
+  idStudent     Int
+  idClassOnlive Int
+  student       Student     @relation(fields: [idStudent], references: [id], onDelete: Cascade)
+  classOnlive   ClassOnlive @relation(fields: [idClassOnlive], references: [id], onDelete: Cascade)
+
+  @@id([idStudent, idClassOnlive])
 }
 
 // Relación entre Cohort y Student
@@ -137,6 +159,7 @@ model CohortStudent {
   idCohort  Int
   student   Student @relation(fields: [idStudent], references: [id], onDelete: Cascade)
   cohort    Cohort  @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  enabled   Boolean @default(true)
 
   @@id([idStudent, idCohort])
 }
@@ -155,8 +178,9 @@ model CohortTeacher {
 model CohortUnit {
   idUnit   Int
   idCohort Int
-  unities  Unit   @relation(fields: [idUnit], references: [id], onDelete: Cascade)
-  cohort   Cohort @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  unities  Unit    @relation(fields: [idUnit], references: [id], onDelete: Cascade)
+  cohort   Cohort  @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  enabled  Boolean @default(true)
 
   @@id([idUnit, idCohort])
 }
@@ -165,8 +189,9 @@ model CohortUnit {
 model CohortCourse {
   idCourse Int
   idCohort Int
-  courses  Course @relation(fields: [idCourse], references: [id], onDelete: Cascade)
-  cohort   Cohort @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  courses  Course  @relation(fields: [idCourse], references: [id], onDelete: Cascade)
+  cohort   Cohort  @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  enabled  Boolean @default(true)
 
   @@id([idCourse, idCohort])
 }
@@ -175,8 +200,9 @@ model CohortCourse {
 model CohortModule {
   idModule Int
   idCohort Int
-  modules  Module @relation(fields: [idModule], references: [id], onDelete: Cascade)
-  cohort   Cohort @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  modules  Module  @relation(fields: [idModule], references: [id], onDelete: Cascade)
+  cohort   Cohort  @relation(fields: [idCohort], references: [id], onDelete: Cascade)
+  enabled  Boolean @default(true)
 
   @@id([idModule, idCohort])
 }

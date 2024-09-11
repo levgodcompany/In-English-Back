@@ -59,6 +59,21 @@ class CourseController {
     }
   }
 
+  async findAllCourseByIdUnitAndIdStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { idUnit, idStudent, idCohort } = req.params;
+      const courses = await CourseUnitService.findAllCourseByIdUnitAndIdStudent(
+        Number(idUnit),
+        Number(idStudent),
+        Number(idCohort)
+      );
+      res.json(courses);
+    } catch (error) {
+      console.log(error);
+      next(error)
+    }
+  }
+
   async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idCourse } = req.params;

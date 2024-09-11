@@ -35,6 +35,17 @@ class LevelController {
     }
   }
 
+  async findAllTeacherByIdLevel(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { idLevel } = req.params;
+      const levels = await LevelService.findAllTeacherByIdLevel(Number(idLevel));
+      res.json(levels);
+    } catch (error) {
+      console.log(error);
+      next(error)
+    }
+  }
+
   async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idLevel } = req.params;

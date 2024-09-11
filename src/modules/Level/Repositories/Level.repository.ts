@@ -19,6 +19,55 @@ class LevelRepository implements ICrudRepository<Level> {
     }
   }
 
+  async findAllTeacherByIdLevel(id: number) {
+    try {
+      const level = await prisma.cohort.findFirst({
+        where: {
+          idLevel: id
+        },
+        include: {
+          cohortTeachers: {
+            include: {
+              teacher: {
+                select: {
+                  id: true,
+                  name: true,
+                  lastName: true,
+                  imgUrl: true
+                }
+              }
+            }
+          }
+        }
+      })
+      // const level = await prisma.level.findUnique({
+      //   where: {
+      //     id
+      //   },
+      //   include: {
+      //     teachers: {
+      //       select: {
+      //         teacher: {
+      //           select: {
+      //             id: true,
+      //             imgUrl: true,
+      //             name: true,
+      //             lastName: true
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // })
+      // if (!level) {
+      //   throw new Error(`No se encontró el Level con ID: ${id}`);
+      // }
+      return level;
+    } catch (error) {
+      throw new Error(`Error al buscar el Level con ID ${id}: ${error}`);
+    }
+  }
+
   async findOneAll(id: number) {
     try {
       const level = await prisma.level.findUnique({

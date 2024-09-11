@@ -1,85 +1,38 @@
-import express from "express";
+import { Router } from "express";
 import {
   StudentCRUDController,
   StudentEntityAssignmentController,
   StudentRelationsController,
 } from "./controllers";
-import { AuthMiddleware, Rol, RoleMiddleware } from "../../utilities";
+import { authenticate, authorizeStudentAndTeacher, authorizeTeacher } from "../../middlewares";
 
-const router = express.Router();
+const router = Router();
 
-const authMiddleware = new AuthMiddleware();
-const roleMiddleware = new RoleMiddleware();
+// Middlewares globales para todas las rutas en este archivo
+router.use(authenticate);
+router.use(authorizeTeacher);
 
-router.get(
-  "/info-basic",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentRelationsController.findAllInfoBasic
-);
-router.get(
-  "/levels",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentRelationsController.findAllAndLevels
-);
-router.get(
-  "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentCRUDController.findAll
-);
-router.get(
-  "/:id",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentCRUDController.findOne
-);
-router.post(
-  "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentCRUDController.create
-);
-router.delete(
-  "/:id",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentCRUDController.delete
-);
+// Rutas para obtener información básica y relaciones
+router.get("/info-basic", StudentRelationsController.findAllInfoBasic);
+router.get("/levels", StudentRelationsController.findAllAndLevels);
 
-// Assign
-router.put(
-  "/:idStudent/level/:idLevel",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentEntityAssignmentController.assignLevelToStudent
-);
-router.put(
-  "/:idStudent/unit/:idUnit",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentEntityAssignmentController.assignUnitToStudent
-);
-router.put(
-  "/:idStudent/course/:idCourse",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentEntityAssignmentController.assignCourseToStudent
-);
-router.put(
-  "/:idStudent/module/:idModule",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentEntityAssignmentController.assignModuleToStudent
-);
+// Rutas CRUD para estudiantes
+router.get("/", StudentCRUDController.findAll);
+router.get("/:id", StudentCRUDController.findOne);
+router.post("/", StudentCRUDController.create);
+router.put("/active/:idStudent/:idStatus", StudentCRUDController.updateActiveStudent);
+router.delete("/:id", StudentCRUDController.delete);
 
-// remove
-router.delete(
-  "/:idStudent/level/:idLevel",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  StudentEntityAssignmentController.removeLevelFromStudent
-);
+// Rutas para asignar entidades al estudiante
+router.put("/:idStudent/level/:idLevel", StudentEntityAssignmentController.assignLevelToStudent);
+router.put("/:idStudent/unit/:idUnit", StudentEntityAssignmentController.assignUnitToStudent);
+router.put("/:idStudent/course/:idCourse", StudentEntityAssignmentController.assignCourseToStudent);
+router.put("/:idStudent/module/:idModule", StudentEntityAssignmentController.assignModuleToStudent);
+
+// Rutas para remover entidades del estudiante
+router.delete("/:idStudent/level/:idLevel", StudentEntityAssignmentController.removeLevelFromStudent);
+
+router.use(authorizeStudentAndTeacher);
+router.get('level/:idLevel/cohorts/student/:idStudent')
 
 export default router;

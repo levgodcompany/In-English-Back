@@ -35,6 +35,30 @@ class CourseUnitService {
       throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findAllCourseByIdUnitAndIdStudent(idUnit: number, idStudent: number, idCohort: number) {
+    try {
+      return CourseUnitRepository.findAllCourseByIdUnitAndIdStudent(
+        idUnit,
+        idStudent,
+        idCohort
+      );
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async totalModuleTuCourse(idCourse: number, idStudent: number) {
+    try {
+      const result = await CourseUnitRepository.totalModuleTuCourse(
+        idCourse,
+        idStudent
+      );
+      return result;
+    } catch (error) {
+      throw new Error(`Error al buscar los courses: ${error}`);
+    }
+  }
 }
 
 export default new CourseUnitService();

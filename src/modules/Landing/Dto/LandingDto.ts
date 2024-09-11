@@ -52,6 +52,7 @@ type TypeLevelDto = {
   id: number;
   title: string;
   description: string;
+  order: number;
   levels: levelDto[];
 };
 
@@ -61,6 +62,7 @@ export function transformLevelData(originalData: any) {
       id: typeLevel.id,
       title: typeLevel.title,
       description: typeLevel.description,
+      order: typeLevel.order,
       levels: typeLevel.typeLevelLevels.map((tll: any) => ({
         id: tll.level.id,
         title: tll.level.title,

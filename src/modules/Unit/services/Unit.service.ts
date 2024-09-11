@@ -52,6 +52,22 @@ class UnitService {
     }
   }
 
+  async findAllUnitByIdLevelAndByIdStudent(idLevel: number, idStudent: number, idCohort: number) {
+    try {
+      return UnitRepository.findAllUnitByIdLevelAndByIdStudent(idLevel, idStudent, idCohort);
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findAllTeacherByIdUnit(idUnit: number) {
+    try {
+      return UnitRepository.findAllTeacherByIdUnit(idUnit);
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async update(id: number, data: Unit) {
     try {
       return UnitRepository.update(id, data);

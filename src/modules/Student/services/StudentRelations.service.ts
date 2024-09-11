@@ -46,6 +46,24 @@ class StudentRelations {
     }
   }
 
+  async findAllLevelsCohorts(idLevel: number, idStudent: number) {
+    try {
+      const students = await StudentRelationsRepository.findAllLevelsCohorts(idLevel, idStudent);
+      return students;
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async totalModuleToCourse(idCourse: number, idStudent: number) {
+    try {
+      const students = await StudentRelationsRepository.totalModuleToCourse(idCourse, idStudent);
+      return students;
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 }
 
 export default new StudentRelations();

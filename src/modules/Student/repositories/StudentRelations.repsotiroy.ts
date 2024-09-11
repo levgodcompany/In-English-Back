@@ -44,6 +44,28 @@ class StudentRelations {
     }
   }
 
+  async findAllLevelsCohorts(idLevel: number, idStudent: number) {
+    try {
+      const students = await prisma.cohort.findMany({
+        where: {
+          idLevel: idLevel
+        },
+      })
+      return students;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Student${error}`);
+    }
+  } 
+
+  async findAllAndLevelsPreRegister() {
+    try {
+      const students = await prisma.student.findMany();
+      return students;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Student${error}`);
+    }
+  }
+
   // Metodo para obtener todos los student con sus relaciones
   async findAllStudentsWithRelations(relations: string[]) {
     try {
@@ -60,6 +82,33 @@ class StudentRelations {
     } catch (error) {
       throw new Error(
         `Error al buscar los estudiantes con sus relaciones${error}`
+      );
+    }
+  }
+
+  // El total de modulos que a completado un student de un curso
+  async totalModuleToCourse(idCourse: number, idStudent: number) {
+    try {
+      type Total = {
+        id: number;
+        total: number;
+      };
+
+      const rawResults = await prisma.$queryRaw<Total[]>`
+          SELECT 
+	          s.id,
+	          COUNT(ms."moduleId") as total
+          FROM public."Students" s
+          INNER JOIN public."ModuleStudent" ms ON ms."studentId" = s.id
+          INNER JOIN public."Modules" m ON m.id = ms."moduleId"
+          WHERE m."idCourse" = ${idCourse} AND s.id = ${idStudent}
+          GROUP BY s.id;
+        `;
+
+      return rawResults;
+    } catch (error) {
+      throw new Error(
+        `Error al buscar el total de modulo completados por un estudiante: ${error}`
       );
     }
   }

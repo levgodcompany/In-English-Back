@@ -7,6 +7,8 @@ import {
 import { HttpStatus, Rol, TokenExpiryOptions } from "../../../utilities";
 import { CustomError } from "../../../utilities/Errors";
 import CohortAssignmentsService from "../../Cohorts/Services/CohortAssignments.service";
+import { prisma } from "../../../../prisma";
+import { transformStudentData } from "../dto/loginStudentDto";
 
 class AuthStudentService extends AuthService<Student> {
   constructor() {
@@ -63,18 +65,52 @@ class AuthStudentService extends AuthService<Student> {
       );
     }
 
-    if (student.status == "014") {
+    const exep = ["014", "003", "005", "007", "012", "015"];
+
+    if (exep.includes(student.status)) {
       throw new CustomError(`Usuario no avilitado`, HttpStatus.NOT_FOUND);
     }
 
+    const studentData = await prisma.student.findUnique({
+      where: { id: 8 },
+      select: {
+        id: true,
+        name: true,
+        lastName: true,
+        email: true,
+        levels: {
+          select: {
+            level: {
+              select: {
+                id: true,
+                title: true,
+                cohorts: {
+                  select: {
+                    id: true,
+                    title: true,
+                    cohortStudents: {
+                      // where: { idStudent: student.id },
+                      select: {
+                        idCohort: true,
+                        enabled: true,
+                        
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
     const token = this.generateToken(student.id);
+    const trasform = transformStudentData(studentData);
 
     return {
       user: {
-        id: student.id,
-        name: student.name,
-        lastName: student.lastName,
-        email: student.email,
+        ...trasform,
       },
       token,
     };
