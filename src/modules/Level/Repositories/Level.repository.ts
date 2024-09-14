@@ -23,7 +23,7 @@ class LevelRepository implements ICrudRepository<Level> {
     try {
       const level = await prisma.cohort.findFirst({
         where: {
-          idLevel: id
+          idLevel: id,
         },
         include: {
           cohortTeachers: {
@@ -33,13 +33,13 @@ class LevelRepository implements ICrudRepository<Level> {
                   id: true,
                   name: true,
                   lastName: true,
-                  imgUrl: true
-                }
-              }
-            }
-          }
-        }
-      })
+                  imgUrl: true,
+                },
+              },
+            },
+          },
+        },
+      });
       // const level = await prisma.level.findUnique({
       //   where: {
       //     id
@@ -115,10 +115,34 @@ class LevelRepository implements ICrudRepository<Level> {
     }
   }
 
+  async findAllByTypeLevel(idTypeLevel: number) {
+    try {
+      const levels = await prisma.typeLevelLevel.findMany({
+        where: {
+          idTypeLevel: idTypeLevel,
+        },
+        include: {
+          level: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              order: true,
+            },
+          },
+        },
+      });
+      const levelDto = levels.map((l) => l.level);
+      return levelDto;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Levels: ${error}`);
+    }
+  }
+
   async findAll() {
     try {
-      const teachers = await prisma.level.findMany();
-      return teachers;
+      const levels = await prisma.level.findMany();
+      return levels;
     } catch (error) {
       throw new Error(`Error al buscar todos los Levels: ${error}`);
     }
@@ -126,12 +150,6 @@ class LevelRepository implements ICrudRepository<Level> {
 
   async create(data: Level) {
     try {
-      const existingLevel = await prisma.level.findFirst({
-        where: { title: data.title },
-      });
-      if (existingLevel) {
-        throw new Error(`Ya existe un Level con el titulo ${data.title}`);
-      }
       const newLevel = await prisma.level.create({ data });
       return newLevel;
     } catch (error) {
@@ -202,6 +220,13 @@ class LevelRepository implements ICrudRepository<Level> {
   public async deleteLevelWithRelations(idLevel: number): Promise<void> {
     try {
       await prisma.$transaction(async (p) => {
+
+        await p.typeLevelLevel.deleteMany({
+          where:{
+            idLevel: idLevel
+          }
+        })
+
         const unities = await p.unit.findMany({
           where: {
             idLevel: idLevel,

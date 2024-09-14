@@ -7,64 +7,62 @@ const router = Router();
 const authMiddleware = new AuthMiddleware();
 const roleMiddleware = new RoleMiddleware();
 
-router.get(
-  "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
-  TeacherController.findAll
-);
+const authenticate = authMiddleware.authenticateToken.bind(authMiddleware);
+const authorizeTeacher = roleMiddleware.authorizeRole([Rol.TEACHER]);
+
+router.use(authenticate);
+
+router.get("/", authorizeTeacher, TeacherController.findAll);
 router.get(
   "/info-basic",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  authorizeTeacher,
   TeacherController.findAllInfoBasic
 );
 router.get(
   "/:idTeacher",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+  authorizeTeacher,
   TeacherController.findOne
 );
 router.post(
   "/",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+
+  authorizeTeacher,
   TeacherController.create
 );
 router.put(
   "/:idTeacher",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+
+  authorizeTeacher,
   TeacherController.update
 );
 router.delete(
   "/:idTeacher",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+
+  authorizeTeacher,
   TeacherController.delete
 );
 router.put(
   "/:idTeacher/level/:idLevel",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+
+  authorizeTeacher,
   TeacherAssignmentsController.assignLevelToTeacher
 );
 router.put(
   "/:idTeacher/unit/:idUnit",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+
+  authorizeTeacher,
   TeacherAssignmentsController.assignUnitToTeacher
 );
 router.put(
   "/:idTeacher/course/:idCourse",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+
+  authorizeTeacher,
   TeacherAssignmentsController.assignCourseToTeacher
 );
 router.put(
   "/:idTeacher/module/:idModule",
-  authMiddleware.authenticateToken.bind(authMiddleware),
-  roleMiddleware.authorizeRole([Rol.TEACHER]),
+
+  authorizeTeacher,
   TeacherAssignmentsController.assignModuleToTeacher
 );
 

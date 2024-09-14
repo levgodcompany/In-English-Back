@@ -7,7 +7,7 @@ import { p } from "../../../utilities/CrudRepository";
 class UnitRepository implements ICrudRepository<Unit> {
   async create(data: Unit) {
     try {
-      const u = prisma.unit;
+      // const u = prisma.unit;
       const unit = await prisma.unit.create({
         data,
       });
@@ -74,7 +74,7 @@ class UnitRepository implements ICrudRepository<Unit> {
       inner join public."Cohorts" ct ON ct.id = cs."idCohort"
       inner join public."CohortUnit" cu ON cu."idCohort" = ct.id
       inner join public."Unities" u ON u.id = cu."idUnit"
-      where u."idLevel"= ${idLevel} and s.id = ${idStudent} and ct.id = ${idCohort} ;
+      where s.id = ${idStudent} and ct.id = ${idCohort} ;
       `;
  
       return unities;

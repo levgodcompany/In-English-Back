@@ -4,19 +4,21 @@ import { LevelRepository } from "../Repositories";
 import ModuleService from "../../Module/services/Module.service";
 import { CustomError } from "../../../utilities/Errors";
 import { HttpStatus } from "../../../utilities";
+import { TypeLevelRelationsService } from "../../TypeLevel/Services";
 
 class LevelService {
-  async create(data: Level) {
+  async create(data: Level, idTypeLevel: number) {
     try {
-      return LevelRepository.create(data);
+      const levle = await LevelRepository.create(data);
+      await TypeLevelRelationsService.assigLevel(levle.id, idTypeLevel);
     } catch (error) {
       throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async findAll() {
+  async findAllByTypeLevel(idTypeLevel: number) {
     try {
-      return LevelRepository.findAll();
+      return LevelRepository.findAllByTypeLevel(idTypeLevel);
     } catch (error) {
       throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -49,7 +51,7 @@ class LevelService {
     // try {
     const teachersLevel = await LevelRepository.findAllTeacherByIdLevel(id);
     if (!teachersLevel) {
-      return []
+      return [];
     }
     const res = teachersLevel.cohortTeachers.map((ct) => {
       // ct.teacher.

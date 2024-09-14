@@ -11,9 +11,13 @@ class CohortRepository {
     }
   }
 
-  async findAll() {
+  async findAll(idLevel: number) {
     try {
-      return await prisma.cohort.findMany();
+      return await prisma.cohort.findMany({
+        where: {
+          idLevel: idLevel
+        }
+      });
     } catch (error) {
       throw new Error(`Error al buscar todos los cohorts: ${error}`);
     }

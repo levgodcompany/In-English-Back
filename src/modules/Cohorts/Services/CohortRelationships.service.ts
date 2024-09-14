@@ -1,5 +1,6 @@
 import { HttpStatus } from "../../../utilities";
 import { CustomError } from "../../../utilities/Errors";
+import { convertToCohortDTO } from "../Dtos/CohortAllInfoDto";
 import { CohortRelationshipsRepository } from "../Repositoryies";
 
 class CohortRelationshipsService {
@@ -77,6 +78,21 @@ class CohortRelationshipsService {
       throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async findAllRelationByIdCohort(idCohort: number) {
+    try {
+      const cohorts =
+        await CohortRelationshipsRepository.findAllRelationByIdCohort(
+          idCohort
+        );
+        
+      return convertToCohortDTO(cohorts);
+    } catch (error) {
+      throw new CustomError(`${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+
   async findAllCohortStudentByIdCohort(idCohort: number) {
     try {
       const cohorts =

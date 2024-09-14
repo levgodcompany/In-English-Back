@@ -92,6 +92,24 @@ class CohortRelationshipsController {
     }
   }
 
+  async findAllRelationByIdCohort(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { idCohort } = req.params;
+      const cohorts =
+        await CohortRelationshipsService.findAllRelationByIdCohort(
+          Number(idCohort)
+        );
+      res.json(cohorts);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
   async findOneAllInfo(
     req: Request,
     res: Response,

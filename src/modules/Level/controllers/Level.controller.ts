@@ -5,66 +5,90 @@ import { LevelService } from "../services";
 class LevelController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const { idTypeLevel } = req.params
       const level: Level = req.body;
       level.order = Number(level.order);
-      const newLevel = await LevelService.create(level);
+      const newLevel = await LevelService.create(level, Number(idTypeLevel));
       res.json(newLevel);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
-  async findAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findAllByTypeLevel(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
-      const levels = await LevelService.findAll();
+      const { idTypeLevel } = req.params;
+      const levels = await LevelService.findAllByTypeLevel(Number(idTypeLevel));
       res.json(levels);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
-  async findAllInfoBasic(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findAllInfoBasic(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const levels = await LevelService.findAllInfoBasic();
       res.json(levels);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
-  async findAllTeacherByIdLevel(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findAllTeacherByIdLevel(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { idLevel } = req.params;
-      const levels = await LevelService.findAllTeacherByIdLevel(Number(idLevel));
+      const levels = await LevelService.findAllTeacherByIdLevel(
+        Number(idLevel)
+      );
       res.json(levels);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
-  async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findOne(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { idLevel } = req.params;
       const levels = await LevelService.findOne(Number(idLevel));
       res.json(levels);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
-  async findOneAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findOneAll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { idLevel } = req.params;
       const levels = await LevelService.findOneAll(Number(idLevel));
       res.json(levels);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
@@ -75,7 +99,7 @@ class LevelController {
       res.json(levels);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
@@ -87,7 +111,7 @@ class LevelController {
       res.json(levels);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 }

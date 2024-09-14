@@ -11,27 +11,36 @@ class CohortController {
       res.json(newCohort);
     } catch (error) {
       console.log("Error", error);
-      next(error)
+      next(error);
     }
   }
 
-  async findAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findAll(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
-      const cohorts = await CohortService.findAll();
+      const { idLevel } = req.params;
+      const cohorts = await CohortService.findAll(Number(idLevel));
       res.json(cohorts);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 
-  async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async findOne(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { idCohort } = req.params;
       const cohort = await CohortService.findOne(Number(idCohort));
       res.json(cohort);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -42,7 +51,7 @@ class CohortController {
       const cohort = await CohortService.update(Number(idCohort), body);
       res.json(cohort);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -53,7 +62,7 @@ class CohortController {
       res.json(cohort);
     } catch (error) {
       console.log(error);
-      next(error)
+      next(error);
     }
   }
 }

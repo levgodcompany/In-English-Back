@@ -13,9 +13,9 @@ class CohortsServices {
     }
   }
 
-  async findAll() {
+  async findAll(idLevel: number) {
     try {
-      const cohorts = await CohortRepository.findAll();
+      const cohorts = await CohortRepository.findAll(idLevel);
 
       return cohorts;
     } catch (error) {

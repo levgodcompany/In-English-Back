@@ -40,6 +40,29 @@ class TeacherRepository {
     }
   }
 
+  async findAllTeacherByIdCohort(idCohort: number) {
+    try {
+      const teachers = await prisma.cohortTeacher.findMany({
+        where: {
+          idCohort: idCohort
+        },
+        select: {
+          teacher: {
+            select: {
+              id: true,
+              name: true,
+              lastName: true,
+              email: true  
+            }
+          }
+        }
+      });
+      return teachers;
+    } catch (error) {
+      throw new Error(`Error al buscar todos los Teachers: ${error}`);
+    }
+  }
+
   async create(data: Teacher) {
     try {
       data.email = data.email.toLowerCase();
