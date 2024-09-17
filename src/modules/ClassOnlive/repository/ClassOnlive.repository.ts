@@ -47,6 +47,17 @@ class ClassOnliveRepository {
 
     return deletClass;
   }
+
+  async update(id: number, data: ClassOnlive) {
+    const deletClass = await this.table.update({
+      where: {
+        id,
+      },
+      data,
+    });
+
+    return deletClass;
+  }
 }
 
 export default new ClassOnliveRepository();

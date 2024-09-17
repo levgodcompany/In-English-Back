@@ -10,6 +10,8 @@ import {
   authorizeTeacher,
 } from "../../middlewares";
 import routerUnit from "./routes/CohortUnit.routes";
+import routerCourse from "./routes/CohorCourses.routes";
+import routerModules from "./routes/CohorModules.routes";
 
 const router = Router();
 
@@ -26,18 +28,9 @@ router.get(
   CohortRelationshipsController.findAllRelationByIdCohort
 );
 
-router.get(
-  "/cohort-unit/:idCohort",
-  CohortRelationshipsController.findAllCohortUnitByIdCohort
-);
-router.get(
-  "/cohort-course/:idCohort",
-  CohortRelationshipsController.findAllCohortCourseByIdCohort
-);
-router.get(
-  "/cohort-module/:idCohort",
-  CohortRelationshipsController.findAllCohortModuleByIdCohort
-);
+
+
+
 router.get(
   "/cohort-teacher/:idCohort",
   CohortRelationshipsController.findAllCohortTeacherByIdCohort
@@ -58,23 +51,16 @@ router.put("/:idCohort", CohortsController.update);
 router.delete("/:idCohort", CohortsController.delete);
 
 router.use("/cohort-unit", routerUnit);
+router.use("/cohort-course", routerCourse);
+router.use("/cohort-module", routerModules);
 
 router.put(
   "/assign/:idCohort/teacher/:idTeacher",
   CohortAssignmentsController.assignTeacherToCohort
 );
-router.put(
-  "/assign/:idCohort/unit/:idUnit",
-  CohortAssignmentsController.assignUnitToCohort
-);
-router.put(
-  "/assign/:idCohort/course/:idCourse",
-  CohortAssignmentsController.assignCourseToCohort
-);
-router.put(
-  "/assign/:idCohort/module/:idModule",
-  CohortAssignmentsController.assignModuleToCohort
-);
+
+
+
 router.put(
   "/assign/:idCohort/student/:idStudent",
   CohortAssignmentsController.assignStudentToCohort

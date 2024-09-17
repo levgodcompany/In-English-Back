@@ -16,7 +16,7 @@ class CohortModuleController {
     }
   }
 
-  async enableUnit(
+  async enableModule(
     req: Request,
     res: Response,
     next: NextFunction

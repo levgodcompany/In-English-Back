@@ -61,16 +61,16 @@ class ClassOnliveController {
     }
   }
 
-  //   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
-  //     try {
-  //       const body: Cohort = req.body;
-  //       const { idCohort } = req.params;
-  //       const cohort = await ClassOnliveService.update(Number(idCohort), body);
-  //       res.json(cohort);
-  //     } catch (error) {
-  //       next(error)
-  //     }
-  //   }
+    async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+        const body: ClassOnlive = req.body;
+        const { idClassOnlive } = req.params;
+        const cohort = await ClassOnliveService.update(Number(idClassOnlive), body);
+        res.json(cohort);
+      } catch (error) {
+        next(error)
+      }
+    }
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

@@ -9,26 +9,19 @@ import {
 const router = Router();
 
 router.use(authenticate);
+router.use(authorizeTeacher);
 
-router.post("/", authorizeTeacher, ClassOnliveController.create);
-router.delete(
-  "/:idClassOnlive",
-  authorizeTeacher,
-  ClassOnliveController.delete
-);
-router.get("/", authorizeStudentAndTeacher, ClassOnliveController.findAll);
-router.get(
-  "/:idClassOnlive",
-  authorizeStudentAndTeacher,
-  ClassOnliveController.findOne
-);
+router.post("/", ClassOnliveController.create);
+router.put("/:idClassOnlive", ClassOnliveController.update);
+router.delete("/:idClassOnlive", ClassOnliveController.delete);
+
+router.use(authorizeStudentAndTeacher);
+router.get("/", ClassOnliveController.findAll);
+router.get("/:idClassOnlive", ClassOnliveController.findOne);
 
 router.get(
   "/cohort/class-onlive/:idCohort",
-  authenticate,
-  authorizeStudentAndTeacher,
   ClassOnliveController.findAllClassOnLive
 );
-
 
 export default router;

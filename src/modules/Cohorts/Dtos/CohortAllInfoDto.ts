@@ -4,6 +4,7 @@ interface ClassOnliveDTO {
   id: number;
   title: string;
   url: string;
+  description: string;
 }
 
 interface CohortTeacherRelationshipDTO {
@@ -99,6 +100,7 @@ export function convertToCohortDTO(json: any): CohortDTO {
       id: item.id,
       title: item.title,
       url: item.url,
+      description: item.description,
     })),
   };
 }

@@ -39,6 +39,11 @@ class ClassOnliveService {
 
     return deletClass;
   }
+  async update(id: number, data: ClassOnlive) {
+    const deletClass = await ClassOnliveRepository.update(id, data);
+
+    return deletClass;
+  }
 }
 
 export default new ClassOnliveService();

@@ -161,7 +161,7 @@ class CohortRelationshipsRepository {
     try {
       return await prisma.cohort.findUnique({
         where: {
-          id: idCohort
+          id: idCohort,
         },
         select: {
           id: true,
@@ -173,10 +173,10 @@ class CohortRelationshipsRepository {
                   id: true,
                   name: true,
                   lastName: true,
-                  email: true
-                }
-              }
-            }
+                  email: true,
+                },
+              },
+            },
           },
           cohortStudents: {
             include: {
@@ -185,10 +185,10 @@ class CohortRelationshipsRepository {
                   id: true,
                   name: true,
                   lastName: true,
-                  email: true
-                }
-              }
-            }
+                  email: true,
+                },
+              },
+            },
           },
           cohortUnities: {
             include: {
@@ -199,12 +199,12 @@ class CohortRelationshipsRepository {
                   idLevel: true,
                   level: {
                     select: {
-                      title: true
-                    }
-                  }
-                }
-              }
-            }
+                      title: true,
+                    },
+                  },
+                },
+              },
+            },
           },
           cohortCourses: {
             include: {
@@ -216,11 +216,11 @@ class CohortRelationshipsRepository {
                   unit: {
                     select: {
                       title: true,
-                    }
-                  }
-                }
-              }
-            }
+                    },
+                  },
+                },
+              },
+            },
           },
           cohortModules: {
             include: {
@@ -228,21 +228,21 @@ class CohortRelationshipsRepository {
                 select: {
                   id: true,
                   title: true,
-                  idCourse: true
-                }
-              }
-            }
+                  idCourse: true,
+                },
+              },
+            },
           },
           classOnlives: {
             select: {
               id: true,
               title: true,
-              url: true
-            }
-          }
-        }
-      })
-      
+              url: true,
+              description: true,
+            },
+          },
+        },
+      });
     } catch (error) {
       throw new Error(
         `Error al buscar todos los profesores del cohort: ${error}`

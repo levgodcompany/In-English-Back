@@ -72,7 +72,7 @@ class AuthStudentService extends AuthService<Student> {
     }
 
     const studentData = await prisma.student.findUnique({
-      where: { id: 8 },
+      where: { id: student.id },
       select: {
         id: true,
         name: true,

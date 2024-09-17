@@ -16,18 +16,18 @@ class CohortCourseController {
     }
   }
 
-  async enableUnit(
+  async enableCourse(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
       const { idCohort, idCourse } = req.params;
-      const body: boolean = req.body;
+      const body: { enabled: boolean } = req.body;
       const teacher = await CohortCourseService.enableCourse(
         Number(idCohort),
         Number(idCourse),
-        body
+        body.enabled
       );
       res.json(teacher);
     } catch (error) {
