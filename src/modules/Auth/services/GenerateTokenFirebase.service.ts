@@ -3,10 +3,11 @@ import * as admin from "firebase-admin";
 class GenerateTokenFirebaseService {
   constructor() {
     // Inicializa Firebase Admin SDK con las credenciales de administrador
+    const FIREBASE_ADMIN_CREDENTIALS =
+      process.env.FIREBASE_ADMIN_CREDENTIALS || "";
+    const serviceAccount = JSON.parse(FIREBASE_ADMIN_CREDENTIALS);
     admin.initializeApp({
-      credential: admin.credential.cert(
-        "jsons/in-house-c77a1-firebase-adminsdk-2jrbm-9899cb26c4.json"
-      ),
+      credential: admin.credential.cert(serviceAccount),
     });
   }
 
