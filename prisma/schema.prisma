@@ -76,11 +76,31 @@ model Teacher {
   @@map("Teachers")
 }
 
+model Category {
+  id              Int              @id @default(autoincrement())
+  title           String
+  description     String
+  categoryTypeLevel CategoryTypeLevel[]
+
+  @@map("Category")
+}
+
+// Tabla de relacion TypeLevel y Level
+model CategoryTypeLevel {
+  idCategory     Int
+  idTypeLevel Int
+  category       Category     @relation(fields: [idCategory], references: [id])
+  typeLevel   TypeLevel @relation(fields: [idTypeLevel], references: [id])
+
+  @@id([idCategory, idTypeLevel])
+}
+
 model TypeLevel {
   id              Int              @id @default(autoincrement())
   title           String
   description     String
   typeLevelLevels TypeLevelLevel[]
+  categoryTypeLevel CategoryTypeLevel[]
   order           Int?
 
   @@map("TypeLevels")

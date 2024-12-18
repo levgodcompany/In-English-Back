@@ -1,43 +1,157 @@
 {
-    
- {
-        "id": 8,
-        "name": "Leandro",
-        "lastName": "Veron",
-        "email": "lean@gmail.com",
-        "levels": [
-            {
-                "id": 14,
-                "title": "Inglés Básico A2",
-                "cohorts": [
-                    {
-                        "id": 23,
-                        "title": "A2-01",
-                        "enabled": true
-                    },
-                    {
-                        "id": 24,
-                        "title": "A2-02",
-                        "enabled": true
-                    }
-                ]
-            },
-            {
-                "id": 13,
-                "title": "Inglés Básico A1",
-                "cohorts": [
-                    {
-                        "id": 22,
-                        "title": "A1-01",
-                        "cohortStudents": []
-                    },
-                    {
-                        "id": 25,
-                        "title": "A1-01",
-                        "enabled": true
-                    }
-                ]
+    "categories": [
+      {
+        "id": 1,
+        "title": "Inglés",
+        "description": "Cursos de inglés desde nivel básico hasta avanzado.",
+        "categoryTypeLevels": [
+          {
+            "idCategory": 1,
+            "idTypeLevel": 1,
+            "typeLevel": {
+              "id": 1,
+              "title": "General English",
+              "description": "Inglés general para la vida diaria.",
+              "order": 1,
+              "typeLevelLevels": [
+                {
+                  "idTypeLevel": 1,
+                  "idLevel": 1,
+                  "level": {
+                    "id": 1,
+                    "title": "Nivel A1",
+                    "description": "Nivel principiante de inglés.",
+                    "order": 1
+                  }
+                },
+                {
+                  "idTypeLevel": 1,
+                  "idLevel": 2,
+                  "level": {
+                    "id": 2,
+                    "title": "Nivel A2",
+                    "description": "Nivel elemental de inglés.",
+                    "order": 2
+                  }
+                }
+              ]
             }
+          },
+          {
+            "idCategory": 1,
+            "idTypeLevel": 2,
+            "typeLevel": {
+              "id": 2,
+              "title": "Business English",
+              "description": "Inglés para negocios y el entorno laboral.",
+              "order": 2,
+              "typeLevelLevels": [
+                {
+                  "idTypeLevel": 2,
+                  "idLevel": 3,
+                  "level": {
+                    "id": 3,
+                    "title": "Nivel B1",
+                    "description": "Nivel intermedio para inglés de negocios.",
+                    "order": 3
+                  }
+                },
+                {
+                  "idTypeLevel": 2,
+                  "idLevel": 4,
+                  "level": {
+                    "id": 4,
+                    "title": "Nivel B2",
+                    "description": "Nivel intermedio alto para inglés de negocios.",
+                    "order": 4
+                  }
+                }
+              ]
+            }
+          }
         ]
-    }
-}
+      },
+      {
+        "id": 2,
+        "title": "Programación",
+        "description": "Cursos de programación para todos los niveles.",
+        "categoryTypeLevels": [
+          {
+            "idCategory": 2,
+            "idTypeLevel": 3,
+            "typeLevel": {
+              "id": 3,
+              "title": "Fundamentos de Programación",
+              "description": "Conceptos básicos de programación.",
+              "order": 1,
+              "typeLevelLevels": [
+                {
+                  "idTypeLevel": 3,
+                  "idLevel": 5,
+                  "level": {
+                    "id": 5,
+                    "title": "Nivel 1",
+                    "description": "Introducción a la programación.",
+                    "order": 1
+                  }
+                },
+                {
+                  "idTypeLevel": 3,
+                  "idLevel": 6,
+                  "level": {
+                    "id": 6,
+                    "title": "Nivel 2",
+                    "description": "Estructuras de control y datos.",
+                    "order": 2
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "idCategory": 2,
+            "idTypeLevel": 4,
+            "typeLevel": {
+              "id": 4,
+              "title": "Desarrollo Web",
+              "description": "Cursos para aprender a crear sitios y aplicaciones web.",
+              "order": 2,
+              "typeLevelLevels": [
+                {
+                  "idTypeLevel": 4,
+                  "idLevel": 7,
+                  "level": {
+                    "id": 7,
+                    "title": "Nivel Básico",
+                    "description": "HTML, CSS y fundamentos de JavaScript.",
+                    "order": 1
+                  }
+                },
+                {
+                  "idTypeLevel": 4,
+                  "idLevel": 8,
+                  "level": {
+                    "id": 8,
+                    "title": "Nivel Intermedio",
+                    "description": "JavaScript avanzado y frameworks básicos.",
+                    "order": 2
+                  }
+                },
+                {
+                  "idTypeLevel": 4,
+                  "idLevel": 9,
+                  "level": {
+                    "id": 9,
+                    "title": "Nivel Avanzado",
+                    "description": "Desarrollo backend y aplicaciones completas.",
+                    "order": 3
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+  
